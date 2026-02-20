@@ -1,0 +1,9 @@
+{
+	"InstallScripts" : 
+	[
+		"/Users/phillipb/Documents/macACE/build/cmake_install.cmake",
+		"/Users/phillipb/Documents/macACE/build/ace/cmake_install.cmake",
+		"/Users/phillipb/Documents/macACE/build/_deps/bartman_gcc_support-build/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

@@ -1,0 +1,404 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install",
+			"include"
+		],
+		"files" : 
+		[
+			"deps/ace/cmake/ace_install.cmake",
+			"deps/ace/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 110,
+				"parent" : 0
+			},
+			{
+				"file" : 0,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 1,
+				"parent" : 2
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 2,
+				"parent" : 2
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 3,
+				"parent" : 2
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 4,
+				"parent" : 2
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 5,
+				"parent" : 2
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 6,
+				"parent" : 2
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 7,
+				"parent" : 2
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 3,
+			"component" : "Unspecified",
+			"destination" : "lib",
+			"paths" : 
+			[
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/ace/managers/advancedsprite.c.obj",
+					"to" : "objects-Debug/ace/src/ace/managers/advancedsprite.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/ace/managers/blit.c.obj",
+					"to" : "objects-Debug/ace/src/ace/managers/blit.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/ace/managers/bob.c.obj",
+					"to" : "objects-Debug/ace/src/ace/managers/bob.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/ace/managers/copper.c.obj",
+					"to" : "objects-Debug/ace/src/ace/managers/copper.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/ace/managers/game.c.obj",
+					"to" : "objects-Debug/ace/src/ace/managers/game.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/ace/managers/joy.c.obj",
+					"to" : "objects-Debug/ace/src/ace/managers/joy.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/ace/managers/key.c.obj",
+					"to" : "objects-Debug/ace/src/ace/managers/key.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/ace/managers/log.c.obj",
+					"to" : "objects-Debug/ace/src/ace/managers/log.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/ace/managers/memory.c.obj",
+					"to" : "objects-Debug/ace/src/ace/managers/memory.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/ace/managers/mouse.c.obj",
+					"to" : "objects-Debug/ace/src/ace/managers/mouse.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/ace/managers/ptplayer.c.obj",
+					"to" : "objects-Debug/ace/src/ace/managers/ptplayer.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/ace/managers/rand.c.obj",
+					"to" : "objects-Debug/ace/src/ace/managers/rand.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/ace/managers/sprite.c.obj",
+					"to" : "objects-Debug/ace/src/ace/managers/sprite.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/ace/managers/state.c.obj",
+					"to" : "objects-Debug/ace/src/ace/managers/state.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/ace/managers/system.c.obj",
+					"to" : "objects-Debug/ace/src/ace/managers/system.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/ace/managers/timer.c.obj",
+					"to" : "objects-Debug/ace/src/ace/managers/timer.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/ace/managers/viewport/camera.c.obj",
+					"to" : "objects-Debug/ace/src/ace/managers/viewport/camera.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/ace/managers/viewport/scrollbuffer.c.obj",
+					"to" : "objects-Debug/ace/src/ace/managers/viewport/scrollbuffer.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/ace/managers/viewport/simplebuffer.c.obj",
+					"to" : "objects-Debug/ace/src/ace/managers/viewport/simplebuffer.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/ace/managers/viewport/tilebuffer.c.obj",
+					"to" : "objects-Debug/ace/src/ace/managers/viewport/tilebuffer.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/ace/utils/bitmap.c.obj",
+					"to" : "objects-Debug/ace/src/ace/utils/bitmap.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/ace/utils/bmframe.c.obj",
+					"to" : "objects-Debug/ace/src/ace/utils/bmframe.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/ace/utils/chunky.c.obj",
+					"to" : "objects-Debug/ace/src/ace/utils/chunky.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/ace/utils/custom.c.obj",
+					"to" : "objects-Debug/ace/src/ace/utils/custom.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/ace/utils/dir.c.obj",
+					"to" : "objects-Debug/ace/src/ace/utils/dir.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/ace/utils/disk_file.c.obj",
+					"to" : "objects-Debug/ace/src/ace/utils/disk_file.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/ace/utils/extview.c.obj",
+					"to" : "objects-Debug/ace/src/ace/utils/extview.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/ace/utils/file.c.obj",
+					"to" : "objects-Debug/ace/src/ace/utils/file.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/ace/utils/font.c.obj",
+					"to" : "objects-Debug/ace/src/ace/utils/font.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/ace/utils/pak_file.c.obj",
+					"to" : "objects-Debug/ace/src/ace/utils/pak_file.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/ace/utils/palette.c.obj",
+					"to" : "objects-Debug/ace/src/ace/utils/palette.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/ace/utils/sprite.c.obj",
+					"to" : "objects-Debug/ace/src/ace/utils/sprite.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/ace/utils/string.c.obj",
+					"to" : "objects-Debug/ace/src/ace/utils/string.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/ace/utils/tag.c.obj",
+					"to" : "objects-Debug/ace/src/ace/utils/tag.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/fixmath/fix16.c.obj",
+					"to" : "objects-Debug/ace/src/fixmath/fix16.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/fixmath/fix16_exp.c.obj",
+					"to" : "objects-Debug/ace/src/fixmath/fix16_exp.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/fixmath/fix16_sqrt.c.obj",
+					"to" : "objects-Debug/ace/src/fixmath/fix16_sqrt.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/fixmath/fix16_str.c.obj",
+					"to" : "objects-Debug/ace/src/fixmath/fix16_str.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/fixmath/fix16_trig.c.obj",
+					"to" : "objects-Debug/ace/src/fixmath/fix16_trig.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/fixmath/fract32.c.obj",
+					"to" : "objects-Debug/ace/src/fixmath/fract32.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/fixmath/uint32.c.obj",
+					"to" : "objects-Debug/ace/src/fixmath/uint32.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/mini_std/ctype.c.obj",
+					"to" : "objects-Debug/ace/src/mini_std/ctype.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/mini_std/errno.c.obj",
+					"to" : "objects-Debug/ace/src/mini_std/errno.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/mini_std/intrin.c.obj",
+					"to" : "objects-Debug/ace/src/mini_std/intrin.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/mini_std/printf.c.obj",
+					"to" : "objects-Debug/ace/src/mini_std/printf.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/mini_std/stdio_file.c.obj",
+					"to" : "objects-Debug/ace/src/mini_std/stdio_file.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/mini_std/stdio_putchar.c.obj",
+					"to" : "objects-Debug/ace/src/mini_std/stdio_putchar.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/mini_std/stdlib.c.obj",
+					"to" : "objects-Debug/ace/src/mini_std/stdlib.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/mini_std/string.c.obj",
+					"to" : "objects-Debug/ace/src/mini_std/string.c.obj"
+				},
+				{
+					"from" : "ace/CMakeFiles/ace.dir//src/mini_std/strtoul.c.obj",
+					"to" : "objects-Debug/ace/src/mini_std/strtoul.c.obj"
+				}
+			],
+			"targetId" : "ace::@c3ba06c9fd8ad93ec66a",
+			"targetIndex" : 0,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 3,
+			"component" : "Unspecified",
+			"cxxModuleBmiTarget" : 
+			{
+				"id" : "ace::@c3ba06c9fd8ad93ec66a",
+				"index" : 0
+			},
+			"destination" : "lib",
+			"type" : "cxxModuleBmi"
+		},
+		{
+			"backtrace" : 4,
+			"component" : "Unspecified",
+			"destination" : "include/ace",
+			"paths" : 
+			[
+				"deps/ace/include/ace/macros.h",
+				"deps/ace/include/ace/types.h"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 5,
+			"component" : "Unspecified",
+			"destination" : "include/ace/generic",
+			"paths" : 
+			[
+				"deps/ace/include/ace/generic/main.h",
+				"deps/ace/include/ace/generic/screen.h"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 6,
+			"component" : "Unspecified",
+			"destination" : "include/ace/utils",
+			"paths" : 
+			[
+				"deps/ace/include/ace/utils/bitmap.h",
+				"deps/ace/include/ace/utils/bmframe.h",
+				"deps/ace/include/ace/utils/chunky.h",
+				"deps/ace/include/ace/utils/custom.h",
+				"deps/ace/include/ace/utils/dir.h",
+				"deps/ace/include/ace/utils/disk_file.h",
+				"deps/ace/include/ace/utils/disk_file_private.h",
+				"deps/ace/include/ace/utils/endian.h",
+				"deps/ace/include/ace/utils/extview.h",
+				"deps/ace/include/ace/utils/file.h",
+				"deps/ace/include/ace/utils/font.h",
+				"deps/ace/include/ace/utils/mini_std.h",
+				"deps/ace/include/ace/utils/pak_file.h",
+				"deps/ace/include/ace/utils/palette.h",
+				"deps/ace/include/ace/utils/sprite.h",
+				"deps/ace/include/ace/utils/string.h",
+				"deps/ace/include/ace/utils/tag.h"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 7,
+			"component" : "Unspecified",
+			"destination" : "include/ace/managers",
+			"paths" : 
+			[
+				"deps/ace/include/ace/managers/advancedsprite.h",
+				"deps/ace/include/ace/managers/blit.h",
+				"deps/ace/include/ace/managers/bob.h",
+				"deps/ace/include/ace/managers/copper.h",
+				"deps/ace/include/ace/managers/game.h",
+				"deps/ace/include/ace/managers/joy.h",
+				"deps/ace/include/ace/managers/key.h",
+				"deps/ace/include/ace/managers/log.h",
+				"deps/ace/include/ace/managers/memory.h",
+				"deps/ace/include/ace/managers/mouse.h",
+				"deps/ace/include/ace/managers/ptplayer.h",
+				"deps/ace/include/ace/managers/rand.h",
+				"deps/ace/include/ace/managers/sprite.h",
+				"deps/ace/include/ace/managers/state.h",
+				"deps/ace/include/ace/managers/system.h",
+				"deps/ace/include/ace/managers/timer.h"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 8,
+			"component" : "Unspecified",
+			"destination" : "include/ace/managers/viewport",
+			"paths" : 
+			[
+				"deps/ace/include/ace/managers/viewport/camera.h",
+				"deps/ace/include/ace/managers/viewport/scrollbuffer.h",
+				"deps/ace/include/ace/managers/viewport/simplebuffer.h",
+				"deps/ace/include/ace/managers/viewport/tilebuffer.h"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 9,
+			"component" : "Unspecified",
+			"destination" : "include/fixmath",
+			"paths" : 
+			[
+				"deps/ace/include/fixmath/fix16.h",
+				"deps/ace/include/fixmath/fix16_trig_sin_lut.h",
+				"deps/ace/include/fixmath/fixmath.h",
+				"deps/ace/include/fixmath/fract32.h",
+				"deps/ace/include/fixmath/int64.h",
+				"deps/ace/include/fixmath/uint32.h"
+			],
+			"type" : "file"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "ace",
+		"source" : "deps/ace"
+	}
+}

@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "_deps/bartman_gcc_support-build",
+		"source" : "build/_deps/bartman_gcc_support-src"
+	}
+}
