@@ -226,30 +226,6 @@ bartman_gcc_support/fast:
 	$(MAKE) $(MAKESILENT) -f _deps/bartman_gcc_support-build/CMakeFiles/bartman_gcc_support.dir/build.make _deps/bartman_gcc_support-build/CMakeFiles/bartman_gcc_support.dir/build
 .PHONY : bartman_gcc_support/fast
 
-deps/ace/tools/build/_deps/freetype-src/tests/issue-1063/main.obj: deps/ace/tools/build/_deps/freetype-src/tests/issue-1063/main.c.obj
-.PHONY : deps/ace/tools/build/_deps/freetype-src/tests/issue-1063/main.obj
-
-# target to build an object file
-deps/ace/tools/build/_deps/freetype-src/tests/issue-1063/main.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/macACE.elf.dir/build.make CMakeFiles/macACE.elf.dir/deps/ace/tools/build/_deps/freetype-src/tests/issue-1063/main.c.obj
-.PHONY : deps/ace/tools/build/_deps/freetype-src/tests/issue-1063/main.c.obj
-
-deps/ace/tools/build/_deps/freetype-src/tests/issue-1063/main.i: deps/ace/tools/build/_deps/freetype-src/tests/issue-1063/main.c.i
-.PHONY : deps/ace/tools/build/_deps/freetype-src/tests/issue-1063/main.i
-
-# target to preprocess a source file
-deps/ace/tools/build/_deps/freetype-src/tests/issue-1063/main.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/macACE.elf.dir/build.make CMakeFiles/macACE.elf.dir/deps/ace/tools/build/_deps/freetype-src/tests/issue-1063/main.c.i
-.PHONY : deps/ace/tools/build/_deps/freetype-src/tests/issue-1063/main.c.i
-
-deps/ace/tools/build/_deps/freetype-src/tests/issue-1063/main.s: deps/ace/tools/build/_deps/freetype-src/tests/issue-1063/main.c.s
-.PHONY : deps/ace/tools/build/_deps/freetype-src/tests/issue-1063/main.s
-
-# target to generate assembly for a file
-deps/ace/tools/build/_deps/freetype-src/tests/issue-1063/main.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/macACE.elf.dir/build.make CMakeFiles/macACE.elf.dir/deps/ace/tools/build/_deps/freetype-src/tests/issue-1063/main.c.s
-.PHONY : deps/ace/tools/build/_deps/freetype-src/tests/issue-1063/main.c.s
-
 main.obj: main.c.obj
 .PHONY : main.obj
 
@@ -274,6 +250,54 @@ main.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/macACE.elf.dir/build.make CMakeFiles/macACE.elf.dir/main.c.s
 .PHONY : main.c.s
 
+src/game.obj: src/game.c.obj
+.PHONY : src/game.obj
+
+# target to build an object file
+src/game.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/macACE.elf.dir/build.make CMakeFiles/macACE.elf.dir/src/game.c.obj
+.PHONY : src/game.c.obj
+
+src/game.i: src/game.c.i
+.PHONY : src/game.i
+
+# target to preprocess a source file
+src/game.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/macACE.elf.dir/build.make CMakeFiles/macACE.elf.dir/src/game.c.i
+.PHONY : src/game.c.i
+
+src/game.s: src/game.c.s
+.PHONY : src/game.s
+
+# target to generate assembly for a file
+src/game.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/macACE.elf.dir/build.make CMakeFiles/macACE.elf.dir/src/game.c.s
+.PHONY : src/game.c.s
+
+src/menu.obj: src/menu.c.obj
+.PHONY : src/menu.obj
+
+# target to build an object file
+src/menu.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/macACE.elf.dir/build.make CMakeFiles/macACE.elf.dir/src/menu.c.obj
+.PHONY : src/menu.c.obj
+
+src/menu.i: src/menu.c.i
+.PHONY : src/menu.i
+
+# target to preprocess a source file
+src/menu.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/macACE.elf.dir/build.make CMakeFiles/macACE.elf.dir/src/menu.c.i
+.PHONY : src/menu.c.i
+
+src/menu.s: src/menu.c.s
+.PHONY : src/menu.s
+
+# target to generate assembly for a file
+src/menu.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/macACE.elf.dir/build.make CMakeFiles/macACE.elf.dir/src/menu.c.s
+.PHONY : src/menu.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -291,12 +315,15 @@ help:
 	@echo "... ace"
 	@echo "... bartman_gcc_support"
 	@echo "... macACE.elf"
-	@echo "... deps/ace/tools/build/_deps/freetype-src/tests/issue-1063/main.obj"
-	@echo "... deps/ace/tools/build/_deps/freetype-src/tests/issue-1063/main.i"
-	@echo "... deps/ace/tools/build/_deps/freetype-src/tests/issue-1063/main.s"
 	@echo "... main.obj"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... src/game.obj"
+	@echo "... src/game.i"
+	@echo "... src/game.s"
+	@echo "... src/menu.obj"
+	@echo "... src/menu.i"
+	@echo "... src/menu.s"
 .PHONY : help
 
 

@@ -40,7 +40,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/opt/homebrew/share/cmake/Modules/Internal/CMakeASMLinkerInformation.cmake"
   "/opt/homebrew/share/cmake/Modules/Internal/CMakeCLinkerInformation.cmake"
   "/opt/homebrew/share/cmake/Modules/Internal/CMakeCommonLinkerInformation.cmake"
-  "/opt/homebrew/share/cmake/Modules/Platform/Generic.cmake"
+  "/opt/homebrew/share/cmake/Modules/Platform/AmigaOS.cmake"
   )
 
 # The corresponding makefile is:

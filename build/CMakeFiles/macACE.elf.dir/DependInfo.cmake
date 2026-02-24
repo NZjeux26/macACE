@@ -8,8 +8,9 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/Users/phillipb/Documents/macACE/deps/ace/tools/build/_deps/freetype-src/tests/issue-1063/main.c" "CMakeFiles/macACE.elf.dir/deps/ace/tools/build/_deps/freetype-src/tests/issue-1063/main.c.obj" "gcc" "CMakeFiles/macACE.elf.dir/deps/ace/tools/build/_deps/freetype-src/tests/issue-1063/main.c.obj.d"
   "/Users/phillipb/Documents/macACE/main.c" "CMakeFiles/macACE.elf.dir/main.c.obj" "gcc" "CMakeFiles/macACE.elf.dir/main.c.obj.d"
+  "/Users/phillipb/Documents/macACE/src/game.c" "CMakeFiles/macACE.elf.dir/src/game.c.obj" "gcc" "CMakeFiles/macACE.elf.dir/src/game.c.obj.d"
+  "/Users/phillipb/Documents/macACE/src/menu.c" "CMakeFiles/macACE.elf.dir/src/menu.c.obj" "gcc" "CMakeFiles/macACE.elf.dir/src/menu.c.obj.d"
   )
 
 # Targets to which this target links which contain Fortran sources.
