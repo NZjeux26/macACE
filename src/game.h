@@ -29,6 +29,7 @@ void gameGsLoop(void);
 void gameGsDestroy(void);
 void buildBoard(void);
 void setupPieces(void);
+void loadAssets(void);
 //void movePiece(g_piece *piece, UBYTE newPos);
 //void checkForCaptures(g_piece *movedPiece);
 void checkForWin(void);

@@ -25,7 +25,7 @@
 #define SQUARE_WIDTH 32 //size of each square on the board in pixels
 #define SQUARE_HEIGHT 25 //22 +3 for the line width
 #define PIECE_SPRITE_WIDTH 32 //size of each piece sprite in pixels
-#define PIECE_SPRITE_HEIGHT 22
+#define PIECE_SPRITE_HEIGHT 21
 
 /*------Setting Up Viewports-------*/
 static tView *s_pView; // View containing all the viewports
@@ -38,12 +38,16 @@ g_piece attackers[MAX_ATTACKERS];
 g_piece defenders[MAX_DEFENDERS];
 
 /*-----GFX Setup-----*/
-static tBitMap *pBmBackground;
-static tBitMap *pBmAttackers;
-static tBitMap *pBmDefenders;
+static tBitMap *pBmBoard;
+static tBitMap *pBmAttackers[MAX_ATTACKERS];
+static tBitMap *pBmAttackers_Mask[MAX_ATTACKERS];
+static tBitMap *pBmDefenders[MAX_DEFENDERS];
+static tBitMap *pBmDefenders_Mask[MAX_DEFENDERS];
 static tBitMap *pBmKing; //since the king is a different graphic
 static tBitMap *pBmKing_Mask;
+static tBitMap *KingMaskImage;
 static tBitMap *pBmClashFX; //FX to flash when one piece takes another
+static tBitMap *pBmClashFX_Mask;
 
 tFont *gFontSmall; //global font for screen
 tTextBitMap *testingbitmap;
@@ -75,26 +79,24 @@ void gameGsCreate(void) {
 
     paletteLoadFromPath("/data/palette/GamePalette.plt", s_pVpMain->pPalette, 32);
 
-    pBmBackground = bitmapCreateFromPath("/data/GFX/BG1.bm",0);
+    pBmBoard = bitmapCreateFromPath("/data/GFX/BG1.bm",0);
     //add asserts here later to check all this logic
     for(UWORD x = 0; x < s_pMainBuffer->uBfrBounds.uwX; x+=16){//fills out the background
     for(UWORD y = 0; y < s_pMainBuffer->uBfrBounds.uwY; y+=16){
-      blitCopyAligned(pBmBackground,x,y,s_pMainBuffer->pBack,x,y,16,16);
-        blitCopyAligned(pBmBackground,x,y,s_pMainBuffer->pFront,x,y,16,16);
+      blitCopyAligned(pBmBoard,x,y,s_pMainBuffer->pBack,x,y,16,16);
+        blitCopyAligned(pBmBoard,x,y,s_pMainBuffer->pFront,x,y,16,16);
         }
     }
     
     gFontSmall = fontCreateFromPath("/data/font/myacefont.fnt");
     
-    //tTextBitMap *testingbitmap = fontCreateTextBitMapFromStr(gFontSmall, "THIS IS A TEST");
-    //fontDrawTextBitMap(s_pMainBuffer->pBack, testingbitmap, 100, 100, 9,FONT_COOKIE);
+    KingMaskImage = bitmapCreate(32,32,5,0);
 
+    loadAssets();
     setupPieces(); //sets up the pieces in their starting positions in the board array and in the piece structs
     buildBoard(); //sets up the board array with the pieces in their starting positions and the special squares marked
+    drawBoard(); //draws the board and pieces to the screen, will need to be called again every time a piece moves or is captured
 
-    pBmKing = bitmapCreateFromPath("/data/GFX/King.bm",0);
-    pBmKing_Mask = bitmapCreateFromPath("/data/GFX/King_Mask.bm",0);
-    
     systemUnuse();
     // Load the view
     viewLoad(s_pView);
@@ -109,10 +111,25 @@ void gameGsLoop(void) {
 
 void gameGsDestroy(void) {
     systemUse();
-    bitmapDestroy(pBmBackground);
+    bitmapDestroy(pBmBoard);
     viewDestroy(s_pView);
 }
-
+//loads in the game assets, including the piece sprites and their masks for blitting with transparency.
+void loadAssets(void){
+  for(UBYTE i = 0; i < MAX_ATTACKERS; i++){
+    pBmAttackers[i] = bitmapCreateFromPath("/data/GFX/Attackers.bm",0);
+    pBmAttackers_Mask[i] = bitmapCreateFromPath("/data/GFX/Attackers_Mask.bm",0);
+  }
+  for(UBYTE j = 0; j < MAX_DEFENDERS; j++){
+    pBmDefenders[j] = bitmapCreateFromPath("/data/GFX/Defenders.bm",0);
+    pBmDefenders_Mask[j] = bitmapCreateFromPath("/data/GFX/Defenders_Mask.bm",0);
+  }
+  pBmKing = bitmapCreateFromPath("/data/GFX/King.bm",0);
+  pBmKing_Mask = bitmapCreateFromPath("/data/GFX/King_Mask.bm",0);
+  pBmClashFX = bitmapCreateFromPath("/data/GFX/ClashFX.bm",0);
+  pBmClashFX_Mask = bitmapCreateFromPath("/data/GFX/ClashFX_Mask.bm",0);
+}
+//sets up the pieces in their starting positions in the board array and in the piece structs
 void setupPieces(void){
   
   UBYTE attackerPositions[MAX_ATTACKERS] = { //predefined starting positions for attackers
@@ -142,6 +159,7 @@ void setupPieces(void){
     attackers[i].pos = attackerPositions[i]; // Assign starting positions from the predefined array
   }
 }
+//sets up the board array with the pieces in their starting positions and the special squares marked
 void buildBoard(void){
     //0 = empty square, 1 = occupied by defender, 2 = occupied by attacker, 3 = occupied by king, 4 = special square ,99 = dead zone for out of bounds
     //initialize the board array to all 0s
@@ -159,6 +177,7 @@ void buildBoard(void){
     //place the attackers on the board according to their positions in the piece structs
     for(UBYTE k = 0; k < MAX_ATTACKERS; k++){
         board[attackers[k].pos] = 2; //attacker
+        //logWrite("Placing attacker at index %d\n", attackers[k].pos);
     }
     //sets the border squares to 99 to prevent out of bounds errors when checking for moves and captures
     for(UBYTE i = 0; i < 169; i++){
@@ -179,7 +198,12 @@ void buildBoard(void){
     specialpos[3] = 154; //bottom right corner
     specialpos[4] = 84; //throne in the middle
 }
-
+//draws the pieces to the screen, will need to be called again every time a piece moves or is captured
 void drawBoard(void){
-
+  blitCopy(s_pMainBuffer->pBack,200,200,
+    KingMaskImage,0,0,32,32,MINTERM_COOKIE);
+  
+  blitCopyMask(pBmKing,0,0,
+    s_pMainBuffer->pBack,143,118,
+    PIECE_SPRITE_WIDTH,PIECE_SPRITE_HEIGHT,pBmKing_Mask->Planes[0]);
 }
