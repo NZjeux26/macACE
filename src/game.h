@@ -21,8 +21,9 @@ typedef struct g_piece{
     Team team;       // 0 = Defneder LIGHT, Anything else = Attacker DARK
     UBYTE captured;  //0 not captured, anything else = captured.
 } g_piece;
-//turn all these enums back into just shorts.
 
+//struct for the x/y positions of the squares on the board for drawing the pieces to the screen, indexed the same as the board array
+//needs shorts since the draw positions are bigger than a UBYTE can hold.
 typedef struct
 {
     short x;
@@ -41,7 +42,5 @@ void loadAssets(void);
 void checkForWin(void);
 void drawBoard(void);
 void drawPieces(void);
-//void drawPiece(g_piece piece);
-
 
 #endif // _GAME_H_

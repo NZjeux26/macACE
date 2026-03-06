@@ -48,7 +48,7 @@ static tBitMap *pBmDefenders_Mask[MAX_DEFENDERS];
 static tBitMap *pBmDefenders_BG[MAX_DEFENDERS]; //for drawing the pieces with the background when they move, to prevent leaving trails
 static tBitMap *pBmKing; //since the king is a different graphic
 static tBitMap *pBmKing_Mask;
-static tBitMap *KingMaskImage;
+static tBitMap *pBmKing_BG; 
 static tBitMap *pBmClashFX; //FX to flash when one piece takes another
 static tBitMap *pBmClashFX_Mask;
 
@@ -57,7 +57,8 @@ tTextBitMap *testingbitmap;
 
 /*-----Global Vars-----*/
 ULONG startTime;
-UBYTE board[169]; // flattened 13x13 board array, each index corresponds to a square on the board. oversized to avoid out of bounds errors, only 169 squares on the board. 0-168 valid indices.
+UBYTE boardState[169]; // flattened 13x13 board array, each index corresponds to a square on the board. oversized to avoid out of bounds errors, only 169 squares on the board. 0-168 valid indices.
+UBYTE boardStateNew[169]; //used to hold the new state of the board after a move, here we can check for captures, wins etc before doing a compare and draw the difference.
 ScreenPos draw_pos[169];
 UBYTE specialpos[5]; //four corners and the throne are only for the King
 
@@ -93,8 +94,6 @@ void gameGsCreate(void) {
     }
     
     gFontSmall = fontCreateFromPath("/data/font/myacefont.fnt");
-    
-    KingMaskImage = bitmapCreate(32,32,5,0);
 
     loadAssets();
     setupPieces(); //sets up the pieces in their starting positions in the board array and in the piece structs
@@ -186,25 +185,25 @@ void buildBoard(void){
     //0 = empty square, 1 = occupied by defender, 2 = occupied by attacker, 3 = occupied by king, 4 = special square ,99 = dead zone for out of bounds
     //initialize the board array to all 0s
     for(int i = 0; i < 169; i++){
-        board[i] = 0;
+        boardState[i] = 0;
     }
     //place the pieces on the board according to their positions in the piece structs
     for(UBYTE j = 0; j < MAX_DEFENDERS; j++){
         if(defenders[j].type == KING){
-            board[defenders[j].pos] = 3; //king
+            boardState[defenders[j].pos] = 3; //king
         } else {
-            board[defenders[j].pos] = 1; //defender
+            boardState[defenders[j].pos] = 1; //defender
         }
     }
     //place the attackers on the board according to their positions in the piece structs
     for(UBYTE k = 0; k < MAX_ATTACKERS; k++){
-        board[attackers[k].pos] = 2; //attacker
+        boardState[attackers[k].pos] = 2; //attacker
         //logWrite("Placing attacker at index %d\n", attackers[k].pos);
     }
     //sets the border squares to 99 to prevent out of bounds errors when checking for moves and captures
     for(UBYTE i = 0; i < 169; i++){
         if(i < 13 || i >= 156 || i % 13 == 0 || i % 13 == 12){
-            board[i] = 99; //dead zone
+            boardState[i] = 99; //dead zone
             //logWrite("Setting board index %d to 99\n", i);
         }
     }
@@ -212,7 +211,7 @@ void buildBoard(void){
     //DEBUG: print the board to the log to check it's set up correctly
     #ifdef OUTPUT_LOGGING
     for(UBYTE i = 0; i < 169; i++){
-        logWrite("Board POS: %d is %d \n", i, board[i]);
+        logWrite("Board POS: %d is %d \n", i, boardState[i]);
     }
     #endif
 
@@ -226,23 +225,41 @@ void buildBoard(void){
 //draws the pieces to the screen, will need to be called again every time a piece moves or is captured
 void drawBoard(void){ //TODO add the BG masks so what's under them is saved for restore.
   for (UBYTE i = 0; i < 169; i++){
-    if(board[i] == 1){ //defender
+    if(boardState[i] == 1){ //defender
       for(UBYTE j = 0; j < MAX_DEFENDERS; j++){
-        if(defenders[j].pos == i && !defenders[j].captured){
-          blitCopyMask(pBmDefenders[j],0,0,
+        if(defenders[j].pos == i && !defenders[j].captured){ //find the defender that is in this position and hasn't been captured, then draw it
+            //copy the background to the piece's BG bitmap for later restoration when it moves
+            blitCopy(s_pMainBuffer->pBack, draw_pos[i].x, draw_pos[i].y, 
+            pBmDefenders_BG[j], 0, 0, 
+            PIECE_SPRITE_WIDTH, PIECE_SPRITE_HEIGHT, MINTERM_COOKIE); 
+              
+            //Then draw the piece with the mask for transparency
+            blitCopyMask(pBmDefenders[j],0,0, 
             s_pMainBuffer->pBack, draw_pos[i].x, draw_pos[i].y,
             PIECE_SPRITE_WIDTH,PIECE_SPRITE_HEIGHT,pBmDefenders_Mask[j]->Planes[0]);
         }
       }
-    } else if(board[i] == 2){ //attacker
+    } else if(boardState[i] == 2){ //attacker
       for(UBYTE k = 0; k < MAX_ATTACKERS; k++){
         if(attackers[k].pos == i && !attackers[k].captured){
-          blitCopyMask(pBmAttackers[k],0,0,
+            //copy the background to the piece's BG bitmap for later restoration when it moves
+            blitCopy(s_pMainBuffer->pBack, draw_pos[i].x, draw_pos[i].y, 
+            pBmAttackers_BG[k], 0, 0, 
+            PIECE_SPRITE_WIDTH, PIECE_SPRITE_HEIGHT, MINTERM_COOKIE); 
+              
+            //Then draw the piece with the mask for transparency
+            blitCopyMask(pBmAttackers[k],0,0,
             s_pMainBuffer->pBack, draw_pos[i].x, draw_pos[i].y,
             PIECE_SPRITE_WIDTH,PIECE_SPRITE_HEIGHT,pBmAttackers_Mask[k]->Planes[0]);
         }
       }
-    } else if(board[i] == 3){ //king
+    } else if(boardState[i] == 3){ //king
+      //copy the background to the king's BG bitmap for later restoration when it moves
+      blitCopy(s_pMainBuffer->pBack, draw_pos[i].x, draw_pos[i].y, 
+      pBmKing_BG, 0, 0,
+      PIECE_SPRITE_WIDTH, PIECE_SPRITE_HEIGHT, MINTERM_COOKIE);
+      
+      //Then draw the king with the mask for transparency
       blitCopyMask(pBmKing,0,0,
         s_pMainBuffer->pBack, draw_pos[i].x, draw_pos[i].y,
         PIECE_SPRITE_WIDTH,PIECE_SPRITE_HEIGHT,pBmKing_Mask->Planes[0]);
