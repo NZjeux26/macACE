@@ -56,14 +56,14 @@ static tBitMap *pBmKing_Mask;
 static tBitMap *pBmKing_BG; 
 static tBitMap *pBmClashFX; //FX to flash when one piece takes another
 static tBitMap *pBmClashFX_Mask;
-static tBitMap *pBmClashFX_BG; //for drawing the FX with the background when they move, to prevent leaving trails
+//static tBitMap *pBmClashFX_BG; //for drawing the FX with the background when they move, to prevent leaving trails
 static tBitMap *pBmSquareHighlight; //for highlighting valid moves and selected pieces
 static tBitMap *pBmSquareHighlight_Mask;
-static tBitMap *pBmSquareHighlight_BG; //for drawing the highlight with the background when it moves, to prevent leaving trails
+static tBitMap *pBmSquareHighlight_BG[2]; //for drawing the highlight with the background when it moves, to prevent leaving trails
 static tBitMap *pBmMouseCursorSrc;
 static tBitMap *pBmMouseCursorData;
 
-static tSprite *pBmMouseCursor;
+static tSprite *pSMouseCursor;
 
 
 tFont *gFontSmall; //global font for screen
@@ -78,8 +78,9 @@ UBYTE specialpos[5]; //four corners and the throne are only for the King
 UBYTE currentPlayer = 1; //0 = defender, 1 = attacker : games start with attacker turn so this is initialised to 1
 UBYTE s_ubBufferIndex = 0; //for double buffering, keeps track of which buffer we're currently drawing to (I don't think i'm doing this yet)
 UBYTE hightlightActive = 0; //whether the highlight for valid moves is currently active, so we know whether to draw it or not in the drawPieces function, and whether to update it when a piece is selected.
+UBYTE lastHighlightIndex[2] = {0, 0}; //the index of the last highlighted square, so we can restore the background when the highlight moves to a new square. This is needed because the highlight is drawn directly to the back buffer and not as a sprite, so we have to manually restore the background when it moves.
 UBYTE highlightIndex = 0; //the index of the currently highlighted square, so we can update the highlight position when a new piece is selected or a move is made.
-
+UBYTE pBm_hasBGToRestore[2] = {0, 0};//[2] = {0,0};
 
 ScreenPos draw_pos[169];
 
@@ -104,7 +105,7 @@ void gameGsCreate(void) {
 
     paletteLoadFromPath("/data/palette/GamePalettev2.plt", s_pVpMain->pPalette, 32);
 
-   drawBoard(); //draw the board to the back buffer before loading the view, so it's visible when the view loads
+    drawBoard(); //draw the board to the back buffer before loading the view, so it's visible when the view loads
     
     gFontSmall = fontCreateFromPath("/data/font/myacefont.fnt");
 
@@ -113,14 +114,12 @@ void gameGsCreate(void) {
 
     pBmMouseCursorSrc = bitmapCreateFromPath("/data/GFX/mousepointer.bm",0);
     pBmMouseCursorData = bitmapCreate(CURSOR_SPRITE_WIDTH,CURSOR_SPRITE_HEIGHT,2,BMF_INTERLEAVED | BMF_CLEAR);
-    pBmMouseCursor = spriteAdd(CURSOR_SPRITE_CHANNEL,pBmMouseCursorData);
+    pSMouseCursor = spriteAdd(CURSOR_SPRITE_CHANNEL,pBmMouseCursorData);
 
-    spriteSetEnabled(pBmMouseCursor, 1);
+    spriteSetEnabled(pSMouseCursor, 1);
     
-    // blitCopyMask(pBmMouseCursorSrc,0,0,
-    // pBmMouseCursorData,0,0,CURSOR_SPRITE_WIDTH,16,pBmMouseCursorSrc->Planes[0]);
     blitCopy(pBmMouseCursorSrc, 0,0,
-    pBmMouseCursorData,0,0,CURSOR_SPRITE_WIDTH,16,MINTERM_COOKIE);
+    pBmMouseCursorData,0,0,CURSOR_SPRITE_WIDTH,CURSOR_SPRITE_HEIGHT,MINTERM_COOKIE);
     
     loadAssets();
     setupPieces(); //sets up the pieces in their starting positions in the board array and in the piece structs
@@ -150,6 +149,7 @@ void gameGsLoop(void) {
     //to implement and works fine performance-wise since it's a small board and not many pieces.
     //use a memcmp when the board states is completed.
     drawPieces();
+    
     if(mouseCheck(MOUSE_PORT_1, MOUSE_LMB)){
       onClick(mouseX, mouseY);
     } else if(mouseCheck(MOUSE_PORT_1, MOUSE_RMB)){
@@ -160,7 +160,7 @@ void gameGsLoop(void) {
       //for testing, right click to switch player turns without making a move
     }
     if (hightlightActive){ //if the highlight for valid moves is active, draw it
-      drawSquarehighlight();
+      drawSquareHighlight();
     }
     s_ubBufferIndex = !s_ubBufferIndex; //toggle the buffer index for double buffering    
      
@@ -203,6 +203,10 @@ void loadAssets(void){
   pBmKing_Mask = bitmapCreateFromPath("/data/GFX/king_mask.bm",0);
   pBmClashFX = bitmapCreateFromPath("/data/GFX/clashFX.bm",0);
   pBmClashFX_Mask = bitmapCreateFromPath("/data/GFX/clashFX_mask.bm",0);
+  pBmSquareHighlight = bitmapCreateFromPath("/data/GFX/squarehighlight.bm",0);
+  pBmSquareHighlight_Mask = bitmapCreateFromPath("/data/GFX/squarehighlight_mask.bm",0);
+  pBmSquareHighlight_BG[0] = bitmapCreate(32,21,5,0); //size of the highlight sprite, for storing the background when drawing the highlight
+  pBmSquareHighlight_BG[1] = bitmapCreate(32,21,5,0); //size of the highlight sprite, for storing the background when drawing the highlight
 }
 //sets up the pieces in their starting positions in the board array and in the piece structs
 void setupPieces(void){
@@ -349,43 +353,56 @@ void drawBoard(void){
         }
     }
 }
+
 void updateMousepos(short mouseX, short mouseY){
-  pBmMouseCursor->wX = mouseX;
-  pBmMouseCursor->wY = mouseY;
+  pSMouseCursor->wX = mouseX;
+  pSMouseCursor->wY = mouseY;
     
-  spriteProcess(pBmMouseCursor);
+  spriteProcess(pSMouseCursor);
   spriteProcessChannel(CURSOR_SPRITE_CHANNEL);
 }
 
 void onClick(short mouseX, short mouseY){
   for(UBYTE i = 0; i < 169; i++){
     //check if the mouse is within the bounds of this square
-    if(mouseX >= draw_pos[i].x && mouseX <= draw_pos[i].x + SQUARE_X &&
-       mouseY >= draw_pos[i].y && mouseY <= draw_pos[i].y + SQUARE_Y){
+    if(mouseX >= draw_pos[i].x && mouseX <= draw_pos[i].x + (SQUARE_X +1) &&
+       mouseY >= draw_pos[i].y && mouseY <= draw_pos[i].y + (SQUARE_Y +1)){
          logWrite("Clicked on square index %d\n", i); 
-         if(hightlightActive){
-           hightlightActive = 0; 
-            //redraw the background to erase the old highlight
-          //  blitCopyMask(pBmSquareHighlight_BG,0,0,
-          //   s_pMainBuffer->pBack, draw_pos[highlightIndex].x, draw_pos[highlightIndex].y,
-          //   32, 32, pBmSquareHighlight_Mask->Planes[0]);
+         //If a square is already Highlighted, set to zero for it to be restored
+         if(hightlightActive){ 
+            logWrite("Undraw Highlighted Index = %d\n", highlightIndex);
+            hightlightActive = 0; 
          }
+
          hightlightActive = 1; //activate the highlight for valid moves
          highlightIndex = i; //set the highlight index to the square that was clicked, so
-        
+         logWrite("Highlighted Index = %d\n", highlightIndex);
          break; //exit the loop once we've found the square that was clicked
     }
   }
 }
 
-void drawSquarehighlight(void){
+void drawSquareHighlight(void){
   //this function will be used to draw the highlight for valid moves and selected pieces, it will be called in the drawPieces function if the highlightActive variable is true, and the position will be determined by the highlightIndex variable which will be set when a piece is selected or a move is made.
-  if(hightlightActive){
-    blitCopy(s_pMainBuffer->pBack, draw_pos[highlightIndex].x, draw_pos[highlightIndex].y,pBmSquareHighlight_BG, 
-    0, 0,32, 32, MINTERM_COOKIE); //copy the background to the highlight's BG bitmap for later restoration when it moves
-
-    blitCopyMask(pBmSquareHighlight,0,0,
-    s_pMainBuffer->pBack, draw_pos[highlightIndex].x, draw_pos[highlightIndex].y,
-    32, 32, pBmSquareHighlight_Mask->Planes[0]);
+  if(!hightlightActive) return;
+  //First check if there's a background to restore from the last highlighted square, and if the highlight has moved to a new square, restore the background of the old highlighted square before drawing the new one
+  //TBH just having a green version of the highlight bitmap and drawing that into it would of been easier but here we are.
+  if(highlightIndex != lastHighlightIndex[s_ubBufferIndex]){
+    logWrite("Restoring background for index %d\n", lastHighlightIndex[s_ubBufferIndex]);
+    //redraw the background to erase the old highlight
+    
+    blitCopy(pBmBoard, draw_pos[lastHighlightIndex[s_ubBufferIndex]].x, draw_pos[lastHighlightIndex[s_ubBufferIndex]].y,
+    s_pMainBuffer->pBack, draw_pos[lastHighlightIndex[s_ubBufferIndex]].x, draw_pos[lastHighlightIndex[s_ubBufferIndex]].y,
+    32, 21, MINTERM_COOKIE);
+    
+    pBm_hasBGToRestore[s_ubBufferIndex] = 0;
   }
+    
+  //Then draw the highlight with the mask for transparency
+  blitCopyMask(pBmSquareHighlight,0,0,
+  s_pMainBuffer->pBack, draw_pos[highlightIndex].x, draw_pos[highlightIndex].y,
+  32,21,pBmSquareHighlight_Mask->Planes[0]);
+
+  pBm_hasBGToRestore[s_ubBufferIndex] = 1;
+  lastHighlightIndex[s_ubBufferIndex] = highlightIndex; //update the last highlighted index to the current one
 }

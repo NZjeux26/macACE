@@ -42,6 +42,6 @@ void loadAssets(void);
 void checkForWin(void);
 void drawBoard(void);
 void drawPieces(void);
-void drawSquarehighlight(void);
+void drawSquareHighlight(void);
 
 #endif // _GAME_H_
