@@ -48,13 +48,13 @@ g_piece defenders[MAX_DEFENDERS];
 static tBitMap *pBmBoard;
 static tBitMap *pBmAttackers[MAX_ATTACKERS];
 static tBitMap *pBmAttackers_Mask[MAX_ATTACKERS];
-static tBitMap *pBmAttackers_BG[MAX_ATTACKERS]; //for drawing the pieces with the background when they move, to prevent leaving trails
+//static tBitMap *pBmAttackers_BG[MAX_ATTACKERS]; //for drawing the pieces with the background when they move, to prevent leaving trails
 static tBitMap *pBmDefenders[MAX_DEFENDERS];
 static tBitMap *pBmDefenders_Mask[MAX_DEFENDERS];
-static tBitMap *pBmDefenders_BG[MAX_DEFENDERS]; //for drawing the pieces with the background when they move, to prevent leaving trails
+//static tBitMap *pBmDefenders_BG[MAX_DEFENDERS]; //for drawing the pieces with the background when they move, to prevent leaving trails
 static tBitMap *pBmKing; //since the king is a different graphic
 static tBitMap *pBmKing_Mask;
-static tBitMap *pBmKing_BG; 
+//static tBitMap *pBmKing_BG; 
 static tBitMap *pBmClashFX; //FX to flash when one piece takes another
 static tBitMap *pBmClashFX_Mask;
 //static tBitMap *pBmClashFX_BG; //for drawing the FX with the background when they move, to prevent leaving trails
@@ -85,6 +85,7 @@ UBYTE pieceHasBGToRestore[2] = {0, 0}; //used to track whether the piece we're a
 UBYTE capturedPieceIndex[2] = {0, 0}; //the index of the piece that was captured in the last move, so we can draw the clash FX on top of it and then restore the background after.
 UBYTE validGeneration = 0; //used for tracking valid moves in the valid moves array. 
 UBYTE moveHistory[10]; //Record the move history so we can track for repetions
+UBYTE longLivetheKing = 0; //flag for when the king is captured.
 
 ScreenPos draw_pos[169];
 
@@ -371,6 +372,21 @@ void resetGame(void){
   setupPieces(); //sets up the pieces in their starting positions in the board array and in the piece structs
   buildBoard(); //sets up the board array with the pieces in their starting positions and the special squares marked
   drawPieces(); //draws the board and pieces to the screen, will need to be called again every time a piece moves or is captured
+  currentPlayer = TEAM_ATTACKER;
+  hightlightActive = 0;
+  lastHighlightIndex[0] = 0;
+  lastHighlightIndex[1] = 0;
+  highlightIndex = 0;
+  HLhasBGToRestore[0] = 0;
+  HLhasBGToRestore[1] = 0;
+  pieceHasBGToRestore[0] = 0;
+  pieceHasBGToRestore[1] = 0;
+  capturedPieceIndex[0] = 0;
+  capturedPieceIndex[1] = 0;
+  validGeneration = 0;
+  memset(validMoves, 0, sizeof(validMoves));
+  memset(moveHistory, 0, sizeof(moveHistory));
+  longLivetheKing = 0;
 }
 
 void updateMousepos(short mouseX, short mouseY){
@@ -539,14 +555,15 @@ void movePiece(void){
       if(defenders[j].pos == lastHighlightIndex[s_ubBufferIndex] && !defenders[j].captured){
         defenders[j].pos = highlightIndex; //update the piece's position in its struct
         
-        if(defenders[j].type == KING) {
-          boardState[highlightIndex] = 3; //update the boardState array with the new position of the piece, 3 for king
-          if (boardState[84] == 0) boardState[84] = 4; //if the king moves off the throne, set the throne to 4 which is a special square. 
-        }
+        if(defenders[j].type == KING) boardState[highlightIndex] = 3; //update the boardState array with the new position of the piece, 3 for king
         else boardState[highlightIndex] = 1; //update the boardState array with the new position of the piece, 1 for defender
         
-        boardState[lastHighlightIndex[s_ubBufferIndex]] = 0; //set the old position to 0 for empty
+        boardState[lastHighlightIndex[s_ubBufferIndex]] = 0; //set the old position to 0 for empty *This will override the throne if the king moved off it.
+        
+        if (boardState[84] == 0) boardState[84] = 4; //if the king moves off the throne, set the throne to 4 which is a special square. 
+        
         currentPlayer = TEAM_ATTACKER; //swap current player here
+        
         break;
       }
     }
@@ -574,70 +591,85 @@ void checkForCaptures(void){
   //check if it's surrounded on the other side by a friendly piece or a special square, if it is, mark it as captured in its struct and update the boardState array to remove it from the board, 
   //then call drawPieces() again to update the screen. 
 
-  //These will give the teams the pieces at those indexs are, not the indexes themselves.
   UBYTE RIGHT = boardState[highlightIndex +1]; 
   UBYTE LEFT = boardState[highlightIndex -1];
   UBYTE UP = boardState[highlightIndex -13];
   UBYTE DOWN = boardState[highlightIndex +13];
 
   UBYTE currentPieceTeam = boardState[highlightIndex]; //the piece that was just moved, used to check which team it belongs to for capture rules
-  UBYTE isKing = (currentPieceTeam == 3); //whether the piece that was just moved is the king, since the king has different capture rules and can only be captured by being surrounded on all four sides.
+   
   
   UBYTE RIGHTINDEX = highlightIndex +1; //the index of the square to the right of the moved piece, used to check for captures in that direction
   UBYTE LEFTINDEX = highlightIndex -1;
   UBYTE UPINDEX = highlightIndex -13;
   UBYTE DOWNINDEX = highlightIndex +13;
   
-  //check the squares around the piece but only out to one space if not blank, out of bounds or on the same team, continue.
-  if(RIGHT > 0 && RIGHT < 10 &&  RIGHT != currentPieceTeam){ 
-    logWrite("Checking +1 Pos at index %d",boardState[highlightIndex]);
-    //work out the team here?
+  UBYTE neighbours[4] = {RIGHT, LEFT, UP, DOWN};
+  UBYTE neighbourIndexes[4] = {RIGHTINDEX, LEFTINDEX, UPINDEX, DOWNINDEX};
+  BYTE directions[4] = {1, -1, -13, 13}; //used to check the square on the other side of the enemy piece for capture rules
 
-    //is the piece the king, in which case we need to see if all four sides are surrounded by attackers
-    if(isKing){
-      //king is captured, game over, attackers win
-      logWrite("King captured, attackers win!");
-      //go to the king capture helper function to follow king capture rules.
-    }
-    else if((boardState[RIGHTINDEX + 1]) == currentPieceTeam || (boardState[RIGHTINDEX + 1] == 4)){ //if the piece on the other side is on the same team or a special square, it's captured
-      //mark the piece as captured in its struct and update the boardState array to remove it from the board 
-      //How to tell which team the piece belongs to? We can check the boardState at the index of the piece to see if it's a defender or attacker, then loop through the corresponding array to find the piece with the matching position and mark it as captured.
-      if(currentPieceTeam == TEAM_DEFENDER|| currentPieceTeam == 3){ //if the piece that moved is a defender or the king, it can only capture attackers
-        for(UBYTE k = 0; k < MAX_ATTACKERS; k++){
-          if(attackers[k].pos == (RIGHTINDEX) && !attackers[k].captured){
-            attackers[k].captured = 2; //mark the piece as captured and needs removed from screen
-            
-            //boardState[RIGHTINDEX] = 0; //update the boardState array to remove it from the board
-            //By setting the above to 0 now, the piece is never found in the drawPieces since it's now a "blank" position
-            break;
-          }
-        }
-      } else if(currentPieceTeam == TEAM_ATTACKER){ //if the piece that moved is an attacker, it can only capture defenders and the king
-        for(UBYTE j = 0; j < MAX_DEFENDERS; j++){
-          if(defenders[j].pos == (RIGHTINDEX) && !defenders[j].captured){ //edge case, what happens when more than one direction has a capture?
-            defenders[j].captured = 1; //mark the piece as captured in its struct
-            capturedPieceIndex[0] = defenders[j].pos; //store the index of the captured piece
-            capturedPieceIndex[1] = defenders[j].pos;
+  for(UBYTE i = 0; i < 4; i++){
+    UBYTE neighbour = neighbours[i];
+    UBYTE neighbourIndex = neighbourIndexes[i];
+    BYTE direction = directions[i];
+  
+    if(neighbour > 0 && neighbour < 10 && neighbour != currentPieceTeam){ //if there's an enemy piece in this direction, check for capture
+        //logWrite("Checking capture in direction %d at index %d\n", direction, neighbourIndex);
+        UBYTE isKing = (neighbour == 3); //if the piece we are checking is the king, we need to check if it's captured differently, so we set a flag for that.
+
+        if(isKing){
+          //we need to check if the king is surrounded on all four sides by attackers or special squares, if he is, he's captured and the attackers win.
+          //shouldn't trigger when the king is against the corners since the edge of the board is out of bounds and not a special square, so it won't count as a capture condition for the king.
+          UBYTE rightOfKing = boardState[neighbourIndex +1];
+          UBYTE leftOfKing = boardState[neighbourIndex -1];
+          UBYTE upOfKing = boardState[neighbourIndex -13];
+          UBYTE downOfKing = boardState[neighbourIndex +13];
+          
+          //logWrite("Checking if king is captured, right: %d, left: %d, up: %d, down: %d\n", rightOfKing, leftOfKing, upOfKing, downOfKing);
+          if((rightOfKing == 2 || rightOfKing == 4) && (leftOfKing == 2 || leftOfKing == 4) && (upOfKing == 2 || upOfKing == 4) && (downOfKing == 2 || downOfKing == 4)){
+            defenders[0].captured = 1; //mark the king as captured and needs removed from screen the king is always at index 0 in the defenders array
+            capturedPieceIndex[0] = defenders[0].pos; //store the index of the captured piece
+            capturedPieceIndex[1] = defenders[0].pos;
             pieceHasBGToRestore[0] = 1; //set restore flag
             pieceHasBGToRestore[1] = 1; //set restore flag
-            boardState[RIGHTINDEX] = 0; //update the boardState array to remove it from the board
-            break;
+            boardState[neighbourIndex] = 0; //update the boardState array to remove it from the board
+          }
+          //king is captured, game over, attackers win
+          //logWrite("King captured, attackers win!");
+          longLivetheKing = 1; //set the flag to indicate the king is captured
+          return; //exit the function since the game is over
+        }
+
+        if((boardState[neighbourIndex + direction]) == currentPieceTeam || (boardState[neighbourIndex + direction] == 4)){ //if the piece on the other side is on the same team or a special square, it's captured
+          //mark the piece as captured in its struct and update the boardState array to remove it from the board 
+          
+          if(currentPieceTeam == TEAM_DEFENDER|| currentPieceTeam == 3){ //if the piece that moved is a defender or the king, it can only capture attackers
+            for(UBYTE k = 0; k < MAX_ATTACKERS; k++){
+              if(attackers[k].pos == (neighbourIndex) && !attackers[k].captured){
+                attackers[k].captured = 1; //mark the piece as captured and needs removed from screen
+                capturedPieceIndex[0] = attackers[k].pos; //store the index of the captured piece
+                capturedPieceIndex[1] = attackers[k].pos;
+                pieceHasBGToRestore[0] = 1; //set restore flag
+                pieceHasBGToRestore[1] = 1; //set restore flag
+                boardState[neighbourIndex] = 0; //update the boardState array to remove it from the board
+                break;
+              }
+            }
+          } 
+          else if(currentPieceTeam == TEAM_ATTACKER){ //if the piece that moved is an attacker, it can only capture defenders and the king
+            for(UBYTE j = 0; j < MAX_DEFENDERS; j++){
+              if(defenders[j].pos == (neighbourIndex) && !defenders[j].captured){ 
+                defenders[j].captured = 1; 
+                capturedPieceIndex[0] = defenders[j].pos; 
+                capturedPieceIndex[1] = defenders[j].pos;
+                pieceHasBGToRestore[0] = 1; 
+                pieceHasBGToRestore[1] = 1; 
+                boardState[neighbourIndex] = 0; 
+                break;
+              }
+            }
           }
         }
-        logWrite("Piece at index %d captured!", highlightIndex +1);
       }
-    }
   }
-
-  if((boardState[highlightIndex -1]) > 0 && (boardState[highlightIndex -1]) < 10){
-
-  }
-  if((boardState[highlightIndex +13]) > 0 && (boardState[highlightIndex +13]) < 10){
-
-  }
-  if((boardState[highlightIndex -13]) > 0 && (boardState[highlightIndex -13]) < 10){
-
-  }
-  //return if no valid pieces or just empty squares around the moved piece
-
 }
