@@ -9,9 +9,8 @@
 #include <ace/utils/file.h>
 #include <ace/utils/font.h>
 #include <ace/utils/string.h>
-// #include <time.h>
-// #include <stdbool.h>
-// #include <stdlib.h>
+#include <stdbool.h>
+#include <stdlib.h>
 
 #define MENU_HEIGHT	256 //y
 #define MENU_WIDTH	320 //x

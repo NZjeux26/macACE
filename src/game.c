@@ -14,6 +14,7 @@
 #include <ace/utils/font.h>
 #include <ace/utils/string.h>
 #include <ace/utils/palette.h>
+#include <mini_std/stdio.h>
 
 /*------DEFINES Setup------*/
 //Amiga Pal LOWRES is 320x256
@@ -67,9 +68,11 @@ static tBitMap *pBmMouseCursorData;
 
 static tSprite *pSMouseCursor;
 
+tTextBitMap *gametextbitmapattack; //bitmap for the font
+tTextBitMap *gametextbitmapdefend; //bitmap for the font
 
 tFont *gFontSmall; //global font for screen
-tTextBitMap *testingbitmap;
+
 
 /*-----Global Vars-----*/
 ULONG startTime;
@@ -114,14 +117,17 @@ void gameGsCreate(void) {
 
     drawBoard(); //draw the board to the back buffer before loading the view, so it's visible when the view loads
     
-    gFontSmall = fontCreateFromPath("/data/font/myacefont.fnt");
-
+    gFontSmall = fontCreateFromPath("myacefont.fnt");
+    
     spriteManagerCreate(s_pView, 0, NULL);
     systemSetDmaBit(DMAB_SPRITE, 1);
 
     pBmMouseCursorSrc = bitmapCreateFromPath("/data/GFX/mousepointer.bm",0);
     pBmMouseCursorData = bitmapCreate(CURSOR_SPRITE_WIDTH,CURSOR_SPRITE_HEIGHT,2,BMF_INTERLEAVED | BMF_CLEAR);
     pSMouseCursor = spriteAdd(CURSOR_SPRITE_CHANNEL,pBmMouseCursorData);
+
+    gametextbitmapattack = fontCreateTextBitMapFromStr(gFontSmall, "ACK");
+    gametextbitmapdefend = fontCreateTextBitMapFromStr(gFontSmall, "DEF");
 
     spriteSetEnabled(pSMouseCursor, 1);
     
@@ -168,19 +174,24 @@ void gameGsLoop(void) {
     //use a memcmp when the board states is completed.
     drawPieces();
     
+    
+    fontDrawTextBitMap(s_pMainBuffer->pBack, gametextbitmapattack, 5,110,0,FONT_COOKIE);
+    fontDrawTextBitMap(s_pMainBuffer->pBack, gametextbitmapdefend, 294,110,0,FONT_COOKIE);
+
     if(mouseCheck(MOUSE_PORT_1, MOUSE_LMB)){
       onClick(mouseX, mouseY);
       getValidMoves();
       movePiece();
-      //checkForCaptures(); //change to call only when a piece actually moves.
-    } else if(mouseCheck(MOUSE_PORT_1, MOUSE_RMB)){
-      if (hightlightActive) {
-        hightlightActive = 0; 
-        resetGame();
-        drawBoard(); //not for real, just here so I can clear the board easy for testing.
-      }
-    
     }
+      //checkForCaptures(); //change to call only when a piece actually moves.
+    // } else if(mouseCheck(MOUSE_PORT_1, MOUSE_RMB)){
+    //   if (hightlightActive) {
+    //     hightlightActive = 0; 
+    //     resetGame();
+    //     drawBoard(); //not for real, just here so I can clear the board easy for testing.
+    //   }
+    // }
+
     if (hightlightActive){ //if the highlight for valid moves is active, draw it
       drawSquareHighlight();
     }
@@ -220,7 +231,8 @@ void gameGsDestroy(void) {
     bitmapDestroy(pBmSquareHighlight_BG[0]);
     bitmapDestroy(pBmSquareHighlight_BG[1]);
     bitmapDestroy(pBmSquareHighlight_Mask);
-
+    fontDestroyTextBitMap(gametextbitmapattack);
+    fontDestroyTextBitMap(gametextbitmapdefend);
     systemSetDmaBit(DMAB_SPRITE, 0);
     spriteManagerDestroy();
 
@@ -397,10 +409,10 @@ void drawPieces(void){
     s_pMainBuffer->pBack, 287, 119, PIECE_SPRITE_WIDTH, PIECE_SPRITE_HEIGHT, MINTERM_COOKIE);
 
     blitCopyMask(pBmClashFX,0,0,
-    s_pMainBuffer->pBack, 0, 119, PIECE_SPRITE_WIDTH, 20, pBmClashFX_Mask->Planes[0]);
+    s_pMainBuffer->pBack, -1, 119, PIECE_SPRITE_WIDTH, 20, pBmClashFX_Mask->Planes[0]);
   } else {
     blitCopy(pBmBoard, 0, 119,
-    s_pMainBuffer->pBack, 0, 119, PIECE_SPRITE_WIDTH, 20, MINTERM_COOKIE);
+    s_pMainBuffer->pBack, -1, 119, PIECE_SPRITE_WIDTH, 20, MINTERM_COOKIE);
 
     blitCopyMask(pBmClashFX,0,0,
     s_pMainBuffer->pBack, 287, 119, PIECE_SPRITE_WIDTH, 20, pBmClashFX_Mask->Planes[0]);
@@ -688,22 +700,23 @@ void checkForCaptures(void){
             pieceHasBGToRestore[1] = 1; //set restore flag
             boardState[neighbourIndex] = 0; //update the boardState array to remove it from the board
             longLivetheKing = 1; //set the flag to indicate the king is captured
-          }
-          //king is captured, game over, attackers win
-          //logWrite("King captured, attackers win!");
-        
+          }  
           return; //exit the function since the game is over
         }
 
-        if((boardState[neighbourIndex + direction]) == currentPieceTeam || (boardState[neighbourIndex + direction] == 4)){ //if the piece on the other side is on the same team or a special square, it's captured
+        if((boardState[neighbourIndex + direction]) == currentPieceTeam || //if the piece on the other side is on the same team
+           (boardState[neighbourIndex + direction] == 4 || // Of next to a special square
+           (currentPieceTeam == 3 && boardState[neighbourIndex + direction] == TEAM_DEFENDER) || //or the current piece is the king and the other piece is a defender
+           (boardState[neighbourIndex + direction] == 3 && currentPieceTeam == TEAM_DEFENDER))){  //or the current piece is a defender and the other side is the king
+
           //mark the piece as captured in its struct and update the boardState array to remove it from the board 
           
-          if(currentPieceTeam == TEAM_DEFENDER|| currentPieceTeam == 3){ //if the piece that moved is a defender or the king, it can only capture attackers
+          if(currentPieceTeam == TEAM_DEFENDER || currentPieceTeam == 3){ //if the piece that moved is a defender or the king, it can only capture attackers
             for(UBYTE k = 0; k < MAX_ATTACKERS; k++){
               if(attackers[k].pos == (neighbourIndex) && !attackers[k].captured){
+                
                 attackers[k].captured = 1; //mark the piece as captured and needs removed from screen
                 UBYTE slot = capturedPieceCount[s_ubBufferIndex];
-                
                 if(slot < MAX_CAPTURES_PM){
                 capturedPieceIndex[0][slot] = attackers[k].pos; //store the index of the captured piece
                 capturedPieceIndex[1][slot] = attackers[k].pos;

@@ -92,6 +92,7 @@ CMakeFiles/macACE.elf.dir/src/menu.c.obj: /Users/phillipb/Documents/macACE/src/m
   /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/tag.h \
   /Users/phillipb/Documents/macACE/deps/ace/include/mini_std/printf.h \
   /Users/phillipb/Documents/macACE/deps/ace/include/mini_std/stdio.h \
+  /Users/phillipb/Documents/macACE/deps/ace/include/mini_std/stdlib.h \
   /Users/phillipb/Documents/macACE/deps/ace/include/mini_std/string.h \
   /Users/phillipb/Documents/macACE/src/menu.h \
   /Users/phillipb/Documents/macACE/src/states.h

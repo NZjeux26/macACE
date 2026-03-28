@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 project(macACE LANGUAGES ASM C)
-set(ACE_DEBUG ON)
+#set(ACE_DEBUG ON) #turn this off when making real disk!!!!
 #set(ACE_DEBUG_UAE ON)
 #set(CMAKE_C_STANDARD 17)
 # Add your project settings here
