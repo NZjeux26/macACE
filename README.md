@@ -1,4 +1,4 @@
-#  Hnefataf on the Amiga
+#  Hnefatafl on the Amiga
 
 This project brings the medieval Norse boardgame to the Amiga platform for the first time.
 
