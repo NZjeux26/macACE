@@ -29,6 +29,10 @@ I have found that sometimes key inputs for the game don’t always work. If you�
 
 If you’re in the game end screen, sometimes just mashing the key you want works.
 
+Game Load times.
+
+The game art takes a while to load the first time, if you hear clicking that means you're still loading assets! 
+
 Bug reporting can be done as submitting a issue to the git repo or @ing Jose Ambraelle in the AmigaGameDev discord.
 Game Rules
 

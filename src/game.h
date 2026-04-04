@@ -3,6 +3,8 @@
 
 #include <ace/utils/file.h>
 
+#define MAX_DEFENDERS 13  //12 Defenders + King
+#define MAX_ATTACKERS 24  //24 Attackers
 typedef enum 
 {
     DEFENDER,
@@ -30,15 +32,26 @@ typedef struct
     short y;
 } ScreenPos;
 
+typedef struct
+{
+    g_piece attackers[MAX_ATTACKERS];
+    g_piece defenders[MAX_DEFENDERS];
+    UBYTE boardState[169]; //0 = empty, 1 = defender, 2 = attacker, 3 = king
+    UBYTE currentPlayer; //0 = defender, 1 = attacker
+    UBYTE kingState;
+} GameState;
+
+extern GameState g_state;
+
 void gameGsCreate(void);
 void gameGsLoop(void);
 void gameGsDestroy(void);
-void buildBoard(void);
+void buildBoard(GameState *state);
 void setupBoard(void);
-void setupPieces(void);
+void setupPieces(GameState *state);
 void loadAssets(void);
-void getValidMoves(void);
-void movePiece(void);
+void getValidMoves(GameState *state, UBYTE pieceIndex);
+void movePiece(GameState *state, UBYTE oldIndex, UBYTE newIndex);
 void drawBoard(void);
 void drawPieces(void);
 void drawSquareHighlight(void);

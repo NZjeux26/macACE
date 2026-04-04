@@ -20,8 +20,6 @@
 //Amiga Pal LOWRES is 320x256
 #define SCREEN_HEIGHT 256 //32 for the top viewport height
 #define SCREEN_WIDTH 320
-#define MAX_DEFENDERS 13  //12 Defenders + King
-#define MAX_ATTACKERS 24  //24 Attackers
 #define BOARD_WIDTH 256 
 #define BOARD_HEIGHT 256
 #define BOARD_ORIGIN_X 28 //offset from left edge of screen to start of board
@@ -34,6 +32,9 @@
 #define CURSOR_SPRITE_HEIGHT 18
 #define CURSOR_SPRITE_CHANNEL 5
 #define MAX_CAPTURES_PM 9 //nine is the therotical max number of pieces that could ever be captured.
+#define KING_ALIVE    0
+#define KING_CAPTURED 1  
+#define KING_ESCAPED  2
 //#define OUTPUT_LOGGING //uncomment to enable more logging on arrays and positions in the debug.txt file.
 
 /*------Setting Up Viewports-------*/
@@ -42,9 +43,9 @@ static tVPort *s_pVpMain; // Viewport for playfield
 static tSimpleBufferManager *s_pMainBuffer; //only a main screen in this, no score ribbon
 //static tRandManager *s_pRandManager;
 
-/*-----Game Piece Setup-----*/
-g_piece attackers[MAX_ATTACKERS];
-g_piece defenders[MAX_DEFENDERS];
+/*-----Game State Setup-----*/
+
+GameState g_state;
 
 /*-----GFX Setup-----*/
 static tBitMap *pBmBoard;
@@ -73,9 +74,8 @@ tFont *gFontSmall; //global font for screen
 
 /*-----Global Vars-----*/
 ULONG startTime;
-UBYTE boardState[169]; // flattened 13x13 board array, each index corresponds to a square on the board. oversized to avoid out of bounds errors, only 169 squares on the board. 0-168 valid indices.
 UBYTE validMoves[169]; //used to hold the valid moves for a selected piece.
-UBYTE currentPlayer = TEAM_ATTACKER; 
+UBYTE validGeneration = 0; //used for tracking valid moves in the valid moves array.
 UBYTE s_ubBufferIndex = 0; //for double buffering, keeps track of which buffer we're currently drawing to
 UBYTE hightlightActive = 0; //whether the highlight for valid moves is currently active, so we know whether to draw it or not in the drawPieces function, and whether to update it when a piece is selected.
 UBYTE lastHighlightIndex[2] = {0, 0}; //the index of the last highlighted square, so we can restore the background when the highlight moves to a new square. This is needed because the highlight is drawn directly to the back buffer and not as a sprite, so we have to manually restore the background when it moves.
@@ -84,11 +84,15 @@ UBYTE HLhasBGToRestore[2] = {0, 0};//[2] = {0,0};
 UBYTE pieceHasBGToRestore[2] = {0, 0}; //used to track whether the piece we're about to draw has a background that needs to be restored when it moves, so we know whether to blit the background before drawing the piece in its new position. This is needed because the pieces are drawn directly to the back buffer and not as sprites, so we have to manually restore the background when they move.
 UBYTE capturedPieceIndex[2][MAX_CAPTURES_PM]; //the index of the piece that was captured in the last move, so we can draw the clash FX on top of it and then restore the background after.
 UBYTE capturedPieceCount[2] = {0,0};
-UBYTE validGeneration = 0; //used for tracking valid moves in the valid moves array. 
-UBYTE moveHistory[10]; //Record the move history so we can track for repetitions
-UBYTE longLivetheKing = 0; //flag for when the king is captured.
 UBYTE gameWinner = 0; //0 no one, 1 attackers, 2 defenders
 ScreenPos draw_pos[169];
+
+UBYTE moveHistory[10]; //Record the move history so we can track for repetitions
+UBYTE currentPlayer = TEAM_ATTACKER; 
+UBYTE boardState[169]; // flattened 13x13 board array, each index corresponds to a square on the board. oversized to avoid out of bounds errors, only 169 squares on the board. 0-168 valid indices.
+g_piece attackers[MAX_ATTACKERS];
+g_piece defenders[MAX_DEFENDERS];
+UBYTE longLivetheKing = 0; //flag for when the king is captured.
 
 void gameGsCreate(void) {
 
@@ -124,7 +128,7 @@ void gameGsCreate(void) {
 
     gametextbitmapattack = fontCreateTextBitMapFromStr(gFontSmall, "ACK");
     gametextbitmapdefend = fontCreateTextBitMapFromStr(gFontSmall, "DEF");
-    version = fontCreateTextBitMapFromStr(gFontSmall,"R"); //versioning so I know if the ADF disk updated correctly.
+    version = fontCreateTextBitMapFromStr(gFontSmall,"D"); //versioning so I know if the ADF disk updated correctly.
 
     spriteSetEnabled(pSMouseCursor, 1);
     
@@ -134,10 +138,11 @@ void gameGsCreate(void) {
     gameWinner = 0; //reset the game winner at the start of the game, in case we're coming from the menu after a game has ended.
 
     loadAssets();
-    setupPieces(); //sets up the pieces in their starting positions in the board array and in the piece structs
+    setupPieces(&g_state); //sets up the pieces in their starting positions in the board array and in the piece structs
     setupBoard(); //sets up the draw positions for each square on the board in the draw_pos array
-    buildBoard(); //sets up the board array with the pieces in their starting positions and the special squares marked
+    buildBoard(&g_state); //sets up the board array with the pieces in their starting positions and the special squares marked
     drawPieces(); //draws the board and pieces to the screen, will need to be called again every time a piece moves or is captured
+    g_state.currentPlayer = TEAM_ATTACKER;
     currentPlayer = TEAM_ATTACKER; //reset the current player to the attackers at the start of the game, in case we're coming from the menu after a game has ended.
     
     systemUnuse();
@@ -172,15 +177,14 @@ void gameGsLoop(void) {
     //use a memcmp when the board states is completed.
     drawPieces();
     
-    
     fontDrawTextBitMap(s_pMainBuffer->pBack, gametextbitmapattack, 6,110,0,FONT_COOKIE);
     fontDrawTextBitMap(s_pMainBuffer->pBack, gametextbitmapdefend, 295,110,0,FONT_COOKIE);
     fontDrawTextBitMap(s_pMainBuffer->pBack, version, 8,8,0,FONT_COOKIE);
 
     if(mouseCheck(MOUSE_PORT_1, MOUSE_LMB)){
       onClick(mouseX, mouseY);
-      getValidMoves();
-      movePiece();
+      getValidMoves(&g_state, highlightIndex); //get the valid moves for the selected piece and populate the validMoves array
+      movePiece(&g_state, lastHighlightIndex[s_ubBufferIndex], highlightIndex); //move the piece in the game state and update the board array, the old and new piece index will need to be passed in here once we have the selection and move working.
     }
       //checkForCaptures(); //change to call only when a piece actually moves.
     // } else if(mouseCheck(MOUSE_PORT_1, MOUSE_RMB)){
@@ -257,7 +261,7 @@ void loadAssets(void){
 }
 
 //sets up the pieces in their starting positions in the board array and in the piece structs
-void setupPieces(void){
+void setupPieces(GameState *state){
   
   UBYTE attackerPositions[MAX_ATTACKERS] = { //predefined starting positions for attackers
     17,18,19,20,21,32,
@@ -271,18 +275,18 @@ void setupPieces(void){
   };
  
   for(int i = 0; i < MAX_DEFENDERS; i++){
-    defenders[i].type = (i == 0) ? KING : DEFENDER; // First piece is the king, the rest are defenders
-    defenders[i].team = TEAM_DEFENDER;
-    defenders[i].captured = 0;
-    defenders[i].pos = defenderPositions[i]; // Assign starting positions from the predefined array First position is the throne in the middle, the rest are around it
+    state->defenders[i].type = (i == 0) ? KING : DEFENDER; // First piece is the king, the rest are defenders
+    state->defenders[i].team = TEAM_DEFENDER;
+    state->defenders[i].captured = 0;
+    state->defenders[i].pos = defenderPositions[i]; // Assign starting positions from the predefined array First position is the throne in the middle, the rest are around it
   }
 
   // Set up the attackers
   for(int i = 0; i < MAX_ATTACKERS; i++){
-    attackers[i].type = ATTACKER;
-    attackers[i].team = TEAM_ATTACKER;
-    attackers[i].captured = 0;
-    attackers[i].pos = attackerPositions[i]; // Assign starting positions from the predefined array
+    state->attackers[i].type = ATTACKER;
+    state->attackers[i].team = TEAM_ATTACKER;
+    state->attackers[i].captured = 0;
+    state->attackers[i].pos = attackerPositions[i]; // Assign starting positions from the predefined array
   }
 }
 
@@ -305,37 +309,37 @@ void setupBoard(void){
 }
 
 //sets up the board array with the pieces in their starting positions and the special squares marked
-void buildBoard(void){
+void buildBoard(GameState *state){
     //0 = empty square, 1 = occupied by defender, 2 = occupied by attacker, 3 = occupied by king, 4 = special square ,99 = dead zone for out of bounds
     //initialize the board array to all 0s
     for(int i = 0; i < 169; i++){
-        boardState[i] = 0;
+        state->boardState[i] = 0;
     }
 
     //set up the special positions for the corners and throne
-    boardState[14] = 4; //top left corner
-    boardState[24] = 4; //top right corner
-    boardState[144] = 4; //bottom left corner
-    boardState[154] = 4; //bottom right corner
-    boardState[84] = 4; //throne in the middle
+    state->boardState[14] = 4; //top left corner
+    state->boardState[24] = 4; //top right corner
+    state->boardState[144] = 4; //bottom left corner
+    state->boardState[154] = 4; //bottom right corner
+    state->boardState[84] = 4; //throne in the middle
 
     //place the pieces on the board according to their positions in the piece structs
     for(UBYTE j = 0; j < MAX_DEFENDERS; j++){
-        if(defenders[j].type == KING){
-            boardState[defenders[j].pos] = 3; //king
+        if(state->defenders[j].type == KING){
+            state->boardState[state->defenders[j].pos] = 3; //king
         } else {
-            boardState[defenders[j].pos] = 1; //defender
+            state->boardState[state->defenders[j].pos] = 1; //defender
         }
     }
     //place the attackers on the board according to their positions in the piece structs
     for(UBYTE k = 0; k < MAX_ATTACKERS; k++){
-        boardState[attackers[k].pos] = 2; //attacker
-        //logWrite("Placing attacker at index %d\n", attackers[k].pos);
+        state->boardState[state->attackers[k].pos] = 2; //attacker
+        //logWrite("Placing attacker at index %d\n", state->attackers[k].pos);
     }
     //sets the border squares to 99 to prevent out of bounds errors when checking for moves and captures
     for(UBYTE i = 0; i < 169; i++){
         if(i < 13 || i >= 156 || i % 13 == 0 || i % 13 == 12){
-            boardState[i] = 99; //dead zone
+            state->boardState[i] = 99; //dead zone
             //logWrite("Setting board index %d to 99\n", i);
         }
     }
@@ -343,7 +347,7 @@ void buildBoard(void){
     //DEBUG: print the board to the log to check it's set up correctly
     #ifdef OUTPUT_LOGGING
     for(UBYTE i = 0; i < 169; i++){
-        logWrite("Board POS: %d is %d \n", i, boardState[i]);
+        logWrite("Board POS: %d is %d \n", i, state->boardState[i]);
     }
     #endif
 }
@@ -351,7 +355,7 @@ void buildBoard(void){
 void drawPieces(void){ 
   //More efficent method, go through each defender or attacker in the respective arrays, if not captured, draw.
   for(UBYTE j = 0; j < MAX_DEFENDERS; j++){ //start at 1 since the king is zero
-    UBYTE i = defenders[j].pos;
+    UBYTE i = g_state.defenders[j].pos;
     //The first position in the array is always the king
     if(j == 0){
       blitCopyMask(pBmKing,0,0,
@@ -359,7 +363,7 @@ void drawPieces(void){
       PIECE_SPRITE_WIDTH,PIECE_SPRITE_HEIGHT,pBmKing_Mask->Planes[0]);
     }
     else{
-      if(!defenders[j].captured){
+      if(!g_state.defenders[j].captured){
         blitCopyMask(pBmDefenders[j],0,0, 
         s_pMainBuffer->pBack, draw_pos[i].x, draw_pos[i].y,
         PIECE_SPRITE_WIDTH,PIECE_SPRITE_HEIGHT,pBmDefenders_Mask[j]->Planes[0]); 
@@ -367,8 +371,8 @@ void drawPieces(void){
     }
   }
   for(UBYTE k = 0; k < MAX_ATTACKERS; k++){
-    UBYTE i = attackers[k].pos;
-    if(!attackers[k].captured){
+    UBYTE i = g_state.attackers[k].pos;
+    if(!g_state.attackers[k].captured){
       blitCopyMask(pBmAttackers[k],0,0,
       s_pMainBuffer->pBack, draw_pos[i].x, draw_pos[i].y,
       PIECE_SPRITE_WIDTH,PIECE_SPRITE_HEIGHT,pBmAttackers_Mask[k]->Planes[0]);
@@ -396,7 +400,7 @@ void drawPieces(void){
     capturedPieceCount[s_ubBufferIndex] = 0;
   }
   //this manages the clash symbol which shows who's turn it is.
-  if(currentPlayer == TEAM_ATTACKER){
+  if(g_state.currentPlayer == TEAM_ATTACKER){
     //undraw the clash from the defender side and redraw it on the attacker side
     blitCopy(pBmBoard, 288, 119,
     s_pMainBuffer->pBack, 288, 119, PIECE_SPRITE_WIDTH, PIECE_SPRITE_HEIGHT, MINTERM_COOKIE);
@@ -424,9 +428,9 @@ void drawBoard(void){
 }
 
 void resetGame(void){
-  currentPlayer = TEAM_ATTACKER;
-  setupPieces(); //sets up the pieces in their starting positions in the board array and in the piece structs
-  buildBoard(); //sets up the board array with the pieces in their starting positions and the special squares marked
+  g_state.currentPlayer = TEAM_ATTACKER;
+  setupPieces(&g_state); //sets up the pieces in their starting positions in the board array and in the piece structs
+  buildBoard(&g_state); //sets up the board array with the pieces in their starting positions and the special squares marked
   drawPieces(); //draws the board and pieces to the screen, will need to be called again every time a piece moves or is captured
   for(UBYTE i = 0; i < 2; i++){
     lastHighlightIndex[i] = 0;
@@ -461,7 +465,7 @@ void onClick(short mouseX, short mouseY){
        mouseY >= draw_pos[i].y && mouseY <= draw_pos[i].y + SQUARE_Y){
         // logWrite("Clicked on square index %d\n", i); 
          //If a square is already Highlighted, set to zero for it to be restored
-         if(!hightlightActive && boardState[i] == 0) return; //if the highlight isn't active and the square clicked is empty, do nothing
+         if(!hightlightActive && g_state.boardState[i] == 0) return; //if the highlight isn't active and the square clicked is empty, do nothing
 
          if(hightlightActive){ 
           //  logWrite("Undraw Highlighted Index = %d\n", highlightIndex);
@@ -504,10 +508,10 @@ void drawSquareHighlight(void){
 }
 
 /* This function will calculate the valid moves for the currently highlighted piece and populate the validMoves array, which is indexed the same as the board array, with a value over 0 for valid moves and 0 for invalid moves.*/
-void getValidMoves(void){
+void getValidMoves(GameState *state, UBYTE selectedIndex){
 
   //First check if the square is empty, a special square or out of bounds, there are no valid moves to calculate, so return
-  if(boardState[highlightIndex] == 0 || boardState[highlightIndex] == 4 || boardState[highlightIndex] == 99){ 
+  if(state->boardState[selectedIndex] == 0 || state->boardState[selectedIndex] == 4 || state->boardState[selectedIndex] == 99){ 
     return;
   }
   //increment valid generation to mark the current valid moves, this way we can avoid having to clear the validMoves array every time.
@@ -520,33 +524,33 @@ void getValidMoves(void){
   }
   
   //need to check whether the piece is the king, if so it's allowed on squares in boardState that = 4.
-  UBYTE isKing = (boardState[highlightIndex] == 3);
+  UBYTE isKing = (state->boardState[selectedIndex] == 3);
 
   /* This is no risk of over or under flow. Only 13-154 are valid game squares and only 14-153 are valid for piece movement */
 
   /*lets check the rows which are +1 and -1 This needs the minus (or plus) so the index doesn't start on the piece selected and auto fails.*/
-  for(UBYTE r = (highlightIndex +1); r < 169; r++){ //rows in the + direction
+  for(UBYTE r = (selectedIndex +1); r < 169; r++){ //rows in the + direction
     //if the square is occupied, break
-    if(boardState[r] > 0 && boardState[r] < 3){
+    if(state->boardState[r] > 0 && state->boardState[r] < 3){
       break; //if greater than 0 it means th square is occupied, a special square or out of bounds and invalid
     }
-    else if(boardState[r] == 4 && !isKing){ //if it's a special square and the piece isn't the king, break
+    else if(state->boardState[r] == 4 && !isKing){ //if it's a special square and the piece isn't the king, break
       break;
     }
-    else if(boardState[r] == 99){ //if it's out of bounds, break
+    else if(state->boardState[r] == 99){ //if it's out of bounds, break
       break;
     }
     validMoves[r] = validGeneration; //add the current position to the valid moves array. 
   }
   
-  for(UBYTE u = (highlightIndex - 1); u < 169; u--){ //rows in the - direction
-    if(boardState[u] > 0 && boardState[u] < 3){
+  for(UBYTE u = (selectedIndex - 1); u < 169; u--){ //rows in the - direction
+    if(state->boardState[u] > 0 && state->boardState[u] < 3){
       break; 
     }
-    else if(boardState[u] == 4 && !isKing){
+    else if(state->boardState[u] == 4 && !isKing){
       break;
     }
-    else if(boardState[u] == 99){
+    else if(state->boardState[u] == 99){
       break;
     }
     validMoves[u] = validGeneration; 
@@ -554,27 +558,27 @@ void getValidMoves(void){
 
   /* **Check Coloums** */
 
-  for(UBYTE c = (highlightIndex +13); c < 169; c=c+13){ 
-    if(boardState[c] > 0 && boardState[c] < 3){
+  for(UBYTE c = (selectedIndex +13); c < 169; c=c+13){ 
+    if(state->boardState[c] > 0 && state->boardState[c] < 3){
       break;
     }
-    else if(boardState[c] == 4 && !isKing){
+    else if(state->boardState[c] == 4 && !isKing){
       break;
     }
-    else if(boardState[c] == 99){
+    else if(state->boardState[c] == 99){
       break;
     }
     validMoves[c] = validGeneration; 
   }
   
-  for(UBYTE y = (highlightIndex -13); y < 169; y=y-13){ 
-    if(boardState[y] > 0 && boardState[y] < 3){
+  for(UBYTE y = (selectedIndex -13); y < 169; y=y-13){ 
+    if(state->boardState[y] > 0 && state->boardState[y] < 3){
       break; 
     }
-    else if(boardState[y] == 4 && !isKing){
+    else if(state->boardState[y] == 4 && !isKing){
       break;
     }
-    else if(boardState[y] == 99){
+    else if(state->boardState[y] == 99){
       break;
     }
     validMoves[y] = validGeneration; 
@@ -596,30 +600,30 @@ void getValidMoves(void){
   then update the boardState array and the piece's struct with the new position, 
   and finally call turn off the highligh and set the flag to restore the background.
 */
-void movePiece(void){
+void movePiece(GameState *state, UBYTE oldIndex, UBYTE newIndex){
   
   //check if the selected new square is a valid move by checking the validMoves array at the highlightIndex, if it's not valid, return and do nothing
-  if(validMoves[highlightIndex] != validGeneration){
+  if(validMoves[newIndex] != validGeneration){
     //logWrite("Invalid move attempted to index %d\n", highlightIndex);
     return;
   }
 
   //find the piece that is being moved by checking the boardState at the lastHighlightIndex to see if it's a defender or the king
   //then loop through the defenders array to find the piece with the matching position and update its position to the new highlightIndex
-  if(currentPlayer == TEAM_DEFENDER){
+  if(state->currentPlayer == TEAM_DEFENDER){
    
     for(UBYTE j = 0; j < MAX_DEFENDERS; j++){
-      if(defenders[j].pos == lastHighlightIndex[s_ubBufferIndex] && !defenders[j].captured){
-        defenders[j].pos = highlightIndex; //update the piece's position in its struct
+      if(state->defenders[j].pos == oldIndex && !state->defenders[j].captured){
+        state->defenders[j].pos = newIndex; //update the piece's position in its struct
         
-        if(defenders[j].type == KING) boardState[highlightIndex] = 3; //update the boardState array with the new position of the piece, 3 for king
-        else boardState[highlightIndex] = 1; //update the boardState array with the new position of the piece, 1 for defender
+        if(state->defenders[j].type == KING) state->boardState[newIndex] = 3; //update the boardState array with the new position of the piece, 3 for king
+        else state->boardState[newIndex] = 1; //update the boardState array with the new position of the piece, 1 for defender
         
-        boardState[lastHighlightIndex[s_ubBufferIndex]] = 0; //set the old position to 0 for empty *This will override the throne if the king moved off it.
+        state->boardState[oldIndex] = 0; //set the old position to 0 for empty *This will override the throne if the king moved off it.
         
-        if (boardState[84] == 0) boardState[84] = 4; //if the king moves off the throne, set the throne to 4 which is a special square. 
+        if (state->boardState[84] == 0) state->boardState[84] = 4; //if the king moves off the throne, set the throne to 4 which is a special square. 
         
-        currentPlayer = TEAM_ATTACKER; //swap current player here
+        state->currentPlayer = TEAM_ATTACKER; //swap current player here
         
         break;
       }
@@ -627,13 +631,13 @@ void movePiece(void){
   } else {
     //do the same for attackers
     for(UBYTE k = 0; k < MAX_ATTACKERS; k++){
-      if(attackers[k].pos == lastHighlightIndex[s_ubBufferIndex] && !attackers[k].captured){
-        attackers[k].pos = highlightIndex;
+      if(state->attackers[k].pos == oldIndex && !state->attackers[k].captured){
+        state->attackers[k].pos = newIndex;
        
-        boardState[highlightIndex] = 2; //update the boardState array with the new position of the piece, 2 for attacker
-        boardState[lastHighlightIndex[s_ubBufferIndex]] = 0; //set the old position to 0 for empty
+        state->boardState[newIndex] = 2; //update the boardState array with the new position of the piece, 2 for attacker
+        state->boardState[oldIndex] = 0; //set the old position to 0 for empty
         
-        currentPlayer = TEAM_DEFENDER;
+        state->currentPlayer = TEAM_DEFENDER;
         break;
       }
     }
