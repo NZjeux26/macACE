@@ -58,9 +58,9 @@ void drawSquareHighlight(void);
 void resetGame(void);
 void checkForWin(void);
 void checkGameEnd(void);
-void checkForCaptures(void);
-void checkShieldWallCaptures(void);
-void checkExitFort(void);
-void checkSurrounded(void);
+void checkForCaptures(GameState *state, UBYTE pieceIndex);
+void checkShieldWallCaptures(GameState *state, UBYTE pieceIndex);
+void checkExitFort(GameState *state);
+void checkSurrounded(GameState *state, UBYTE pieceIndex);
 
 #endif // _GAME_H_
