@@ -31,7 +31,7 @@
 #define CURSOR_SPRITE_WIDTH 16
 #define CURSOR_SPRITE_HEIGHT 18
 #define CURSOR_SPRITE_CHANNEL 5
-#define MAX_CAPTURES_PM 9 //nine is the therotical max number of pieces that could ever be captured.
+
 #define KING_ALIVE    0
 #define KING_CAPTURED 1  
 #define KING_ESCAPED  2
@@ -44,7 +44,6 @@ static tSimpleBufferManager *s_pMainBuffer; //only a main screen in this, no sco
 //static tRandManager *s_pRandManager;
 
 /*-----Game State Setup-----*/
-
 GameState g_state;
 
 /*-----GFX Setup-----*/
@@ -83,16 +82,11 @@ UBYTE highlightIndex = 0; //the index of the currently highlighted square, so we
 UBYTE HLhasBGToRestore[2] = {0, 0};//[2] = {0,0};
 UBYTE pieceHasBGToRestore[2] = {0, 0}; //used to track whether the piece we're about to draw has a background that needs to be restored when it moves, so we know whether to blit the background before drawing the piece in its new position. This is needed because the pieces are drawn directly to the back buffer and not as sprites, so we have to manually restore the background when they move.
 UBYTE capturedPieceIndex[2][MAX_CAPTURES_PM]; //the index of the piece that was captured in the last move, so we can draw the clash FX on top of it and then restore the background after.
-UBYTE capturedPieceCount[2] = {0,0};
+UBYTE capturedPieceCount[2] = {0, 0}; //the number of pieces that were captured in the last move, so we know how many backgrounds we need to restore after drawing the clash FX.
 UBYTE gameWinner = 0; //0 no one, 1 attackers, 2 defenders
 ScreenPos draw_pos[169];
 
 UBYTE moveHistory[10]; //Record the move history so we can track for repetitions
-// UBYTE currentPlayer = TEAM_ATTACKER; 
-// UBYTE boardState[169]; // flattened 13x13 board array, each index corresponds to a square on the board. oversized to avoid out of bounds errors, only 169 squares on the board. 0-168 valid indices.
-// g_piece attackers[MAX_ATTACKERS];
-// g_piece defenders[MAX_DEFENDERS];
-// UBYTE longLivetheKing = 0; //flag for when the king is captured.
 
 void gameGsCreate(void) {
 
@@ -172,28 +166,38 @@ void gameGsLoop(void) {
     //Do mouse stuff here to select and move pieces, check for captures and wins, etc.
     updateMousepos(mouseX, mouseY);
 
-    //redraw the board and pieces every frame, 
-    //to implement and works fine performance-wise since it's a small board and not many pieces.
-    //use a memcmp when the board states is completed.
+    //redraw the pieces every frame, 
     drawPieces();
     
+    //these only need drawn once for each buffer frame and since they wont be writeen on again keft alone.
     fontDrawTextBitMap(s_pMainBuffer->pBack, gametextbitmapattack, 6,110,0,FONT_COOKIE);
     fontDrawTextBitMap(s_pMainBuffer->pBack, gametextbitmapdefend, 295,110,0,FONT_COOKIE);
     fontDrawTextBitMap(s_pMainBuffer->pBack, version, 8,8,0,FONT_COOKIE);
 
     if(mouseCheck(MOUSE_PORT_1, MOUSE_LMB)){
       onClick(mouseX, mouseY);
+
       getValidMoves(&g_state, highlightIndex); //get the valid moves for the selected piece and populate the validMoves array
-      movePiece(&g_state, lastHighlightIndex[s_ubBufferIndex], highlightIndex); //move the piece in the game state and update the board array, the old and new piece index will need to be passed in here once we have the selection and move working.
+      MoveResult result = {0};
+      movePiece(&g_state, lastHighlightIndex[s_ubBufferIndex], highlightIndex, &result); //move the piece in the game state and update the board array, the old and new piece index will need to be passed in here once we have the selection and move working.
+      
+      if(result.clearHighlight == 1){ //if the move function set the flag to clear the highlight, then we need to clear it
+        hightlightActive = 0; //deactivate the highlight
+        HLhasBGToRestore[s_ubBufferIndex] = 1; //set the flag to restore the background on the next frame, since the highlight is drawn directly to the back buffer and not as a sprite, we have to manually restore the background when it moves or is cleared.
+      }
+      
+      //the result struct is used to seperate the global render flags that were previously used so that when a CPU player wants to use the movePiece function and it's sub functions in a branching tree it doesn't affect the game rendering
+      if(result.capturedCount[0] > 0 ){
+        for(UBYTE i = 0; i < result.capturedCount[0]; i++){
+          capturedPieceIndex[0][i] = result.capturedPieceIndexes[0][i];
+          capturedPieceIndex[1][i] = result.capturedPieceIndexes[1][i]; 
+        }
+        capturedPieceCount[0] = result.capturedCount[0];
+        capturedPieceCount[1] = result.capturedCount[1];
+        pieceHasBGToRestore[0] = 1; //set the flag to restore the background
+        pieceHasBGToRestore[1] = 1; //set the flag to restore the background 
+      }
     }
-      //checkForCaptures(); //change to call only when a piece actually moves.
-    // } else if(mouseCheck(MOUSE_PORT_1, MOUSE_RMB)){
-    //   if (hightlightActive) {
-    //     hightlightActive = 0; 
-    //     resetGame();
-    //     drawBoard(); //not for real, just here so I can clear the board easy for testing.
-    //   }
-    // }
 
     if (hightlightActive){ //if the highlight for valid moves is active, draw it
       drawSquareHighlight();
@@ -425,30 +429,8 @@ void drawBoard(void){
         blitCopyAligned(pBmBoard,x,y,s_pMainBuffer->pFront,x,y,16,16);
         }
     }
+   
 }
-
-// void resetGame(void){
-//   g_state.currentPlayer = TEAM_ATTACKER;
-//   setupPieces(&g_state); //sets up the pieces in their starting positions in the board array and in the piece structs
-//   buildBoard(&g_state); //sets up the board array with the pieces in their starting positions and the special squares marked
-//   drawPieces(); //draws the board and pieces to the screen, will need to be called again every time a piece moves or is captured
-//   for(UBYTE i = 0; i < 2; i++){
-//     lastHighlightIndex[i] = 0;
-//     HLhasBGToRestore[i] = 0;
-//     pieceHasBGToRestore[i] = 0;
-//     capturedPieceIndex[i][0] = 0;
-//     capturedPieceIndex[i][1] = 0;
-//     capturedPieceIndex[i][2] = 0;
-//     capturedPieceIndex[i][3] = 0;
-//     capturedPieceCount[i] = 0;
-//   }
-//   hightlightActive = 0;
-//   highlightIndex = 0;
-//   validGeneration = 0;
-//   memset(validMoves, 0, sizeof(validMoves));
-//   memset(moveHistory, 0, sizeof(moveHistory));
-//   longLivetheKing = 0;
-// }
 
 void updateMousepos(short mouseX, short mouseY){
   pSMouseCursor->wX = mouseX;
@@ -600,7 +582,7 @@ void getValidMoves(GameState *state, UBYTE selectedIndex){
   then update the boardState array and the piece's struct with the new position, 
   and finally call turn off the highligh and set the flag to restore the background.
 */
-void movePiece(GameState *state, UBYTE oldIndex, UBYTE newIndex){
+void movePiece(GameState *state, UBYTE oldIndex, UBYTE newIndex, MoveResult *result){
   
   //check if the selected new square is a valid move by checking the validMoves array at the highlightIndex, if it's not valid, return and do nothing
   if(validMoves[newIndex] != validGeneration){
@@ -642,18 +624,21 @@ void movePiece(GameState *state, UBYTE oldIndex, UBYTE newIndex){
       }
     }
   }
-  checkForCaptures(&g_state, newIndex);
+
+  //these will need removed or done some other way. A CPU player wouldn't be clicking to move piece so this would fire, but not actually do anything.
+  result->clearHighlight = 1; //set the flag to clear the highlight after a move is made
+
+  checkForCaptures(&g_state, newIndex, result);
   if(capturedPieceCount[s_ubBufferIndex] == 0){
-    checkShieldWallCaptures(&g_state, newIndex);
+    checkShieldWallCaptures(&g_state, newIndex, result);
     checkExitFort(&g_state);
     checkSurrounded(&g_state, newIndex);
   }
-  hightlightActive = 0; //deactivate the highlight after a move is made
-  HLhasBGToRestore[s_ubBufferIndex] = 1; //set restore flag
+  
   checkGameEnd();
 }
 
-void checkForCaptures(GameState *state, UBYTE pieceIndex){
+void checkForCaptures(GameState *state, UBYTE pieceIndex, MoveResult *result){
   //after a piece is moved, we need to check if it has captured any enemy pieces by looking at the squares around the moved piece in the boardState array, if there's an enemy piece there, 
   //check if it's surrounded on the other side by a friendly piece or a special square, if it is, mark it as captured in its struct and update the boardState array to remove it from the board, 
   //then call drawPieces() again to update the screen. 
@@ -694,12 +679,10 @@ void checkForCaptures(GameState *state, UBYTE pieceIndex){
           //logWrite("Checking if king is captured, right: %d, left: %d, up: %d, down: %d\n", rightOfKing, leftOfKing, upOfKing, downOfKing);
           if((rightOfKing == 2 || rightOfKing == 4) && (leftOfKing == 2 || leftOfKing == 4) && (upOfKing == 2 || upOfKing == 4) && (downOfKing == 2 || downOfKing == 4)){
             state->defenders[0].captured = 1; //mark the king as captured and needs removed from screen the king is always at index 0 in the defenders array
-            capturedPieceIndex[0][0] = state->defenders[0].pos; //store the index of the captured piece
-            capturedPieceIndex[1][0] = state->defenders[0].pos;
-            capturedPieceCount[0] = 1;
-            capturedPieceCount[1] = 1;
-            pieceHasBGToRestore[0] = 1; //set restore flag
-            pieceHasBGToRestore[1] = 1; //set restore flag
+            result->capturedPieceIndexes[0][0] = state->defenders[0].pos; //store the index of the captured piece
+            result->capturedPieceIndexes[1][0] = state->defenders[0].pos;
+            result->capturedCount[0] = 1;
+            result->capturedCount[1] = 1;
             state->boardState[neighbourIndex] = 0; //update the boardState array to remove it from the board
             state->kingState = KING_CAPTURED; //set the flag to indicate the king is captured
           }  
@@ -718,14 +701,13 @@ void checkForCaptures(GameState *state, UBYTE pieceIndex){
               if(state->attackers[k].pos == (neighbourIndex) && !state->attackers[k].captured){
                 
                 state->attackers[k].captured = 1; //mark the piece as captured and needs removed from screen
-                UBYTE slot = capturedPieceCount[s_ubBufferIndex];
+                UBYTE slot = result->capturedCount[s_ubBufferIndex];
                 if(slot < MAX_CAPTURES_PM){
-                capturedPieceIndex[0][slot] = state->attackers[k].pos; //store the index of the captured piece
-                capturedPieceIndex[1][slot] = state->attackers[k].pos;
-                capturedPieceCount[0]++;
-                capturedPieceCount[1]++;
-                pieceHasBGToRestore[0] = 1; //set restore flag
-                pieceHasBGToRestore[1] = 1; //set restore flag
+                
+                result->capturedPieceIndexes[0][slot] = state->attackers[k].pos; //store the index of the captured piece
+                result->capturedPieceIndexes[1][slot] = state->attackers[k].pos;
+                result->capturedCount[0]++;
+                result->capturedCount[1]++;
                 state->boardState[neighbourIndex] = 0; //update the boardState array to remove it from the board
                 }
                 break;
@@ -737,14 +719,12 @@ void checkForCaptures(GameState *state, UBYTE pieceIndex){
               if(state->defenders[j].pos == (neighbourIndex) && !state->defenders[j].captured){ 
                 
                 state->defenders[j].captured = 1; 
-                UBYTE slot = capturedPieceCount[s_ubBufferIndex];
+                UBYTE slot = result->capturedCount[s_ubBufferIndex];
                 if(slot < MAX_CAPTURES_PM){
-                  capturedPieceIndex[0][slot] = state->defenders[j].pos; 
-                  capturedPieceIndex[1][slot] = state->defenders[j].pos;
-                  capturedPieceCount[0]++;
-                  capturedPieceCount[1]++;
-                  pieceHasBGToRestore[0] = 1; 
-                  pieceHasBGToRestore[1] = 1; 
+                  result->capturedPieceIndexes[0][slot] = state->defenders[j].pos; 
+                  result->capturedPieceIndexes[1][slot] = state->defenders[j].pos;
+                  result->capturedCount[0]++;
+                  result->capturedCount[1]++;
                   state->boardState[neighbourIndex] = 0; 
                 }
                 break;
@@ -775,7 +755,7 @@ void checkGameEnd(void){
   
 }
 
-void checkShieldWallCaptures(GameState *state, UBYTE pieceIndex){
+void checkShieldWallCaptures(GameState *state, UBYTE pieceIndex, MoveResult *result){
 
   UBYTE currentPieceTeam = state->boardState[pieceIndex];
   
@@ -876,14 +856,12 @@ void checkShieldWallCaptures(GameState *state, UBYTE pieceIndex){
         for(UBYTE j = 0; j < MAX_DEFENDERS; j++){
           if(state->defenders[j].pos == idx && !state->defenders[j].captured){
             state->defenders[j].captured = 1;
-            UBYTE slot = capturedPieceCount[s_ubBufferIndex];
+            UBYTE slot = result->capturedCount[s_ubBufferIndex];
             if(slot < MAX_CAPTURES_PM){
-              capturedPieceIndex[0][slot] = idx;
-              capturedPieceIndex[1][slot] = idx;
-              capturedPieceCount[0]++;
-              capturedPieceCount[1]++;
-              pieceHasBGToRestore[0] = 1;
-              pieceHasBGToRestore[1] = 1;
+              result->capturedPieceIndexes[0][slot] = idx;
+              result->capturedPieceIndexes[1][slot] = idx;
+              result->capturedCount[0]++;
+              result->capturedCount[1]++;
             }
             state->boardState[idx] = 0;
             break;
@@ -893,14 +871,12 @@ void checkShieldWallCaptures(GameState *state, UBYTE pieceIndex){
         for(UBYTE k = 0; k < MAX_ATTACKERS; k++){
           if(state->attackers[k].pos == idx && !state->attackers[k].captured){
             state->attackers[k].captured = 1;
-            UBYTE slot = capturedPieceCount[s_ubBufferIndex];
+            UBYTE slot = result->capturedCount[s_ubBufferIndex];
             if(slot < MAX_CAPTURES_PM){
-              capturedPieceIndex[0][slot] = idx;
-              capturedPieceIndex[1][slot] = idx;
-              capturedPieceCount[0]++;
-              capturedPieceCount[1]++;
-              pieceHasBGToRestore[0] = 1;
-              pieceHasBGToRestore[1] = 1;
+              result->capturedPieceIndexes[0][slot] = idx;
+              result->capturedPieceIndexes[1][slot] = idx;
+              result->capturedCount[0]++;
+              result->capturedCount[1]++;
             }
             state->boardState[idx] = 0;
             break;

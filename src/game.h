@@ -5,6 +5,7 @@
 
 #define MAX_DEFENDERS 13  //12 Defenders + King
 #define MAX_ATTACKERS 24  //24 Attackers
+#define MAX_CAPTURES_PM 9 //nine is the therotical max number of pieces that could ever be captured.
 typedef enum 
 {
     DEFENDER,
@@ -31,7 +32,11 @@ typedef struct
     short x;
     short y;
 } ScreenPos;
-
+typedef struct{
+    UBYTE capturedPieceIndexes[2][MAX_CAPTURES_PM]; //the index of the piece that was captured in the last move, so we can draw the clash FX on top of it and then restore the background after.
+    UBYTE capturedCount[2];
+    UBYTE clearHighlight;
+} MoveResult;
 typedef struct
 {
     g_piece attackers[MAX_ATTACKERS];
@@ -51,15 +56,15 @@ void setupBoard(void);
 void setupPieces(GameState *state);
 void loadAssets(void);
 void getValidMoves(GameState *state, UBYTE pieceIndex);
-void movePiece(GameState *state, UBYTE oldIndex, UBYTE newIndex);
+void movePiece(GameState *state, UBYTE oldIndex, UBYTE newIndex, MoveResult *result);
 void drawBoard(void);
 void drawPieces(void);
 void drawSquareHighlight(void);
 void resetGame(void);
 void checkForWin(void);
 void checkGameEnd(void);
-void checkForCaptures(GameState *state, UBYTE pieceIndex);
-void checkShieldWallCaptures(GameState *state, UBYTE pieceIndex);
+void checkForCaptures(GameState *state, UBYTE pieceIndex, MoveResult *result);
+void checkShieldWallCaptures(GameState *state, UBYTE pieceIndex, MoveResult *result);
 void checkExitFort(GameState *state);
 void checkSurrounded(GameState *state, UBYTE pieceIndex);
 
