@@ -349,7 +349,7 @@ void buildBoard(void){
 }
 
 void drawPieces(void){ 
-  //More efficent method, go through each defender or attacker in the respective arrays, if not captured, draw.
+  //More efficient method, go through each defender or attacker in the respective arrays, if not captured, draw.
   for(UBYTE j = 0; j < MAX_DEFENDERS; j++){ //start at 1 since the king is zero
     UBYTE i = defenders[j].pos;
     //The first position in the array is always the king
@@ -552,7 +552,7 @@ void getValidMoves(void){
     validMoves[u] = validGeneration; 
   }
 
-  /* **Check Coloums** */
+  /* **Check Columns** */
 
   for(UBYTE c = (highlightIndex +13); c < 169; c=c+13){ 
     if(boardState[c] > 0 && boardState[c] < 3){
@@ -594,7 +594,7 @@ void getValidMoves(void){
 /*
   This function will move the currently highlighted piece to a new square if it's a valid move,
   then update the boardState array and the piece's struct with the new position, 
-  and finally call turn off the highligh and set the flag to restore the background.
+  and finally call turn off the highlight and set the flag to restore the background.
 */
 void movePiece(void){
   
