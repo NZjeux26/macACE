@@ -1,4 +1,5 @@
 #include "game.h"
+#include "ai.h"
 #include "input.h"
 #include "states.h"
 #include <ace/managers/key.h>
@@ -32,9 +33,6 @@
 #define CURSOR_SPRITE_HEIGHT 18
 #define CURSOR_SPRITE_CHANNEL 5
 
-#define KING_ALIVE    0
-#define KING_CAPTURED 1  
-#define KING_ESCAPED  2
 //#define OUTPUT_LOGGING //uncomment to enable more logging on arrays and positions in the debug.txt file.
 
 /*------Setting Up Viewports-------*/
@@ -45,7 +43,7 @@ static tSimpleBufferManager *s_pMainBuffer; //only a main screen in this, no sco
 
 /*-----Game State Setup-----*/
 GameState g_state;
-
+AIMove cpuMove;
 /*-----GFX Setup-----*/
 static tBitMap *pBmBoard;
 static tBitMap *pBmAttackers[MAX_ATTACKERS];
@@ -73,7 +71,7 @@ tFont *gFontSmall; //global font for screen
 
 /*-----Global Vars-----*/
 ULONG startTime;
-UBYTE validMoves[169]; //used to hold the valid moves for a selected piece.
+UBYTE validMoves[BOARD_SIZE]; //used to hold the valid moves for a selected piece.
 UBYTE validGeneration = 0; //used for tracking valid moves in the valid moves array.
 UBYTE s_ubBufferIndex = 0; //for double buffering, keeps track of which buffer we're currently drawing to
 UBYTE hightlightActive = 0; //whether the highlight for valid moves is currently active, so we know whether to draw it or not in the drawPieces function, and whether to update it when a piece is selected.
@@ -84,9 +82,11 @@ UBYTE pieceHasBGToRestore[2] = {0, 0}; //used to track whether the piece we're a
 UBYTE capturedPieceIndex[2][MAX_CAPTURES_PM]; //the index of the piece that was captured in the last move, so we can draw the clash FX on top of it and then restore the background after.
 UBYTE capturedPieceCount[2] = {0, 0}; //the number of pieces that were captured in the last move, so we know how many backgrounds we need to restore after drawing the clash FX.
 UBYTE gameWinner = 0; //0 no one, 1 attackers, 2 defenders
-ScreenPos draw_pos[169];
+ScreenPos draw_pos[BOARD_SIZE];
 
 UBYTE moveHistory[10]; //Record the move history so we can track for repetitions
+UBYTE cpuPlayerTeam = TEAM_DEFENDER;//manually assigned for now, this will be set via the main menu in the future.
+UBYTE humanPlayerTeam = TEAM_ATTACKER;
 
 void gameGsCreate(void) {
 
@@ -165,6 +165,52 @@ void gameGsLoop(void) {
 
     //Do mouse stuff here to select and move pieces, check for captures and wins, etc.
     updateMousepos(mouseX, mouseY);
+    //if the current player is the human player, allow them to move
+    if(g_state.currentPlayer == humanPlayerTeam){
+      if(mouseCheck(MOUSE_PORT_1, MOUSE_LMB)){
+        onClick(mouseX, mouseY);
+
+        getValidMoves(&g_state, highlightIndex); //get the valid moves for the selected piece and populate the validMoves array
+        MoveResult result = {0};
+        movePiece(&g_state, lastHighlightIndex[s_ubBufferIndex], highlightIndex, &result); //move the piece in the game state and update the board array, the old and new piece index will need to be passed in here once we have the selection and move working.
+        
+        if(result.clearHighlight == 1){ //if the move function set the flag to clear the highlight, then we need to clear it
+          hightlightActive = 0; //deactivate the highlight
+          HLhasBGToRestore[s_ubBufferIndex] = 1; //set the flag to restore the background on the next frame, since the highlight is drawn directly to the back buffer and not as a sprite, we have to manually restore the background when it moves or is cleared.
+        }
+        
+        //the result struct is used to seperate the global render flags that were previously used so that when a CPU player wants to use the movePiece function and it's sub functions in a branching tree it doesn't affect the game rendering
+        if(result.capturedCount[0] > 0 ){
+          for(UBYTE i = 0; i < result.capturedCount[0]; i++){
+            capturedPieceIndex[0][i] = result.capturedPieceIndexes[0][i];
+            capturedPieceIndex[1][i] = result.capturedPieceIndexes[1][i]; 
+          }
+          capturedPieceCount[0] = result.capturedCount[0];
+          capturedPieceCount[1] = result.capturedCount[1];
+          pieceHasBGToRestore[0] = 1; //set the flag to restore the background
+          pieceHasBGToRestore[1] = 1; //set the flag to restore the background 
+        }
+      }
+    }
+    else{
+      //pass the state to the AI to then play and get a return of what move (from/to) it wants to play
+      cpuMove = getBestMove(&g_state);
+      //update the board
+      MoveResult cpuresult = {0};
+      getValidMoves(&g_state,cpuMove.fromIndex);
+      movePiece(&g_state, cpuMove.fromIndex, cpuMove.toIndex, &cpuresult);
+
+      if(cpuresult.capturedCount[0] > 0 ){
+          for(UBYTE i = 0; i < cpuresult.capturedCount[0]; i++){
+            capturedPieceIndex[0][i] = cpuresult.capturedPieceIndexes[0][i];
+            capturedPieceIndex[1][i] = cpuresult.capturedPieceIndexes[1][i]; 
+          }
+          capturedPieceCount[0] = cpuresult.capturedCount[0];
+          capturedPieceCount[1] = cpuresult.capturedCount[1];
+          pieceHasBGToRestore[0] = 1; //set the flag to restore the background
+          pieceHasBGToRestore[1] = 1; //set the flag to restore the background 
+        }
+    }
 
     //redraw the pieces every frame, 
     drawPieces();
@@ -173,31 +219,6 @@ void gameGsLoop(void) {
     fontDrawTextBitMap(s_pMainBuffer->pBack, gametextbitmapattack, 6,110,0,FONT_COOKIE);
     fontDrawTextBitMap(s_pMainBuffer->pBack, gametextbitmapdefend, 295,110,0,FONT_COOKIE);
     fontDrawTextBitMap(s_pMainBuffer->pBack, version, 8,8,0,FONT_COOKIE);
-
-    if(mouseCheck(MOUSE_PORT_1, MOUSE_LMB)){
-      onClick(mouseX, mouseY);
-
-      getValidMoves(&g_state, highlightIndex); //get the valid moves for the selected piece and populate the validMoves array
-      MoveResult result = {0};
-      movePiece(&g_state, lastHighlightIndex[s_ubBufferIndex], highlightIndex, &result); //move the piece in the game state and update the board array, the old and new piece index will need to be passed in here once we have the selection and move working.
-      
-      if(result.clearHighlight == 1){ //if the move function set the flag to clear the highlight, then we need to clear it
-        hightlightActive = 0; //deactivate the highlight
-        HLhasBGToRestore[s_ubBufferIndex] = 1; //set the flag to restore the background on the next frame, since the highlight is drawn directly to the back buffer and not as a sprite, we have to manually restore the background when it moves or is cleared.
-      }
-      
-      //the result struct is used to seperate the global render flags that were previously used so that when a CPU player wants to use the movePiece function and it's sub functions in a branching tree it doesn't affect the game rendering
-      if(result.capturedCount[0] > 0 ){
-        for(UBYTE i = 0; i < result.capturedCount[0]; i++){
-          capturedPieceIndex[0][i] = result.capturedPieceIndexes[0][i];
-          capturedPieceIndex[1][i] = result.capturedPieceIndexes[1][i]; 
-        }
-        capturedPieceCount[0] = result.capturedCount[0];
-        capturedPieceCount[1] = result.capturedCount[1];
-        pieceHasBGToRestore[0] = 1; //set the flag to restore the background
-        pieceHasBGToRestore[1] = 1; //set the flag to restore the background 
-      }
-    }
 
     if (hightlightActive){ //if the highlight for valid moves is active, draw it
       drawSquareHighlight();

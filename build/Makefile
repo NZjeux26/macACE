@@ -250,6 +250,30 @@ main.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/macACE.elf.dir/build.make CMakeFiles/macACE.elf.dir/main.c.s
 .PHONY : main.c.s
 
+src/ai.obj: src/ai.c.obj
+.PHONY : src/ai.obj
+
+# target to build an object file
+src/ai.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/macACE.elf.dir/build.make CMakeFiles/macACE.elf.dir/src/ai.c.obj
+.PHONY : src/ai.c.obj
+
+src/ai.i: src/ai.c.i
+.PHONY : src/ai.i
+
+# target to preprocess a source file
+src/ai.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/macACE.elf.dir/build.make CMakeFiles/macACE.elf.dir/src/ai.c.i
+.PHONY : src/ai.c.i
+
+src/ai.s: src/ai.c.s
+.PHONY : src/ai.s
+
+# target to generate assembly for a file
+src/ai.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/macACE.elf.dir/build.make CMakeFiles/macACE.elf.dir/src/ai.c.s
+.PHONY : src/ai.c.s
+
 src/game.obj: src/game.c.obj
 .PHONY : src/game.obj
 
@@ -342,6 +366,9 @@ help:
 	@echo "... main.obj"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... src/ai.obj"
+	@echo "... src/ai.i"
+	@echo "... src/ai.s"
 	@echo "... src/game.obj"
 	@echo "... src/game.i"
 	@echo "... src/game.s"

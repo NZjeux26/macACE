@@ -6,6 +6,13 @@
 #define MAX_DEFENDERS 13  //12 Defenders + King
 #define MAX_ATTACKERS 24  //24 Attackers
 #define MAX_CAPTURES_PM 9 //nine is the therotical max number of pieces that could ever be captured.
+
+#define KING_ALIVE    0
+#define KING_CAPTURED 1  
+#define KING_ESCAPED  2
+
+#define BOARD_SIZE 169
+
 typedef enum 
 {
     DEFENDER,
@@ -41,12 +48,14 @@ typedef struct
 {
     g_piece attackers[MAX_ATTACKERS];
     g_piece defenders[MAX_DEFENDERS];
-    UBYTE boardState[169]; //0 = empty, 1 = defender, 2 = attacker, 3 = king
+    UBYTE boardState[BOARD_SIZE]; //0 = empty, 1 = defender, 2 = attacker, 3 = king
     UBYTE currentPlayer; //0 = defender, 1 = attacker
     UBYTE kingState;
 } GameState;
 
 extern GameState g_state;
+extern UBYTE validGeneration;
+extern UBYTE validMoves[BOARD_SIZE];
 
 void gameGsCreate(void);
 void gameGsLoop(void);

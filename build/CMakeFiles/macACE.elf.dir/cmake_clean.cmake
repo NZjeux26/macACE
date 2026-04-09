@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/macACE.elf.dir/main.c.obj"
   "CMakeFiles/macACE.elf.dir/main.c.obj.d"
+  "CMakeFiles/macACE.elf.dir/src/ai.c.obj"
+  "CMakeFiles/macACE.elf.dir/src/ai.c.obj.d"
   "CMakeFiles/macACE.elf.dir/src/game.c.obj"
   "CMakeFiles/macACE.elf.dir/src/game.c.obj.d"
   "CMakeFiles/macACE.elf.dir/src/input.c.obj"

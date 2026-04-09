@@ -9,6 +9,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/Users/phillipb/Documents/macACE/main.c" "CMakeFiles/macACE.elf.dir/main.c.obj" "gcc" "CMakeFiles/macACE.elf.dir/main.c.obj.d"
+  "/Users/phillipb/Documents/macACE/src/ai.c" "CMakeFiles/macACE.elf.dir/src/ai.c.obj" "gcc" "CMakeFiles/macACE.elf.dir/src/ai.c.obj.d"
   "/Users/phillipb/Documents/macACE/src/game.c" "CMakeFiles/macACE.elf.dir/src/game.c.obj" "gcc" "CMakeFiles/macACE.elf.dir/src/game.c.obj.d"
   "/Users/phillipb/Documents/macACE/src/input.c" "CMakeFiles/macACE.elf.dir/src/input.c.obj" "gcc" "CMakeFiles/macACE.elf.dir/src/input.c.obj.d"
   "/Users/phillipb/Documents/macACE/src/menu.c" "CMakeFiles/macACE.elf.dir/src/menu.c.obj" "gcc" "CMakeFiles/macACE.elf.dir/src/menu.c.obj.d"
