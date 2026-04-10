@@ -352,7 +352,7 @@ AIMove getBestMove(GameState *s){
     UBYTE moveCount;
     UBYTE maximisingPlayer = (s->currentPlayer == TEAM_DEFENDER);
     getAllMoves(s, s->currentPlayer, moveList, &moveCount);
-
+    UBYTE seearchDepth = 1; //this can be adjusted based on performance needs, but 3 is a good starting point for a balance of performance and decision making.
     AIMove bestMove = moveList[0];
     WORD bestEval = maximisingPlayer ? -32768 : 32767;
     WORD alpha = -32768;
@@ -361,7 +361,7 @@ AIMove getBestMove(GameState *s){
     for(UBYTE i = 0; i < moveCount; i++){
         GameState childState = *s; //create a copy of the game state to apply the move to
         applyMove(&childState, moveList[i]);
-        WORD eval = minimax(&childState, 2, alpha, beta, !maximisingPlayer); //depth of 2 for now, this can be adjusted based on performance needs
+        WORD eval = minimax(&childState, seearchDepth, alpha, beta, !maximisingPlayer); //depth of 2 for now, this can be adjusted based on performance needs
         
         if(maximisingPlayer && eval > bestEval){
             bestEval = eval;

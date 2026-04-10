@@ -172,11 +172,17 @@ void gameGsLoop(void) {
 
         getValidMoves(&g_state, highlightIndex); //get the valid moves for the selected piece and populate the validMoves array
         MoveResult result = {0};
+        lastHighlightIndex[!s_ubBufferIndex] = lastHighlightIndex[s_ubBufferIndex]; 
         movePiece(&g_state, lastHighlightIndex[s_ubBufferIndex], highlightIndex, &result); //move the piece in the game state and update the board array, the old and new piece index will need to be passed in here once we have the selection and move working.
         
-        if(result.clearHighlight == 1){ //if the move function set the flag to clear the highlight, then we need to clear it
-          hightlightActive = 0; //deactivate the highlight
-          HLhasBGToRestore[s_ubBufferIndex] = 1; //set the flag to restore the background on the next frame, since the highlight is drawn directly to the back buffer and not as a sprite, we have to manually restore the background when it moves or is cleared.
+        if(result.moveComplete){
+          //if the move is complete, we need to check if the CPU player needs to make a move next, and if so, we can set a flag to trigger the CPU move in the next frame, this is needed to prevent the CPU move from happening in the same frame as the human move which can cause issues with the game state and rendering.
+          if(result.clearHighlight == 1){ //if the move function set the flag to clear the highlight, then we need to clear it
+            hightlightActive = 0; //deactivate the highlight
+            HLhasBGToRestore[s_ubBufferIndex] = 1; //set the flag to restore the background on the next frame, since the highlight is drawn directly to the back buffer and not as a sprite, we have to manually restore the background when it moves or is cleared.
+            HLhasBGToRestore[!s_ubBufferIndex] = 1; //also set the other buffer to restore, since the highlight is drawn directly to the back buffer and not as a sprite, we have to manually restore the background when it moves or is cleared, and since we're double buffering we need to make sure both buffers are restored.
+          }
+          g_state.currentPlayer = cpuPlayerTeam; //swap the current player to the CPU player, so that in the next frame the CPU will make its move.
         }
         
         //the result struct is used to seperate the global render flags that were previously used so that when a CPU player wants to use the movePiece function and it's sub functions in a branching tree it doesn't affect the game rendering
@@ -192,13 +198,31 @@ void gameGsLoop(void) {
         }
       }
     }
-    else{
+    
+    else{ //if it's the CPU player's turn, calculate the best move and make it
       //pass the state to the AI to then play and get a return of what move (from/to) it wants to play
       cpuMove = getBestMove(&g_state);
       //update the board
       MoveResult cpuresult = {0};
+      highlightIndex = cpuMove.fromIndex; 
+      hightlightActive = 1; //activate the highlight for the CPU move, so the player can see what move the CPU is making.
+
       getValidMoves(&g_state,cpuMove.fromIndex);
+
+      lastHighlightIndex[s_ubBufferIndex] = cpuMove.fromIndex; //update the last highlighted index to the CPU move's from index, so that when the highlight moves to the to index we can restore the background of the from index.
+      lastHighlightIndex[!s_ubBufferIndex] = cpuMove.fromIndex; //also update the other buffer's last highlighted index, since the highlight is drawn directly to the back buffer and not as a sprite, we have to manually restore the background when it moves, and since we're double buffering we need to make sure both buffers are updated.
+      highlightIndex = cpuMove.toIndex;
+      
       movePiece(&g_state, cpuMove.fromIndex, cpuMove.toIndex, &cpuresult);
+
+      if(cpuresult.moveComplete){
+        if(cpuresult.clearHighlight == 1){ //if the move function set the flag to clear the highlight, then we need to clear it
+          hightlightActive = 0; //deactivate the highlight
+          HLhasBGToRestore[s_ubBufferIndex] = 1; //set the flag to restore the background on the next frame, since the highlight is drawn directly to the back buffer and not as a sprite, we have to manually restore the background when it moves or is cleared.
+          HLhasBGToRestore[!s_ubBufferIndex] = 1; //also set the other buffer to restore, since the highlight is drawn directly to the back buffer and not as a sprite, we have to manually restore the background when it moves or is cleared, and since we're double buffering we need to make sure both buffers are restored.
+        }
+        g_state.currentPlayer = humanPlayerTeam; //swap the current player back to the human player, so that in the next frame the human can make their move.
+      }
 
       if(cpuresult.capturedCount[0] > 0 ){
           for(UBYTE i = 0; i < cpuresult.capturedCount[0]; i++){
@@ -413,7 +437,7 @@ void drawPieces(void){
       
       HLhasBGToRestore[s_ubBufferIndex] = 0; //reset the flag after restoring
     }
-  }
+ }
   //if the piece that was just captured has a background that needs to be restored, restore it to erase the piece from the screen
   if(pieceHasBGToRestore[s_ubBufferIndex]){ 
     for(UBYTE c = 0; c < capturedPieceCount[s_ubBufferIndex]; c++){
@@ -424,6 +448,7 @@ void drawPieces(void){
     pieceHasBGToRestore[s_ubBufferIndex] = 0; //reset the flag after restoring
     capturedPieceCount[s_ubBufferIndex] = 0;
   }
+
   //this manages the clash symbol which shows who's turn it is.
   if(g_state.currentPlayer == TEAM_ATTACKER){
     //undraw the clash from the defender side and redraw it on the attacker side
@@ -626,8 +651,8 @@ void movePiece(GameState *state, UBYTE oldIndex, UBYTE newIndex, MoveResult *res
         
         if (state->boardState[84] == 0) state->boardState[84] = 4; //if the king moves off the throne, set the throne to 4 which is a special square. 
         
-        state->currentPlayer = TEAM_ATTACKER; //swap current player here
-        
+        //state->currentPlayer = TEAM_ATTACKER; //swap current player here
+        result->moveComplete = 1; //set the flag to indicate the move is complete, this will be used by the CPU player to know when to make its move after the human player moves.
         break;
       }
     }
@@ -640,7 +665,8 @@ void movePiece(GameState *state, UBYTE oldIndex, UBYTE newIndex, MoveResult *res
         state->boardState[newIndex] = 2; //update the boardState array with the new position of the piece, 2 for attacker
         state->boardState[oldIndex] = 0; //set the old position to 0 for empty
         
-        state->currentPlayer = TEAM_DEFENDER;
+        //state->currentPlayer = TEAM_DEFENDER;
+        result->moveComplete = 1; //set the flag to indicate the move is complete, this will be used by the CPU player to know when to make its move after the human player moves.
         break;
       }
     }

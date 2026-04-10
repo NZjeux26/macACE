@@ -43,6 +43,7 @@ typedef struct{
     UBYTE capturedPieceIndexes[2][MAX_CAPTURES_PM]; //the index of the piece that was captured in the last move, so we can draw the clash FX on top of it and then restore the background after.
     UBYTE capturedCount[2];
     UBYTE clearHighlight;
+    UBYTE moveComplete;
 } MoveResult;
 typedef struct
 {
