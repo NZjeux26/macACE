@@ -87,6 +87,7 @@ ScreenPos draw_pos[BOARD_SIZE];
 UBYTE moveHistory[10]; //Record the move history so we can track for repetitions
 UBYTE cpuPlayerTeam = TEAM_DEFENDER;//manually assigned for now, this will be set via the main menu in the future.
 UBYTE humanPlayerTeam = TEAM_ATTACKER;
+UBYTE waitFrame = 0;
 
 void gameGsCreate(void) {
 
@@ -162,9 +163,10 @@ void gameGsLoop(void) {
     }
     short mouseX = mouseGetX(MOUSE_PORT_1);
     short mouseY = mouseGetY(MOUSE_PORT_1);
-
+    
     //Do mouse stuff here to select and move pieces, check for captures and wins, etc.
     updateMousepos(mouseX, mouseY);
+
     //if the current player is the human player, allow them to move
     if(g_state.currentPlayer == humanPlayerTeam){
       if(mouseCheck(MOUSE_PORT_1, MOUSE_LMB)){
@@ -199,45 +201,50 @@ void gameGsLoop(void) {
       }
     }
     
-    else{ //if it's the CPU player's turn, calculate the best move and make it
-      //pass the state to the AI to then play and get a return of what move (from/to) it wants to play
-      cpuMove = getBestMove(&g_state);
-      //update the board
-      MoveResult cpuresult = {0};
-      highlightIndex = cpuMove.fromIndex; 
-      hightlightActive = 1; //activate the highlight for the CPU move, so the player can see what move the CPU is making.
-
-      getValidMoves(&g_state,cpuMove.fromIndex);
-
-      lastHighlightIndex[s_ubBufferIndex] = cpuMove.fromIndex; //update the last highlighted index to the CPU move's from index, so that when the highlight moves to the to index we can restore the background of the from index.
-      lastHighlightIndex[!s_ubBufferIndex] = cpuMove.fromIndex; //also update the other buffer's last highlighted index, since the highlight is drawn directly to the back buffer and not as a sprite, we have to manually restore the background when it moves, and since we're double buffering we need to make sure both buffers are updated.
-      highlightIndex = cpuMove.toIndex;
-      
-      movePiece(&g_state, cpuMove.fromIndex, cpuMove.toIndex, &cpuresult);
-
-      if(cpuresult.moveComplete){
-        if(cpuresult.clearHighlight == 1){ //if the move function set the flag to clear the highlight, then we need to clear it
-          hightlightActive = 0; //deactivate the highlight
-          HLhasBGToRestore[s_ubBufferIndex] = 1; //set the flag to restore the background on the next frame, since the highlight is drawn directly to the back buffer and not as a sprite, we have to manually restore the background when it moves or is cleared.
-          HLhasBGToRestore[!s_ubBufferIndex] = 1; //also set the other buffer to restore, since the highlight is drawn directly to the back buffer and not as a sprite, we have to manually restore the background when it moves or is cleared, and since we're double buffering we need to make sure both buffers are restored.
-        }
-        g_state.currentPlayer = humanPlayerTeam; //swap the current player back to the human player, so that in the next frame the human can make their move.
-      }
-
-      if(cpuresult.capturedCount[0] > 0 ){
-          for(UBYTE i = 0; i < cpuresult.capturedCount[0]; i++){
-            capturedPieceIndex[0][i] = cpuresult.capturedPieceIndexes[0][i];
-            capturedPieceIndex[1][i] = cpuresult.capturedPieceIndexes[1][i]; 
-          }
-          capturedPieceCount[0] = cpuresult.capturedCount[0];
-          capturedPieceCount[1] = cpuresult.capturedCount[1];
-          pieceHasBGToRestore[0] = 1; //set the flag to restore the background
-          pieceHasBGToRestore[1] = 1; //set the flag to restore the background 
-        }
-    }
-
-    //redraw the pieces every frame, 
+      //redraw the pieces every frame, 
     drawPieces();
+
+    if(g_state.currentPlayer == cpuPlayerTeam){ //if it's the CPU player's turn, calculate the best move and make it
+      //waitframe is added to allow both buffers clear from the human players turn.
+      if(waitFrame){
+        //pass the state to the AI to then play and get a return of what move (from/to) it wants to play
+        cpuMove = getBestMove(&g_state);
+        //update the board
+        MoveResult cpuresult = {0};
+        highlightIndex = cpuMove.fromIndex; 
+        hightlightActive = 1; //activate the highlight for the CPU move, so the player can see what move the CPU is making.
+
+        getValidMoves(&g_state,cpuMove.fromIndex);
+
+        lastHighlightIndex[s_ubBufferIndex] = cpuMove.fromIndex; //update the last highlighted index to the CPU move's from index, so that when the highlight moves to the to index we can restore the background of the from index.
+        lastHighlightIndex[!s_ubBufferIndex] = cpuMove.fromIndex; 
+        
+        movePiece(&g_state, cpuMove.fromIndex, cpuMove.toIndex, &cpuresult);
+
+        if(cpuresult.moveComplete){
+          if(cpuresult.clearHighlight == 1){ //if the move function set the flag to clear the highlight, then we need to clear it
+            hightlightActive = 0; //deactivate the highlight
+            HLhasBGToRestore[s_ubBufferIndex] = 1; //set the flag to restore the background on the next frame, since the highlight is drawn directly to the back buffer and not as a sprite, we have to manually restore the background when it moves or is cleared.
+            HLhasBGToRestore[!s_ubBufferIndex] = 1; //also set the other buffer to restore, 
+          }
+          g_state.currentPlayer = humanPlayerTeam; //swap the current player back to the human player, so that in the next frame the human can make their move.
+        }
+
+        if(cpuresult.capturedCount[0] > 0 ){
+            for(UBYTE i = 0; i < cpuresult.capturedCount[0]; i++){
+              capturedPieceIndex[0][i] = cpuresult.capturedPieceIndexes[0][i];
+              capturedPieceIndex[1][i] = cpuresult.capturedPieceIndexes[1][i]; 
+            }
+            capturedPieceCount[0] = cpuresult.capturedCount[0];
+            capturedPieceCount[1] = cpuresult.capturedCount[1];
+            pieceHasBGToRestore[0] = 1; //set the flag to restore the background
+            pieceHasBGToRestore[1] = 1; //set the flag to restore the background 
+          }
+          waitFrame = 0; //reset the wait frame flag, so that the CPU move only happens once per turn and not every frame while it's the CPU player's turn
+      }
+      else waitFrame = 1;
+      
+    }
     
     //these only need drawn once for each buffer frame and since they wont be writeen on again keft alone.
     fontDrawTextBitMap(s_pMainBuffer->pBack, gametextbitmapattack, 6,110,0,FONT_COOKIE);

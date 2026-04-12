@@ -52,6 +52,7 @@ typedef struct
     UBYTE boardState[BOARD_SIZE]; //0 = empty, 1 = defender, 2 = attacker, 3 = king
     UBYTE currentPlayer; //0 = defender, 1 = attacker
     UBYTE kingState;
+    UBYTE turnState;
 } GameState;
 
 extern GameState g_state;
