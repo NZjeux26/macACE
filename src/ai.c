@@ -9,6 +9,8 @@
 
 //#define AI_LOGGING
 
+#define MAX_DEPTH 1;
+
 const UWORD kingPosWeights[BOARD_SIZE] = {
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,  // dead zone row
     0, 10000, 10000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 10000, 10000,  0,
@@ -24,10 +26,6 @@ const UWORD kingPosWeights[BOARD_SIZE] = {
     0, 10000, 10000, 1000, 1000, 1000, 1000, 1000, 1000,  1000, 10000, 10000, 0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0   // dead zone row
 };
-
-// AIMove getBestMove(GameState *s){
-//     return;
-// }
 
 /*
     returns a score based on how much control the defenders have of the corners
@@ -311,21 +309,123 @@ void applyMove(GameState *s, AIMove move){
     checkSurrounded(s, move.toIndex);
 }
 
+void applyMoveWithUndo(GameState *s, AIMove move, UndoInfo *undo){
+    //This function will apply the move like applyMove, but it will also store the necessary information in the undo struct to be able to undo the move later. This is useful for the minimax algorithm to be able to explore different move options without permanently changing the game state.
+
+    //The implementation of this function would be similar to applyMove, but with additional code to store the previous state of any pieces that are moved or captured in the undo struct before making the changes to the game state. Then, the undoMove function can use that stored information to revert the game state back to what it was before the move was applied.
+    undo->fromIndex = move.fromIndex;
+    undo->toIndex = move.toIndex;
+    undo->oldFrom = s->boardState[move.fromIndex];
+    undo->oldTo = s->boardState[move.toIndex];
+    undo->pieceTeam = (s->currentPlayer == TEAM_DEFENDER) ? TEAM_DEFENDER : TEAM_ATTACKER;
+    undo->oldKingState = s->kingState;
+    undo->oldCurrentPlayer = s->currentPlayer;
+    undo->captureCount = 0;
+
+    if(s->currentPlayer == TEAM_DEFENDER){
+        undo->pieceTeam = TEAM_DEFENDER;
+         for(UBYTE j = 0; j < MAX_DEFENDERS; j++){
+            if(s->defenders[j].pos == move.fromIndex && !s->defenders[j].captured){
+                undo->pieceIndex = j;
+                s->defenders[j].pos = move.toIndex;
+                s->boardState[move.toIndex] = (s->defenders[j].type == KING) ? 3 : 1; //update the boardState array with the new position of the piece, 1 for defender
+                s->boardState[move.fromIndex] = (move.fromIndex == 84) ? 4 : 0; //set the old position to 0 for empty *This will override the throne if the king moved off it.
+                break;
+            }
+        }
+        s->currentPlayer = TEAM_ATTACKER; //swap current player here
+    } else {
+        for(UBYTE k = 0; k < MAX_ATTACKERS; k++){
+            if(s->attackers[k].pos == move.fromIndex && !s->attackers[k].captured){
+                undo->pieceIndex = k;
+                s->attackers[k].pos = move.toIndex;
+                s->boardState[move.toIndex] = 2; //update the boardState array with the new position of the piece, 2 for attacker
+                s->boardState[move.fromIndex] = 0; //set the old position to 0 for empty
+                break;
+            }
+        }   
+        s->currentPlayer = TEAM_DEFENDER;
+    }
+
+    MoveResult result = {0}; //Not actually used anywhere since this is just internal to the AI.
+    checkForCaptures(s, move.toIndex, &result);
+    checkShieldWallCaptures(s, move.toIndex, &result);
+
+    for(UBYTE i = 0; i < result.capturedCount[0] && undo->captureCount < MAX_CAPTURES_PM; i++){
+        undo->capturedPieceIndexes[undo->captureCount] = result.capturedPieceIndexes[0][i];
+        undo->capturedTeams[undo->captureCount] = TEAM_DEFENDER;
+        undo->captureCount++;
+    }
+    for(UBYTE i = 0; i < result.capturedCount[1] && undo->captureCount < MAX_CAPTURES_PM; i++){
+        undo->capturedPieceIndexes[undo->captureCount] = result.capturedPieceIndexes[1][i];
+        undo->capturedTeams[undo->captureCount] = TEAM_ATTACKER;
+        undo->captureCount++;
+    }
+
+    checkExitFort(s);
+    checkSurrounded(s, move.toIndex);
+
+}
+
+void undoMove(GameState *s, UndoInfo *undo){
+
+    //restore flags
+    s->kingState = undo->oldKingState;
+    s->currentPlayer = undo->oldCurrentPlayer;
+
+    //Restore the moving piece pos directly using the stored index
+    if(undo->pieceTeam == TEAM_DEFENDER){
+        s->defenders[undo->pieceIndex].pos = undo->fromIndex;
+    } else {
+        s->attackers[undo->pieceIndex].pos = undo->fromIndex;
+    }
+
+    //Restore board squares,  oldFrom handles the throne case.
+    //We havea. snapshot before everything moved.
+    s->boardState[undo->fromIndex] = undo->oldFrom;
+    s->boardState[undo->toIndex] = undo->oldTo;
+
+    for(UBYTE i = 0; i< undo->captureCount; i++){
+        UBYTE boardPos = undo->capturedPieceIndexes[i];
+
+        if(undo->capturedTeams[i] == TEAM_DEFENDER){
+            for(UBYTE j = 0; j < MAX_DEFENDERS; j++){
+                if(s->defenders[j].pos == boardPos && s->defenders[j].captured){
+                    s->defenders[j].captured = 0;
+                    s->boardState[boardPos] = (s->defenders[j].type == KING) ? 3 : 1;
+                    break; 
+                }
+            }
+        }
+        else{
+            for(UBYTE k = 0; k < MAX_ATTACKERS; k++){
+                if(s->attackers[k].pos == boardPos && s->attackers[k].captured){
+                    s->attackers[k].captured = 0;
+                    s->boardState[boardPos] = 2;
+                    break;
+                }
+            }
+        }
+    }
+}
+
 WORD minimax(GameState *s, UBYTE depth, WORD alpha, WORD beta, UBYTE maximizingPlayer){
     if(depth == 0 || s->kingState != KING_ALIVE){
         return evaluateBoard(s);
     }
 
-    static AIMove moveList[BOARD_SIZE];
+    //ordering in move list?
+    AIMove moveList[BOARD_SIZE]; // I don't actually know why the move list is the size of the board, it's just a list of moves.
     UBYTE moveCount;
 
     if(maximizingPlayer){
         getAllMoves(s, TEAM_DEFENDER, moveList, &moveCount);
         WORD maxEval = -32768;
         for(UBYTE i = 0; i < moveCount; i++){
-            GameState childState = *s; //create a copy of the game state to apply the move to
-            applyMove(&childState, moveList[i]);
-            WORD eval = minimax(&childState, depth - 1, alpha, beta, 0);
+            UndoInfo undo;
+            applyMoveWithUndo(s, moveList[i], &undo);
+            WORD eval = minimax(s, depth - 1, alpha, beta, 0);
+            undoMove(s, &undo);
             if(eval > maxEval) maxEval = eval;
             if(eval > alpha) alpha = eval;
             if(beta <= alpha) break; //beta cut-off
@@ -335,9 +435,10 @@ WORD minimax(GameState *s, UBYTE depth, WORD alpha, WORD beta, UBYTE maximizingP
         getAllMoves(s, TEAM_ATTACKER, moveList, &moveCount);
         WORD minEval = 32767;
         for(UBYTE i = 0; i < moveCount; i++){
-            GameState childState = *s; //create a copy of the game state to apply the move to
-            applyMove(&childState, moveList[i]);
-            WORD eval = minimax(&childState, depth - 1, alpha, beta, 1);
+            UndoInfo undo;
+            applyMoveWithUndo(s, moveList[i], &undo);
+            WORD eval = minimax(s, depth - 1, alpha, beta, 1);
+            undoMove(s, &undo);
             if(eval < minEval) minEval = eval;
             if(eval < beta) beta = eval;
             if(beta <= alpha) break; //alpha cut-off
@@ -348,21 +449,24 @@ WORD minimax(GameState *s, UBYTE depth, WORD alpha, WORD beta, UBYTE maximizingP
 
 AIMove getBestMove(GameState *s){
     
-    AIMove moveList[BOARD_SIZE];
+    AIMove moveList[BOARD_SIZE]; //does it have to be this big? ordering?
     UBYTE moveCount;
     UBYTE maximisingPlayer = (s->currentPlayer == TEAM_DEFENDER);
+    
     getAllMoves(s, s->currentPlayer, moveList, &moveCount);
-    UBYTE seearchDepth = 1; //this can be adjusted based on performance needs, but 3 is a good starting point for a balance of performance and decision making.
+    
+    UBYTE seearchDepth = MAX_DEPTH; //this can be adjusted based on performance needs.
     AIMove bestMove = moveList[0];
     WORD bestEval = maximisingPlayer ? -32768 : 32767;
     WORD alpha = -32768;
     WORD beta = 32767;
 
     for(UBYTE i = 0; i < moveCount; i++){
-        GameState childState = *s; //create a copy of the game state to apply the move to
-        applyMove(&childState, moveList[i]);
-        WORD eval = minimax(&childState, seearchDepth, alpha, beta, !maximisingPlayer); //depth of 2 for now, this can be adjusted based on performance needs
-        
+        UndoInfo undo;
+        applyMoveWithUndo(s, moveList[i], &undo);
+        WORD eval = minimax(s, seearchDepth, alpha, beta, !maximisingPlayer); //depth of 2 for now, this can be adjusted based on performance needs
+        undoMove(s, &undo);
+
         if(maximisingPlayer && eval > bestEval){
             bestEval = eval;
             bestMove = moveList[i];
@@ -375,6 +479,9 @@ AIMove getBestMove(GameState *s){
         }
      
     }
+    //mnaybe seperate the valid moves of AI and player, so we don't have to clear them here, but for now this works.
+    memset(validMoves, 0, sizeof(validMoves)); //clear valid moves after the search is done, since the getBestMove function is called during the CPU turn and we don't want any leftover valid move markings to interfere with the player's turn.
+    validGeneration = 0; //reset valid generation as well since we use that to mark valid moves in the getValidMoves function, and we don't want any leftover generation markings to interfere with the player's turn.
     
     #ifdef AI_LOGGING
     logWrite("AI getBestMove: from %d to %d, score %d\n", 

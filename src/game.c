@@ -79,8 +79,8 @@ UBYTE lastHighlightIndex[2] = {0, 0}; //the index of the last highlighted square
 UBYTE highlightIndex = 0; //the index of the currently highlighted square, so we can update the highlight position when a new piece is selected or a move is made.
 UBYTE HLhasBGToRestore[2] = {0, 0};//[2] = {0,0};
 UBYTE pieceHasBGToRestore[2] = {0, 0}; //used to track whether the piece we're about to draw has a background that needs to be restored when it moves, so we know whether to blit the background before drawing the piece in its new position. This is needed because the pieces are drawn directly to the back buffer and not as sprites, so we have to manually restore the background when they move.
-UBYTE capturedPieceIndex[2][MAX_CAPTURES_PM]; //the index of the piece that was captured in the last move, so we can draw the clash FX on top of it and then restore the background after.
-UBYTE capturedPieceCount[2] = {0, 0}; //the number of pieces that were captured in the last move, so we know how many backgrounds we need to restore after drawing the clash FX.
+UBYTE capturedPieceIndex[2][MAX_CAPTURES_PM]; //the index of the piece that was captured in the last move, and then restore the background after.
+UBYTE capturedPieceCount[2] = {0, 0}; //the number of pieces that were captured in the last move, so we know how many backgrounds we need to restore
 UBYTE gameWinner = 0; //0 no one, 1 attackers, 2 defenders
 ScreenPos draw_pos[BOARD_SIZE];
 
@@ -159,8 +159,9 @@ void gameGsLoop(void) {
       }
       stateChange(g_pStateManager, g_pMenuState);
       return;
-      
     }
+    if(keyCheck(KEY_D)) drawPieces();
+    
     short mouseX = mouseGetX(MOUSE_PORT_1);
     short mouseY = mouseGetY(MOUSE_PORT_1);
     
@@ -204,24 +205,29 @@ void gameGsLoop(void) {
       //redraw the pieces every frame, 
     drawPieces();
 
+    if (hightlightActive){ //if the highlight for valid moves is active, draw it
+      drawSquareHighlight();
+    }
+
     if(g_state.currentPlayer == cpuPlayerTeam){ //if it's the CPU player's turn, calculate the best move and make it
       //waitframe is added to allow both buffers clear from the human players turn.
       if(waitFrame){
+        hightlightActive = 0;
         //pass the state to the AI to then play and get a return of what move (from/to) it wants to play
         cpuMove = getBestMove(&g_state);
         //update the board
         MoveResult cpuresult = {0};
         highlightIndex = cpuMove.fromIndex; 
-        hightlightActive = 1; //activate the highlight for the CPU move, so the player can see what move the CPU is making.
-
-        getValidMoves(&g_state,cpuMove.fromIndex);
+        
+        getValidMoves(&g_state,cpuMove.fromIndex);//this might be needed, it may increment valid generation and screw up the move
 
         lastHighlightIndex[s_ubBufferIndex] = cpuMove.fromIndex; //update the last highlighted index to the CPU move's from index, so that when the highlight moves to the to index we can restore the background of the from index.
         lastHighlightIndex[!s_ubBufferIndex] = cpuMove.fromIndex; 
         
         movePiece(&g_state, cpuMove.fromIndex, cpuMove.toIndex, &cpuresult);
-
+        
         if(cpuresult.moveComplete){
+          hightlightActive = 1; //activate the highlight for the CPU move, so the player can see what move the CPU is making.
           if(cpuresult.clearHighlight == 1){ //if the move function set the flag to clear the highlight, then we need to clear it
             hightlightActive = 0; //deactivate the highlight
             HLhasBGToRestore[s_ubBufferIndex] = 1; //set the flag to restore the background on the next frame, since the highlight is drawn directly to the back buffer and not as a sprite, we have to manually restore the background when it moves or is cleared.
@@ -243,7 +249,6 @@ void gameGsLoop(void) {
           waitFrame = 0; //reset the wait frame flag, so that the CPU move only happens once per turn and not every frame while it's the CPU player's turn
       }
       else waitFrame = 1;
-      
     }
     
     //these only need drawn once for each buffer frame and since they wont be writeen on again keft alone.
@@ -251,9 +256,6 @@ void gameGsLoop(void) {
     fontDrawTextBitMap(s_pMainBuffer->pBack, gametextbitmapdefend, 295,110,0,FONT_COOKIE);
     fontDrawTextBitMap(s_pMainBuffer->pBack, version, 8,8,0,FONT_COOKIE);
 
-    if (hightlightActive){ //if the highlight for valid moves is active, draw it
-      drawSquareHighlight();
-    }
     s_ubBufferIndex = !s_ubBufferIndex; //toggle the buffer index for double buffering    
 
     viewProcessManagers(s_pView);
