@@ -9,7 +9,12 @@
 
 //#define AI_LOGGING
 
-#define MAX_DEPTH 1;
+#define MAX_DEPTH 3
+
+UBYTE aiValidMoves[BOARD_SIZE];
+UWORD aiValidGeneration = 0;
+//using this global buffer instead of local ones, at depth 2+ the amount of MoveList buffers is quite large and a overflow occurs somewhere
+AIMove moveBuffer[MAX_DEPTH + 1][400];
 
 const UWORD kingPosWeights[BOARD_SIZE] = {
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,  // dead zone row
@@ -26,7 +31,92 @@ const UWORD kingPosWeights[BOARD_SIZE] = {
     0, 10000, 10000, 1000, 1000, 1000, 1000, 1000, 1000,  1000, 10000, 10000, 0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0   // dead zone row
 };
+/* This function will calculate the valid moves for the currently highlighted piece and populate the validMoves array, which is indexed the same as the board array, with a value over 0 for valid moves and 0 for invalid moves.*/
+void aiGetValidMoves(GameState *state, UBYTE selectedIndex){
+  //selectedIndex == highlightedindex
+  //First check if the square is empty, a special square or out of bounds, there are no valid moves to calculate, so return
+  if(state->boardState[selectedIndex] == 0 || state->boardState[selectedIndex] == 4 || state->boardState[selectedIndex] == 99){ 
+    return;
+  }
+  //increment valid generation to mark the current valid moves, this way we can avoid having to clear the validMoves array every time.
+  aiValidGeneration++;
 
+  if(aiValidGeneration == 0){
+    memset(aiValidMoves, 0, sizeof(aiValidMoves));
+    aiValidGeneration = 1;
+  }
+  
+  //need to check whether the piece is the king, if so it's allowed on squares in boardState that = 4.
+  UBYTE isKing = (state->boardState[selectedIndex] == 3);
+
+  /* This is no risk of over or under flow. Only 13-154 are valid game squares and only 14-153 are valid for piece movement */
+
+  /*lets check the rows which are +1 and -1 This needs the minus (or plus) so the index doesn't start on the piece selected and auto fails.*/
+  for(UBYTE r = (selectedIndex +1); r < 169; r++){ //rows in the + direction
+    //if the square is occupied, break
+    if(state->boardState[r] > 0 && state->boardState[r] <=3){
+      break; //if greater than 0 it means th square is occupied, a special square or out of bounds and invalid
+    }
+    else if(state->boardState[r] == 4 && !isKing){ //if it's a special square and the piece isn't the king, break
+      break;
+    }
+    else if(state->boardState[r] == 99){ //if it's out of bounds, break
+      break;
+    }
+    aiValidMoves[r] = aiValidGeneration; //add the current position to the valid moves array. 
+  }
+  
+  for(UBYTE u = (selectedIndex - 1); u < 169; u--){ //rows in the - direction
+    if(state->boardState[u] > 0 && state->boardState[u] <=3){
+      break; 
+    }
+    else if(state->boardState[u] == 4 && !isKing){
+      break;
+    }
+    else if(state->boardState[u] == 99){
+      break;
+    }
+    aiValidMoves[u] = aiValidGeneration; 
+  }
+
+  /* **Check Coloums** */
+
+  for(UBYTE c = (selectedIndex +13); c < 169; c=c+13){ 
+    if(state->boardState[c] > 0 && state->boardState[c] <=3){
+      break;
+    }
+    else if(state->boardState[c] == 4 && !isKing){
+      break;
+    }
+    else if(state->boardState[c] == 99){
+      break;
+    }
+    aiValidMoves[c] = aiValidGeneration; 
+  }
+  
+  for(UBYTE y = (selectedIndex -13); y < 169; y=y-13){ 
+    if(state->boardState[y] > 0 && state->boardState[y] <=3){
+      break; 
+    }
+    else if(state->boardState[y] == 4 && !isKing){
+      break;
+    }
+    else if(state->boardState[y] == 99){
+      break;
+    }
+    aiValidMoves[y] = aiValidGeneration; 
+  }
+  
+  /* Warning, this will not print the full array if you select a square and then quit, you must select another square (empty or not)*/
+  #ifdef OUTPUT_LOGGING
+  logWrite("aiValidGeneration = %d\n", aiValidGeneration);
+  for(UBYTE i = 0; i < 169; i++){
+    if(aiValidMoves[i] == aiValidGeneration){
+      logWrite("Valid Moves at Square %d\n",i);
+    }
+  }
+  #endif
+}
 /*
     returns a score based on how much control the defenders have of the corners
 
@@ -154,8 +244,8 @@ UBYTE cornerDanger(GameState *s){
     return danger;
 }
 
-WORD evaluateBoard(GameState *s){
-    WORD score = 0;
+LONG evaluateBoard(GameState *s){
+    LONG score = 0;
     //King is always the first position in the defender array
     UBYTE kingPos = s->defenders[0].pos;
 
@@ -232,10 +322,10 @@ void getAllMoves(GameState *s, UBYTE team, AIMove *moveList, UBYTE *moveCount){
             if(s->defenders[j].captured) continue;
 
             UBYTE piecePos = s->defenders[j].pos;
-            getValidMoves(s, piecePos);
+            aiGetValidMoves(s, piecePos);
 
             for(UBYTE i = 0; i < BOARD_SIZE; i++){
-                if(validMoves[i] == validGeneration){
+                if(aiValidMoves[i] == aiValidGeneration){
                     moveList[*moveCount].fromIndex = piecePos;
                     moveList[*moveCount].toIndex = i;
                     (*moveCount)++;
@@ -251,10 +341,10 @@ void getAllMoves(GameState *s, UBYTE team, AIMove *moveList, UBYTE *moveCount){
             if(s->attackers[k].captured) continue;
 
             UBYTE piecePos = s->attackers[k].pos;
-            getValidMoves(s, piecePos);
+            aiGetValidMoves(s, piecePos);
 
             for(UBYTE i = 0; i < BOARD_SIZE; i++){
-                if(validMoves[i] == validGeneration){
+                if(aiValidMoves[i] == aiValidGeneration){
                     moveList[*moveCount].fromIndex = piecePos;
                     moveList[*moveCount].toIndex = i;
                     (*moveCount)++;
@@ -265,48 +355,6 @@ void getAllMoves(GameState *s, UBYTE team, AIMove *moveList, UBYTE *moveCount){
         logWrite("getAllMoves: team %d generated %d moves\n", team, *moveCount);
         #endif
     }
-}
-
-/*
-    here the AI gets to move pieces around in it's own local copy of the game state
-*/
-void applyMove(GameState *s, AIMove move){
-    
-    MoveResult result = {0}; //Not actually used anywhere since this is just internal to the AI.
-
-    if(s->currentPlayer == TEAM_DEFENDER){
-        for(UBYTE j = 0; j < MAX_DEFENDERS; j++){
-            if(s->defenders[j].pos == move.fromIndex && !s->defenders[j].captured){
-                s->defenders[j].pos = move.toIndex;
-                s->boardState[move.toIndex] = (s->defenders[j].type == KING) ? 3 : 1; //update the boardState array with the new position of the piece, 1 for defender
-                s->boardState[move.fromIndex] = 0; //set the old position to 0 for empty *This will override the throne if the king moved off it.
-                if (s->boardState[84] == 0) s->boardState[84] = 4; //if the king moves off the throne, set the throne to 4 which is a special square. 
-                s->currentPlayer = TEAM_ATTACKER; //swap current player here
-                break;
-            }
-        }
-    } else {
-        for(UBYTE k = 0; k < MAX_ATTACKERS; k++){
-            if(s->attackers[k].pos == move.fromIndex && !s->attackers[k].captured){
-                s->attackers[k].pos = move.toIndex;
-                s->boardState[move.toIndex] = 2; //update the boardState array with the new position of the piece, 2 for attacker
-                s->boardState[move.fromIndex] = 0; //set the old position to 0 for empty
-                s->currentPlayer = TEAM_DEFENDER;
-                break;
-            }
-        }   
-    }
-
-    // #ifdef AI_LOGGING
-    // logWrite("applyMove: from %d to %d player %d\n", 
-    //     move.fromIndex, move.toIndex, s->currentPlayer);
-    // #endif
-
-    //After moving the piece, we need to check if any pieces were captured by this move, and update the board state accordingly.
-    checkForCaptures(s, move.toIndex, &result); //I think passing Null is going to break something
-    checkShieldWallCaptures(s, move.toIndex, &result);
-    checkExitFort(s);
-    checkSurrounded(s, move.toIndex);
 }
 
 void applyMoveWithUndo(GameState *s, AIMove move, UndoInfo *undo){
@@ -363,7 +411,7 @@ void applyMoveWithUndo(GameState *s, AIMove move, UndoInfo *undo){
     }
 
     checkExitFort(s);
-    checkSurrounded(s, move.toIndex);
+    checkSurrounded(s, move.toIndex); //crashing here, atm AI is only playing defender but when it plays attackers it will be needed, need to have filter checks for the current team.
 
 }
 
@@ -409,18 +457,18 @@ void undoMove(GameState *s, UndoInfo *undo){
     }
 }
 
-WORD minimax(GameState *s, UBYTE depth, WORD alpha, WORD beta, UBYTE maximizingPlayer){
+LONG minimax(GameState *s, UBYTE depth, LONG alpha, LONG beta, UBYTE maximizingPlayer){
     if(depth == 0 || s->kingState != KING_ALIVE){
         return evaluateBoard(s);
     }
 
     //ordering in move list?
-    AIMove moveList[BOARD_SIZE]; // I don't actually know why the move list is the size of the board, it's just a list of moves.
+    AIMove *moveList = moveBuffer[depth]; // I don't actually know why the move list is the size of the board, it's just a list of moves.
     UBYTE moveCount;
 
     if(maximizingPlayer){
         getAllMoves(s, TEAM_DEFENDER, moveList, &moveCount);
-        WORD maxEval = -32768;
+        LONG maxEval = -32768;
         for(UBYTE i = 0; i < moveCount; i++){
             UndoInfo undo;
             applyMoveWithUndo(s, moveList[i], &undo);
@@ -433,7 +481,7 @@ WORD minimax(GameState *s, UBYTE depth, WORD alpha, WORD beta, UBYTE maximizingP
         return maxEval;
     } else {
         getAllMoves(s, TEAM_ATTACKER, moveList, &moveCount);
-        WORD minEval = 32767;
+        LONG minEval = 32767;
         for(UBYTE i = 0; i < moveCount; i++){
             UndoInfo undo;
             applyMoveWithUndo(s, moveList[i], &undo);
@@ -457,14 +505,14 @@ AIMove getBestMove(GameState *s){
     
     UBYTE seearchDepth = MAX_DEPTH; //this can be adjusted based on performance needs.
     AIMove bestMove = moveList[0];
-    WORD bestEval = maximisingPlayer ? -32768 : 32767;
-    WORD alpha = -32768;
-    WORD beta = 32767;
+    LONG bestEval = maximisingPlayer ? -32768 : 32767;
+    LONG alpha = -32768;
+    LONG beta = 32767;
 
     for(UBYTE i = 0; i < moveCount; i++){
         UndoInfo undo;
         applyMoveWithUndo(s, moveList[i], &undo);
-        WORD eval = minimax(s, seearchDepth, alpha, beta, !maximisingPlayer); //depth of 2 for now, this can be adjusted based on performance needs
+        LONG eval = minimax(s, seearchDepth, alpha, beta, !maximisingPlayer); //depth of 2 for now, this can be adjusted based on performance needs
         undoMove(s, &undo);
 
         if(maximisingPlayer && eval > bestEval){
@@ -480,13 +528,14 @@ AIMove getBestMove(GameState *s){
      
     }
     //mnaybe seperate the valid moves of AI and player, so we don't have to clear them here, but for now this works.
-    memset(validMoves, 0, sizeof(validMoves)); //clear valid moves after the search is done, since the getBestMove function is called during the CPU turn and we don't want any leftover valid move markings to interfere with the player's turn.
-    validGeneration = 0; //reset valid generation as well since we use that to mark valid moves in the getValidMoves function, and we don't want any leftover generation markings to interfere with the player's turn.
+    memset(aiValidMoves, 0, sizeof(aiValidMoves)); //clear valid moves after the search is done, since the getBestMove function is called during the CPU turn and we don't want any leftover valid move markings to interfere with the player's turn.
+    aiValidGeneration = 0; //reset valid generation as well since we use that to mark valid moves in the aiGetValidMoves function, and we don't want any leftover generation markings to interfere with the player's turn.
     
     #ifdef AI_LOGGING
     logWrite("AI getBestMove: from %d to %d, score %d\n", 
         bestMove.fromIndex, bestMove.toIndex, bestEval);
     #endif
-
+    logWrite("AI getBestMove: from %d to %d, score %ld\n", 
+        bestMove.fromIndex, bestMove.toIndex, bestEval);
     return bestMove;
 }

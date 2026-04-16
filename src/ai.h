@@ -25,9 +25,9 @@ typedef struct{
 /* *****AI Functions***** */
 AIMove getBestMove(GameState *s);
 void getAllMoves(GameState *s, UBYTE team, AIMove *moveList, UBYTE *moveCount);
-WORD evaluateBoard(GameState *s);
+LONG evaluateBoard(GameState *s);
 void stratagy(GameState *s);
-WORD minimax(GameState *s, UBYTE depth, WORD alpha, WORD beta, UBYTE maximising);
+LONG minimax(GameState *s, UBYTE depth, LONG alpha, LONG beta, UBYTE maximising);
 void applyMove(GameState *s, AIMove move);
 void applyMoveWithUndo(GameState *s, AIMove move, UndoInfo *undo);
 void undoMove(GameState *s, UndoInfo *undo);
@@ -40,5 +40,5 @@ UBYTE defenderCornerControl(GameState *s);
 BYTE kingSidesThreatened(GameState *s);
 UBYTE kingShieldCount(GameState *s);
 UBYTE kingMobility(GameState *s);
-
+void aiGetValidMoves(GameState *state, UBYTE selectedIndex);
 #endif

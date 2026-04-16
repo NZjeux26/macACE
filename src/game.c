@@ -161,7 +161,7 @@ void gameGsLoop(void) {
       return;
     }
     if(keyCheck(KEY_D)) drawPieces();
-    
+
     short mouseX = mouseGetX(MOUSE_PORT_1);
     short mouseY = mouseGetY(MOUSE_PORT_1);
     
@@ -223,13 +223,13 @@ void gameGsLoop(void) {
 
         lastHighlightIndex[s_ubBufferIndex] = cpuMove.fromIndex; //update the last highlighted index to the CPU move's from index, so that when the highlight moves to the to index we can restore the background of the from index.
         lastHighlightIndex[!s_ubBufferIndex] = cpuMove.fromIndex; 
-        
+        highlightIndex = cpuMove.toIndex;
         movePiece(&g_state, cpuMove.fromIndex, cpuMove.toIndex, &cpuresult);
         
         if(cpuresult.moveComplete){
-          hightlightActive = 1; //activate the highlight for the CPU move, so the player can see what move the CPU is making.
+          
           if(cpuresult.clearHighlight == 1){ //if the move function set the flag to clear the highlight, then we need to clear it
-            hightlightActive = 0; //deactivate the highlight
+            hightlightActive = 0;
             HLhasBGToRestore[s_ubBufferIndex] = 1; //set the flag to restore the background on the next frame, since the highlight is drawn directly to the back buffer and not as a sprite, we have to manually restore the background when it moves or is cleared.
             HLhasBGToRestore[!s_ubBufferIndex] = 1; //also set the other buffer to restore, 
           }
@@ -500,7 +500,7 @@ void onClick(short mouseX, short mouseY){
     //check if the mouse is within the bounds of this square
     if(mouseX >= draw_pos[i].x && mouseX <= draw_pos[i].x + SQUARE_X &&
        mouseY >= draw_pos[i].y && mouseY <= draw_pos[i].y + SQUARE_Y){
-        // logWrite("Clicked on square index %d\n", i); 
+         logWrite("Clicked on square index %d\n", i); 
          //If a square is already Highlighted, set to zero for it to be restored
          if(!hightlightActive && g_state.boardState[i] == 0) return; //if the highlight isn't active and the square clicked is empty, do nothing
 
@@ -568,7 +568,7 @@ void getValidMoves(GameState *state, UBYTE selectedIndex){
   /*lets check the rows which are +1 and -1 This needs the minus (or plus) so the index doesn't start on the piece selected and auto fails.*/
   for(UBYTE r = (selectedIndex +1); r < 169; r++){ //rows in the + direction
     //if the square is occupied, break
-    if(state->boardState[r] > 0 && state->boardState[r] < 3){
+    if(state->boardState[r] > 0 && state->boardState[r] <=3){
       break; //if greater than 0 it means th square is occupied, a special square or out of bounds and invalid
     }
     else if(state->boardState[r] == 4 && !isKing){ //if it's a special square and the piece isn't the king, break
@@ -581,7 +581,7 @@ void getValidMoves(GameState *state, UBYTE selectedIndex){
   }
   
   for(UBYTE u = (selectedIndex - 1); u < 169; u--){ //rows in the - direction
-    if(state->boardState[u] > 0 && state->boardState[u] < 3){
+    if(state->boardState[u] > 0 && state->boardState[u] <=3){
       break; 
     }
     else if(state->boardState[u] == 4 && !isKing){
@@ -596,7 +596,7 @@ void getValidMoves(GameState *state, UBYTE selectedIndex){
   /* **Check Coloums** */
 
   for(UBYTE c = (selectedIndex +13); c < 169; c=c+13){ 
-    if(state->boardState[c] > 0 && state->boardState[c] < 3){
+    if(state->boardState[c] > 0 && state->boardState[c] <=3){
       break;
     }
     else if(state->boardState[c] == 4 && !isKing){
@@ -609,7 +609,7 @@ void getValidMoves(GameState *state, UBYTE selectedIndex){
   }
   
   for(UBYTE y = (selectedIndex -13); y < 169; y=y-13){ 
-    if(state->boardState[y] > 0 && state->boardState[y] < 3){
+    if(state->boardState[y] > 0 && state->boardState[y] <=3){
       break; 
     }
     else if(state->boardState[y] == 4 && !isKing){
@@ -687,8 +687,8 @@ void movePiece(GameState *state, UBYTE oldIndex, UBYTE newIndex, MoveResult *res
   checkForCaptures(&g_state, newIndex, result);
   if(capturedPieceCount[s_ubBufferIndex] == 0){
     checkShieldWallCaptures(&g_state, newIndex, result);
-    checkExitFort(&g_state);
-    checkSurrounded(&g_state, newIndex);
+    if(g_state.currentPlayer == TEAM_DEFENDER) checkExitFort(&g_state); //exit fort only applys to defenders
+    if(g_state.currentPlayer == TEAM_ATTACKER) checkSurrounded(&g_state, newIndex); //only the attackers surround and no point checking when defenders move
   }
   
   checkGameEnd();
