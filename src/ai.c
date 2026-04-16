@@ -268,15 +268,15 @@ LONG evaluateBoard(GameState *s){
     //Corner danger
     WORD danger = cornerDanger(s);
     UBYTE dist = nearestCornerDist(s);
-    if(dist <= 3) score -= (danger * 80);
-    else score -= (danger * 40);
+    if(dist <= 3) score -= (danger << 6);
+    else score -= (danger << 4);
 
     //King Safety
-    score += (kingShieldCount(s) * 15);
-    score -=(kingSidesThreatened(s) * 1000);
+    score += (kingShieldCount(s) << 4);
+    score -=(kingSidesThreatened(s) << 10); //this is a very important factor, having attackers on multiple sides of the king is a huge threat and should be weighted heavily.
 
     //defender map control
-    score += (defenderCornerControl(s) * 15);
+    score += (defenderCornerControl(s) << 4);
 
     //Piece counting / scores
     UBYTE attackersAlive = 0;
@@ -290,18 +290,18 @@ LONG evaluateBoard(GameState *s){
         if(!s->defenders[j].captured) defendersAlive++;
     }
 
-    score -= (attackersAlive * 12);
-    score += (defendersAlive * 24);
+    score -= (attackersAlive << 3); // Multiply by 8
+    score += (defendersAlive << 4); // Multiply by 16
 
     //Attacker logic
 
     #ifdef AI_LOGGING
     logWrite("--- EVAL ---\n");
     logWrite("  KingPos:       %d (idx %d)\n", kingPosWeights[kingPos], kingPos);
-    logWrite("  CornerDanger:  %d (dist %d, raw danger %d)\n", (dist <= 3) ? danger * 80 : danger * 40, dist, danger);
-    logWrite("  ShieldCount:   %d\n", kingShieldCount(s) * 15);
-    logWrite("  SidesThreat:   %d\n", kingSidesThreatened(s) * 1000);
-    logWrite("  CornerCtrl:    %d\n", defenderCornerControl(s) * 15);
+    logWrite("  CornerDanger:  %d (dist %d, raw danger %d)\n", (dist <= 3) ? danger << 6 : danger << 4, dist, danger);
+    logWrite("  ShieldCount:   %d\n", kingShieldCount(s) << 4);
+    logWrite("  SidesThreat:   %d\n", kingSidesThreatened(s) << 10);
+    logWrite("  CornerCtrl:    %d\n", defenderCornerControl(s) << 4);
     logWrite("  Pieces ATK:%d DEF:%d score: %d\n", attackersAlive, defendersAlive, score);
     logWrite("  TOTAL:         %d\n", score);
     logWrite("------------\n");
@@ -472,7 +472,7 @@ LONG minimax(GameState *s, UBYTE depth, LONG alpha, LONG beta, UBYTE maximizingP
         for(UBYTE i = 0; i < moveCount; i++){
             UndoInfo undo;
             applyMoveWithUndo(s, moveList[i], &undo);
-            WORD eval = minimax(s, depth - 1, alpha, beta, 0);
+            LONG eval = minimax(s, depth - 1, alpha, beta, 0);
             undoMove(s, &undo);
             if(eval > maxEval) maxEval = eval;
             if(eval > alpha) alpha = eval;
@@ -485,7 +485,7 @@ LONG minimax(GameState *s, UBYTE depth, LONG alpha, LONG beta, UBYTE maximizingP
         for(UBYTE i = 0; i < moveCount; i++){
             UndoInfo undo;
             applyMoveWithUndo(s, moveList[i], &undo);
-            WORD eval = minimax(s, depth - 1, alpha, beta, 1);
+            LONG eval = minimax(s, depth - 1, alpha, beta, 1);
             undoMove(s, &undo);
             if(eval < minEval) minEval = eval;
             if(eval < beta) beta = eval;
@@ -497,7 +497,7 @@ LONG minimax(GameState *s, UBYTE depth, LONG alpha, LONG beta, UBYTE maximizingP
 
 AIMove getBestMove(GameState *s){
     
-    AIMove moveList[BOARD_SIZE]; //does it have to be this big? ordering?
+    AIMove *moveList = moveBuffer[0];
     UBYTE moveCount;
     UBYTE maximisingPlayer = (s->currentPlayer == TEAM_DEFENDER);
     
@@ -506,8 +506,8 @@ AIMove getBestMove(GameState *s){
     UBYTE seearchDepth = MAX_DEPTH; //this can be adjusted based on performance needs.
     AIMove bestMove = moveList[0];
     LONG bestEval = maximisingPlayer ? -32768 : 32767;
-    LONG alpha = -32768;
-    LONG beta = 32767;
+    LONG alpha = -32775;
+    LONG beta = 32770;
 
     for(UBYTE i = 0; i < moveCount; i++){
         UndoInfo undo;
@@ -537,5 +537,10 @@ AIMove getBestMove(GameState *s){
     #endif
     logWrite("AI getBestMove: from %d to %d, score %ld\n", 
         bestMove.fromIndex, bestMove.toIndex, bestEval);
+
+    for(UBYTE i = 0; i < 10; i++){
+        logWrite("Move %d: from %d to %d\n", i, moveList[i].fromIndex, moveList[i].toIndex);
+    }
+    //add a log write here to print the first ten values of the movelist and their scores for review.
     return bestMove;
 }
