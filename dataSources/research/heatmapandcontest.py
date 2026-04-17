@@ -16,6 +16,16 @@ Contestation outputs (aggregated across all plies, destination squares):
   contest_overlap.png        — B: min(attacker, defender)
   contest_tugofwar.png       — C: (att - def) / (att + def + 1)  [-1..+1]
   contest_weighted.png       — D: (att * def) / (att + def + 1)
+
+Text exports (POS:BOARDINDEX:VALUE format):
+  heatmap_attacker_src_move{N}.txt   — per ply
+  heatmap_attacker_dst_move{N}.txt   — per ply
+  heatmap_defender_src_move{N}.txt   — per ply
+  heatmap_defender_dst_move{N}.txt   — per ply
+  contest_ratio.txt / contest_overlap.txt / contest_tugofwar.txt / contest_weighted.txt
+
+Board index: flat 1D boardState[169] (13x13 with outer off-limits ring).
+  A11 = 14, K1 = 154.  Formula: 14 + (11 - row) * 13 + col_idx
 """
 
 import csv
@@ -27,8 +37,8 @@ from pathlib import Path
 
 # ── Configuration ─────────────────────────────────────────────────────────────
 
-CSV_PATH  = "/Users/phillipb/Documents/macACE/dataSources/research/previousGameData/game_moves.csv"
-OUTPUT_DIR = Path("/Users/phillipb/Documents/macACE/dataSources/research/previousGameData")
+CSV_PATH   = "game_moves.csv"
+OUTPUT_DIR = Path(".")
 PLIES      = 10
 
 COLS    = list("abcdefghijk")
@@ -93,10 +103,7 @@ def build_heatmaps(games, role, plies):
 
 # ── Standard per-ply heatmap grid ─────────────────────────────────────────────
 
-def draw_heatmap_grid(maps: list, role: str, direction: str, output_path: Path):
-    """
-    Draw a grid of per-ply heatmaps (2 rows × 5 cols for 10 plies).
-    """
+def draw_heatmap_grid(maps, role, direction, output_path, cmap=plt.cm.YlOrRd):
     n = len(maps)
     ncols = 5
     nrows = (n + ncols - 1) // ncols
@@ -107,42 +114,28 @@ def draw_heatmap_grid(maps: list, role: str, direction: str, output_path: Path):
     fig.suptitle(f"{role.capitalize()} — {direction} squares (first {n} moves)",
                  color="white", fontsize=14, y=1.01)
 
-    # Shared colour scale across all plies
     global_max = max(m.max() for m in maps) or 1
-
-    cmap = plt.cm.YlOrRd
 
     for i, ax in enumerate(np.array(axes).flat):
         if i >= n:
             ax.set_visible(False)
             continue
-
         data = maps[i]
-
-        # Board background
-        ax.set_facecolor("#ffffff")
-
-        im = ax.imshow(data, origin='lower', cmap=cmap,
-                       vmin=0, vmax=global_max,
-                       extent=[-0.5, 10.5, -0.5, 10.5],
-                       aspect='equal', interpolation='nearest')
-
-        # Grid lines
+        ax.set_facecolor("#0d1117")
+        ax.imshow(data, origin='lower', cmap=cmap,
+                  vmin=0, vmax=global_max,
+                  extent=[-0.5, 10.5, -0.5, 10.5],
+                  aspect='equal', interpolation='nearest')
         for x in range(12):
             ax.axvline(x - 0.5, color='#333355', linewidth=0.4)
         for y in range(12):
             ax.axhline(y - 0.5, color='#333355', linewidth=0.4)
-
-        # Annotate non-zero cells with count
         for row in range(11):
             for col in range(11):
                 val = int(data[row, col])
                 if val > 0:
-                    ax.text(col, row, str(val),
-                            ha='center', va='center',
-                            fontsize=6.5, color='#51534E',
-                            fontweight='bold')
-
+                    ax.text(col, row, str(val), ha='center', va='center',
+                            fontsize=6.5, color='white', fontweight='bold')
         ax.set_title(f"Move {i + 1}", color='#ccccff', fontsize=9, pad=4)
         ax.set_xticks(range(11))
         ax.set_xticklabels(COLS, fontsize=6, color='#aaaacc')
@@ -150,7 +143,6 @@ def draw_heatmap_grid(maps: list, role: str, direction: str, output_path: Path):
         ax.set_yticklabels([str(r) for r in ROWS], fontsize=6, color='#aaaacc')
         ax.tick_params(length=0)
 
-    # Shared colourbar
     cbar_ax = fig.add_axes([1.01, 0.15, 0.02, 0.7])
     sm = plt.cm.ScalarMappable(cmap=cmap, norm=mcolors.Normalize(0, global_max))
     sm.set_array([])
@@ -238,6 +230,36 @@ def build_contestation_maps(games, plies):
     weighted = (A * D) / (A + D + 1)
     return A, D, ratio, overlap, tugofwar, weighted
 
+# ── Board index converter & text export ───────────────────────────────────────
+
+def square_to_board_index(col_idx, row):
+    """
+    Convert a game square to a flat boardState[169] index.
+    boardState is a 13x13 array with an outer off-limits ring.
+    A11 = 14, K1 = 154.  Formula: 14 + (11 - row) * 13 + col_idx
+    """
+    return 14 + (11 - row) * 13 + col_idx
+
+
+def export_map_to_text(data, output_path, label=None):
+    """
+    Write a board map to a text file in POS:BOARDINDEX:VALUE format.
+    Skips zero-value squares.
+    Columns are A-K (uppercase), rows are 1-11.
+    """
+    with open(output_path, 'w') as f:
+        if label:
+            f.write(f"# {label}\n")
+        for row_i in range(11):
+            for col_i in range(11):
+                val = data[row_i, col_i]
+                if val == 0:
+                    continue
+                game_row = ROWS[row_i]          # 1..11
+                pos      = f"{COLS[col_i].upper()}{game_row}"
+                idx      = square_to_board_index(col_i, game_row)
+                f.write(f"{pos}:{idx}:{val:.4f}\n")
+    print(f"Saved: {output_path}")
 
 # ── Main ──────────────────────────────────────────────────────────────────────
 
@@ -248,13 +270,25 @@ def main():
     games = load_games(CSV_PATH)
     print(f"Games loaded: {len(games)}\n")
 
+    # ── Per-role per-ply heatmaps + text exports ──
     for role in ("attacker", "defender"):
         src_maps, dst_maps = build_heatmaps(games, role, PLIES)
+
         draw_heatmap_grid(src_maps, role, "source (from)",
                           OUTPUT_DIR / f"heatmap_{role}_src.png")
         draw_heatmap_grid(dst_maps, role, "destination (to)",
                           OUTPUT_DIR / f"heatmap_{role}_dst.png")
 
+        for ply, m in enumerate(src_maps):
+            export_map_to_text(m,
+                OUTPUT_DIR / f"heatmap_{role}_src_move{ply+1}.txt",
+                label=f"{role} source move {ply+1}")
+        for ply, m in enumerate(dst_maps):
+            export_map_to_text(m,
+                OUTPUT_DIR / f"heatmap_{role}_dst_move{ply+1}.txt",
+                label=f"{role} destination move {ply+1}")
+
+    # ── Contestation maps + text exports ──
     print("\nBuilding contestation maps...")
     A, D, ratio, overlap, tugofwar, weighted = build_contestation_maps(games, PLIES)
 
@@ -290,6 +324,11 @@ def main():
         cmap=plt.cm.inferno, vmin=0, vmax=weighted.max() or 1,
         att_raw=A, def_raw=D,
     )
+
+    export_map_to_text(ratio,    OUTPUT_DIR / "contest_ratio.txt",    label="Contestation A — Ratio")
+    export_map_to_text(overlap,  OUTPUT_DIR / "contest_overlap.txt",  label="Contestation B — Overlap")
+    export_map_to_text(tugofwar, OUTPUT_DIR / "contest_tugofwar.txt", label="Contestation C — Tug of War")
+    export_map_to_text(weighted, OUTPUT_DIR / "contest_weighted.txt", label="Contestation D — Weighted Overlap")
 
     print("\nDone.")
 

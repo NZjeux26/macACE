@@ -122,6 +122,32 @@ void aiGetValidMoves(GameState *state, UBYTE selectedIndex){
 
     **Again like ther attcker version, this is based on the immediate adjcent pieces, which are not
     really that effective to have. This also could be combined with Corner Danger to give a free float score
+
+    This is to change
+
+    become defender perimeter instead. 
+
+     UBYTE primeapproaches[4][2] = {
+        {125,113}, //Top Left
+        {121,107}, //Top Right
+        {43,55}, //Bottom Left
+        {47,61} //Bottom Right
+    };
+    This is the main perimeter that needs guarded early to stop an encirclement
+
+    Secondary squares to guard permieter.
+    UBYTE secondaryapproaches[4][2] = {
+        {124,100}, //Top Left
+        {122,94}, //Top Right
+        {44,31}, //Bottom Left
+        {46,74} //Bottom Right
+    };
+    
+    Follow the same process as below but make a combined perimeter control
+
+    **New Version should be:
+
+    Provides a control score based on attacker or defender control of the perimeter. More positive the defender controls vs more neg the attacker
 */
 UBYTE defenderCornerControl(GameState *s){
     UBYTE control = 0;
@@ -140,6 +166,34 @@ UBYTE defenderCornerControl(GameState *s){
         else if(a == TEAM_ATTACKER || b == TEAM_ATTACKER) control +=1;
     }
     return control;
+}
+
+/* 
+    Returns a danger score based on the approaches to corners being occupied 
+    
+    **This is a very simplified idea, in the actual game you wouldn't block the
+    approaches in these locations since they can be taken. The better places would be
+    in the area one square further out either as a single or in pairs.
+
+    Keep for now, but this will definatly need improved.
+*/
+UBYTE cornerDanger(GameState *s){
+    UBYTE danger = 0;
+
+    UBYTE approaches[4][2] = {
+        {15,27}, //approaches for 14 Top Left
+        {23,37}, //Top Right
+        {145,131}, //Bottom Left
+        {153,141} //Bottom Right
+    };
+
+    for(UBYTE i = 0; i < 4; i++){
+        UBYTE a = s->boardState[approaches[i][0]];
+        UBYTE b = s->boardState[approaches[i][1]];
+        if(a == TEAM_ATTACKER && b == TEAM_ATTACKER) danger += 2;
+        else if(a == TEAM_ATTACKER || b == TEAM_ATTACKER) danger +=1;
+    }
+    return danger;
 }
 
 /*
@@ -214,34 +268,6 @@ UBYTE manhattanToCorner(UBYTE pos, UBYTE corner){
     if(rowDiff < 0) rowDiff = -rowDiff;
     if(colDiff < 0) colDiff = -colDiff;
     return (UBYTE)(rowDiff + colDiff);
-}
-
-/* 
-    Returns a danger score based on the approaches to corners being occupied 
-    
-    **This is a very simplified idea, in the actual game you wouldn't block the
-    approaches in these locations since they can be taken. The better places would be
-    in the area one square further out either as a single or in pairs.
-
-    Keep for now, but this will definatly need improved.
-*/
-UBYTE cornerDanger(GameState *s){
-    UBYTE danger = 0;
-
-    UBYTE approaches[4][2] = {
-        {15,27}, //approaches for 14 Top Left
-        {23,37}, //Top Right
-        {145,131}, //Bottom Left
-        {153,141} //Bottom Right
-    };
-
-    for(UBYTE i = 0; i < 4; i++){
-        UBYTE a = s->boardState[approaches[i][0]];
-        UBYTE b = s->boardState[approaches[i][1]];
-        if(a == TEAM_ATTACKER && b == TEAM_ATTACKER) danger += 2;
-        else if(a == TEAM_ATTACKER || b == TEAM_ATTACKER) danger +=1;
-    }
-    return danger;
 }
 
 LONG evaluateBoard(GameState *s){
