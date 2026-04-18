@@ -227,7 +227,6 @@ void gameGsLoop(void) {
         movePiece(&g_state, cpuMove.fromIndex, cpuMove.toIndex, &cpuresult);
         
         if(cpuresult.moveComplete){
-          
           if(cpuresult.clearHighlight == 1){ //if the move function set the flag to clear the highlight, then we need to clear it
             hightlightActive = 0;
             HLhasBGToRestore[s_ubBufferIndex] = 1; //set the flag to restore the background on the next frame, since the highlight is drawn directly to the back buffer and not as a sprite, we have to manually restore the background when it moves or is cleared.
@@ -246,8 +245,26 @@ void gameGsLoop(void) {
             pieceHasBGToRestore[0] = 1; //set the flag to restore the background
             pieceHasBGToRestore[1] = 1; //set the flag to restore the background 
           }
+          //Logging
+          UBYTE aliveCounter = 0;
+          for(UBYTE i = 0; i < MAX_ATTACKERS; i++){
+            if(!g_state.attackers[i].captured){
+              logWrite("Attacker %d at position %d\n", i, g_state.attackers[i].pos);
+              aliveCounter++;
+            }
+          }
+          logWrite("Total alive attackers: %d\n", aliveCounter);
+
+          UBYTE aliveCounterD = 0;
+          for(UBYTE i = 1; i < MAX_DEFENDERS; i++){
+            if(!g_state.defenders[i].captured){
+              logWrite("Defender %d at position %d\n", i, g_state.defenders[i].pos);
+              aliveCounterD++; 
+            }
+          }
+          logWrite("Total alive defenders: %d\n", aliveCounterD);
           waitFrame = 0; //reset the wait frame flag, so that the CPU move only happens once per turn and not every frame while it's the CPU player's turn
-      }
+        }
       else waitFrame = 1;
     }
     
@@ -674,8 +691,7 @@ void movePiece(GameState *state, UBYTE oldIndex, UBYTE newIndex, MoveResult *res
        
         state->boardState[newIndex] = 2; //update the boardState array with the new position of the piece, 2 for attacker
         state->boardState[oldIndex] = 0; //set the old position to 0 for empty
-        
-        //state->currentPlayer = TEAM_DEFENDER;
+   
         result->moveComplete = 1; //set the flag to indicate the move is complete, this will be used by the CPU player to know when to make its move after the human player moves.
         break;
       }
@@ -758,7 +774,7 @@ void checkForCaptures(GameState *state, UBYTE pieceIndex, MoveResult *result){
               if(state->attackers[k].pos == (neighbourIndex) && !state->attackers[k].captured){
                 
                 state->attackers[k].captured = 1; //mark the piece as captured and needs removed from screen
-                state->attackers[k].pos = 39;
+                //state->attackers[k].pos = 39;
                 UBYTE slot = result->capturedCount[s_ubBufferIndex];
                 if(slot < MAX_CAPTURES_PM){
                 
@@ -777,8 +793,8 @@ void checkForCaptures(GameState *state, UBYTE pieceIndex, MoveResult *result){
               if(state->defenders[j].pos == (neighbourIndex) && !state->defenders[j].captured){ 
                 
                 state->defenders[j].captured = 1; 
-                state->defenders[j].pos = 51;
-                UBYTE slot = result->capturedCount[s_ubBufferIndex];
+                //state->defenders[j].pos = 51; //why did this go off randomly? This is being called in the AI so 
+                UBYTE slot = result->capturedCount[s_ubBufferIndex]; //why is this tied to the buffer index? This is being used to store the captured pieces for the animation, so it needs to be per buffer to avoid conflicts between the two players when they both capture pieces on the same turn.
                 if(slot < MAX_CAPTURES_PM){
                   result->capturedPieceIndexes[0][slot] = state->defenders[j].pos; 
                   result->capturedPieceIndexes[1][slot] = state->defenders[j].pos;

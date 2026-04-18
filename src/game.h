@@ -41,7 +41,7 @@ typedef struct
 } ScreenPos;
 typedef struct{
     UBYTE capturedPieceIndexes[2][MAX_CAPTURES_PM]; //the index of the piece that was captured in the last move.
-    UBYTE capturedCount[2];
+    UBYTE capturedCount[2]; //the number of pieces that were captured in the last move, so we know how many backgrounds we need to restore
     UBYTE clearHighlight;
     UBYTE moveComplete;
 } MoveResult;

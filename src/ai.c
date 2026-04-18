@@ -19,14 +19,14 @@ AIMove moveBuffer[MAX_DEPTH + 1][400];
 
 static UBYTE gameTurnCounter = 0;
 
-const UWORD kingPosWeights[BOARD_SIZE] = {
+const WORD kingPosWeights[BOARD_SIZE] = {
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,  // dead zone row
     0,  5000,   3000, 1000,  1000,  1000, 1000, 1000, 1000, 1000,  3000, 5000,  0,
     0,  3000,   500,  500,   500,   500,  500,  500,  500,   500,  500,  3000,  0,
     0,  1000,   500,  200,   200,   200,  200,  200,  200,   200,  500,  1000,  0,
     0,  1000,   500,  200,   100,   100,  100,  100,  100,   200,  500,  1000,  0,
     0,  1000,   500,  200,   100,   75,   75,   75,   100,   200,  500,  1000,  0,
-    0,  1000,   500,  200,   100,   75,    0,   75,   100,   200,  500,  1000,  0,
+    0,  1000,   500,  200,   100,   75,  -50,   75,   100,   200,  500,  1000,  0,
     0,  1000,   500,  200,   100,   75,   75,   75,   100,   200,  500,  1000,  0,
     0,  1000,   500,  200,   100,   100,  100,  100,  100,   200,  500,  1000,  0,
     0,  1000,   500,  200,   200,   200,  200,  200,  200,   200,  500,  1000,  0,
@@ -34,6 +34,8 @@ const UWORD kingPosWeights[BOARD_SIZE] = {
     0,  5000,   3000, 1000,  1000,  1000, 1000, 1000, 1000,  1000, 3000, 5000,  0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0   // dead zone row
 };
+
+/* ------Helper Functions------ */
 
 void AIgameReset(void){
     gameTurnCounter = 0;
@@ -127,6 +129,33 @@ void aiGetValidMoves(GameState *state, UBYTE selectedIndex){
   #endif
 }
 
+// Manhattan distance from king to nearest corner
+UBYTE manhattanToCorner(UBYTE pos, UBYTE corner){
+    BYTE rowDiff = (pos / 13) - (corner / 13);
+    BYTE colDiff = (pos % 13) - (corner % 13);
+    if(rowDiff < 0) rowDiff = -rowDiff;
+    if(colDiff < 0) colDiff = -colDiff;
+    return (UBYTE)(rowDiff + colDiff);
+}
+
+/* 
+    Returns the corner nearest the king
+*/
+UBYTE nearestCornerDist(GameState *s){
+    UBYTE corners[4] = {14,24,144,154};
+    UBYTE kingPos = s->defenders[0].pos;
+    UBYTE nearest = 255;
+
+    for(UBYTE i = 0; i < 4; i++){
+        UBYTE d = manhattanToCorner(kingPos, corners[i]);
+        if(d < nearest) nearest = d;
+    }
+
+    return nearest;
+}
+
+/* ------Tactical Functions------ */
+
 /* Provides a control score based on attacker or defender control of the perimeter. 
     Positive values favor the Defender, negative values favor the Attacker.
     Uses a synergy bonus to force the AI to complete pairs.
@@ -202,38 +231,13 @@ WORD kingSafety(GameState *s){
         UBYTE sq = s->boardState[adj[i]];
         if(sq == 0){
             emptyCount++;
-            safety += 50; //empty squares increase safety
+            safety += 75; //empty squares increase safety
         }
         else if(sq == TEAM_ATTACKER) safety -= 200; //if pieces around the king are attackers, the threat of capture increases
         else if(sq == TEAM_DEFENDER || sq == 4) safety += 25; //But if it's defenders or empty squares, the threat decreases
     }
 
     return safety;
-}
-
-// Manhattan distance from king to nearest corner
-UBYTE manhattanToCorner(UBYTE pos, UBYTE corner){
-    BYTE rowDiff = (pos / 13) - (corner / 13);
-    BYTE colDiff = (pos % 13) - (corner % 13);
-    if(rowDiff < 0) rowDiff = -rowDiff;
-    if(colDiff < 0) colDiff = -colDiff;
-    return (UBYTE)(rowDiff + colDiff);
-}
-
-/* 
-    Returns the corner nearest the king
-*/
-UBYTE nearestCornerDist(GameState *s){
-    UBYTE corners[4] = {14,24,144,154};
-    UBYTE kingPos = s->defenders[0].pos;
-    UBYTE nearest = 255;
-
-    for(UBYTE i = 0; i < 4; i++){
-        UBYTE d = manhattanToCorner(kingPos, corners[i]);
-        if(d < nearest) nearest = d;
-    }
-
-    return nearest;
 }
 
 WORD evaluateBoard(GameState *s){
@@ -290,6 +294,8 @@ WORD evaluateBoard(GameState *s){
 
     return score;
 }
+
+/* -----AI Move Generation Functions----- */
 
 /*
     gets all the moves for each piece
@@ -385,7 +391,7 @@ void applyMoveWithUndo(GameState *s, AIMove move, UndoInfo *undo){
         undo->capturedTeams[undo->captureCount] = TEAM_DEFENDER;
         undo->captureCount++;
     }
-    for(UBYTE i = 0; i < result.capturedCount[1] && undo->captureCount < MAX_CAPTURES_PM; i++){
+    for(UBYTE i = 0; i < result.capturedCount[0] && undo->captureCount < MAX_CAPTURES_PM; i++){
         undo->capturedPieceIndexes[undo->captureCount] = result.capturedPieceIndexes[1][i];
         undo->capturedTeams[undo->captureCount] = TEAM_ATTACKER;
         undo->captureCount++;
@@ -437,6 +443,8 @@ void undoMove(GameState *s, UndoInfo *undo){
         }
     }
 }
+
+/* ------AI Move Evaluation Functions------*/
 
 WORD minimax(GameState *s, UBYTE depth, WORD alpha, WORD beta, UBYTE maximizingPlayer){
     if(depth == 0 || s->kingState != KING_ALIVE){
@@ -544,10 +552,8 @@ AIMove getBestMove(GameState *s){
     #endif
     logWrite("AI getBestMove: from %d to %d, score %d\n", 
         bestMove.fromIndex, bestMove.toIndex, bestEval);
-
-    for(UBYTE i = 0; i < 10; i++){
-        logWrite("Move %d: from %d to %d\n", i, moveList[i].fromIndex, moveList[i].toIndex);
-    }
+    logWrite("moveCount: %d\n", moveCount);
+        
     //add a log write here to print the first ten values of the movelist and their scores for review.
     return bestMove;
 }
