@@ -9,28 +9,37 @@
 
 //#define AI_LOGGING
 
-#define MAX_DEPTH 3
+#define MAX_DEPTH 1
+#define AI_INF 30000
 
-UBYTE aiValidMoves[BOARD_SIZE];
+UWORD aiValidMoves[BOARD_SIZE]; //Chnaging this to UWORD fixed the problem of max scores and the CPU just getting the same move as top
 UWORD aiValidGeneration = 0;
 //using this global buffer instead of local ones, at depth 2+ the amount of MoveList buffers is quite large and a overflow occurs somewhere
 AIMove moveBuffer[MAX_DEPTH + 1][400];
 
+static UBYTE gameTurnCounter = 0;
+
 const UWORD kingPosWeights[BOARD_SIZE] = {
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,  // dead zone row
-    0, 10000, 10000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 10000, 10000,  0,
-    0, 10000,   500,  500,  500,  500,  500,  500,  500,   500, 10000,    0,  0,
-    0,  1000,   500,  200,  200,  200,  200,  200,  200,   500,  1000,    0,  0,
-    0,  1000,   500,  200,   50,   50,   50,   50,   50,   500,  1000,    0,  0,
-    0,  1000,   500,  200,   50,   10,   10,   10,   50,   200,  1000,    0,  0,
-    0,  1000,   500,  200,   50,   10,    0,   10,   50,   200,  1000,    0,  0,
-    0,  1000,   500,  200,   50,   10,   10,   10,   50,   200,  1000,    0,  0,
-    0,  1000,   500,  200,   50,   50,   50,   50,   50,   500,  1000,    0,  0,
-    0,  1000,   500,  200,  200,  200,  200,  200,  200,   500,  1000,    0,  0,
-    0, 10000,   500,  500,  500,  500,  500,  500,  500,   500, 10000,    0,  0,
-    0, 10000, 10000, 1000, 1000, 1000, 1000, 1000, 1000,  1000, 10000, 10000, 0,
+    0,  5000,   3000, 1000,  1000,  1000, 1000, 1000, 1000, 1000,  3000, 5000,  0,
+    0,  3000,   500,  500,   500,   500,  500,  500,  500,   500,  500,  3000,  0,
+    0,  1000,   500,  200,   200,   200,  200,  200,  200,   200,  500,  1000,  0,
+    0,  1000,   500,  200,   100,   100,  100,  100,  100,   200,  500,  1000,  0,
+    0,  1000,   500,  200,   100,   75,   75,   75,   100,   200,  500,  1000,  0,
+    0,  1000,   500,  200,   100,   75,    0,   75,   100,   200,  500,  1000,  0,
+    0,  1000,   500,  200,   100,   75,   75,   75,   100,   200,  500,  1000,  0,
+    0,  1000,   500,  200,   100,   100,  100,  100,  100,   200,  500,  1000,  0,
+    0,  1000,   500,  200,   200,   200,  200,  200,  200,   200,  500,  1000,  0,
+    0,  3000,   500,  500,   500,   500,  500,  500,  500,   500,  500,  3000,  0,
+    0,  5000,   3000, 1000,  1000,  1000, 1000, 1000, 1000,  1000, 3000, 5000,  0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0   // dead zone row
 };
+
+void AIgameReset(void){
+    gameTurnCounter = 0;
+    aiValidGeneration = 0;
+    memset(aiValidMoves, 0, sizeof(aiValidMoves));
+}
 /* This function will calculate the valid moves for the currently highlighted piece and populate the validMoves array, which is indexed the same as the board array, with a value over 0 for valid moves and 0 for invalid moves.*/
 void aiGetValidMoves(GameState *state, UBYTE selectedIndex){
   //selectedIndex == highlightedindex
@@ -117,95 +126,71 @@ void aiGetValidMoves(GameState *state, UBYTE selectedIndex){
   }
   #endif
 }
-/*
-    returns a score based on how much control the defenders have of the corners
 
-    **Again like ther attcker version, this is based on the immediate adjcent pieces, which are not
-    really that effective to have. This also could be combined with Corner Danger to give a free float score
-
-    This is to change
-
-    become defender perimeter instead. 
-
-     UBYTE primeapproaches[4][2] = {
-        {125,113}, //Top Left
-        {121,107}, //Top Right
-        {43,55}, //Bottom Left
-        {47,61} //Bottom Right
-    };
-    This is the main perimeter that needs guarded early to stop an encirclement
-
-    Secondary squares to guard permieter.
-    UBYTE secondaryapproaches[4][2] = {
-        {124,100}, //Top Left
-        {122,94}, //Top Right
-        {44,31}, //Bottom Left
-        {46,74} //Bottom Right
-    };
-    
-    Follow the same process as below but make a combined perimeter control
-
-    **New Version should be:
-
-    Provides a control score based on attacker or defender control of the perimeter. More positive the defender controls vs more neg the attacker
+/* Provides a control score based on attacker or defender control of the perimeter. 
+    Positive values favor the Defender, negative values favor the Attacker.
+    Uses a synergy bonus to force the AI to complete pairs.
 */
-UBYTE defenderCornerControl(GameState *s){
-    UBYTE control = 0;
 
-    UBYTE approaches[4][2] = {
-        {15,27}, //approaches for 14 Top Left
-        {23,37}, //Top Right
-        {145,131}, //Bottom Left
-        {153,141} //Bottom Right
+WORD evaluatePerimeterControl(GameState *s){
+    WORD control = 0;
+
+    // Main perimeter that needs guarded early to stop an encirclement
+    UBYTE prime[4][2] = {
+        {125,113}, // Top Left
+        {121,107}, // Top Right
+        {43,55},   // Bottom Left
+        {47,61}    // Bottom Right
     };
 
+    // Secondary squares to guard perimeter
+    UBYTE secondary[4][2] = {
+        {124,100}, // Top Left
+        {122,94},  // Top Right
+        {44,31},   // Bottom Left
+        {46,74}    // Bottom Right
+    };
+
+    // Evaluate prime perimeter
     for(UBYTE i = 0; i < 4; i++){
-        UBYTE a = s->boardState[approaches[i][0]];
-        UBYTE b = s->boardState[approaches[i][1]];
-        if(a == TEAM_DEFENDER && b == TEAM_DEFENDER) control += 2;
-        else if(a == TEAM_ATTACKER || b == TEAM_ATTACKER) control +=1;
+        UBYTE a = s->boardState[prime[i][0]];
+        UBYTE b = s->boardState[prime[i][1]];
+
+        //defender scoring
+        if(a == TEAM_DEFENDER && b == TEAM_DEFENDER) control += 50;
+        else if(a == TEAM_DEFENDER || b == TEAM_DEFENDER) control += 15;
+
+        //attacker scoring
+        if(a == TEAM_ATTACKER && b == TEAM_ATTACKER) control -= 50;
+        else if(a == TEAM_ATTACKER || b == TEAM_ATTACKER) control -= 15;
     }
+
+    // Evaluate secondary perimeter
+    for(UBYTE i = 0; i < 4; i++){
+        UBYTE a = s->boardState[secondary[i][0]];
+        UBYTE b = s->boardState[secondary[i][1]];
+
+        //defender scoring
+        if(a == TEAM_DEFENDER && b == TEAM_DEFENDER) control += 25;
+        else if(a == TEAM_DEFENDER || b == TEAM_DEFENDER) control += 7;
+
+        //attacker scoring
+        if(a == TEAM_ATTACKER && b == TEAM_ATTACKER) control -= 25;
+        else if(a == TEAM_ATTACKER || b == TEAM_ATTACKER) control -= 7;
+    }
+
     return control;
 }
 
-/* 
-    Returns a danger score based on the approaches to corners being occupied 
-    
-    **This is a very simplified idea, in the actual game you wouldn't block the
-    approaches in these locations since they can be taken. The better places would be
-    in the area one square further out either as a single or in pairs.
-
-    Keep for now, but this will definatly need improved.
-*/
-UBYTE cornerDanger(GameState *s){
-    UBYTE danger = 0;
-
-    UBYTE approaches[4][2] = {
-        {15,27}, //approaches for 14 Top Left
-        {23,37}, //Top Right
-        {145,131}, //Bottom Left
-        {153,141} //Bottom Right
-    };
-
-    for(UBYTE i = 0; i < 4; i++){
-        UBYTE a = s->boardState[approaches[i][0]];
-        UBYTE b = s->boardState[approaches[i][1]];
-        if(a == TEAM_ATTACKER && b == TEAM_ATTACKER) danger += 2;
-        else if(a == TEAM_ATTACKER || b == TEAM_ATTACKER) danger +=1;
-    }
-    return danger;
-}
-
 /*
-    How many side the king has attackers surrounding it
-    
-    ** Same as below, doesn't say what direction, or pieces further out
-    than one square
+    This calculates the saftey of the king, how many attackers are around it, vs how many blank or friendly sqaures
 */
-BYTE kingSidesThreatened(GameState *s){
+WORD kingSafety(GameState *s){
     UBYTE kingPos = s->defenders[0].pos;
-    BYTE threat = 0;
     
+    WORD safety = 0;
+    UBYTE emptyCount = 0;
+
     UBYTE adj[4] = {
         kingPos +1,
         kingPos -1,
@@ -215,34 +200,24 @@ BYTE kingSidesThreatened(GameState *s){
 
     for(UBYTE i = 0; i < 4; i++){
         UBYTE sq = s->boardState[adj[i]];
-        if(sq == TEAM_ATTACKER || sq == 4) threat++; //if pieces around the king are attackers, the threat of capture increases
-        if(sq == TEAM_DEFENDER) threat--; //But if it's defenders, the threat decreases
+        if(sq == 0){
+            emptyCount++;
+            safety += 50; //empty squares increase safety
+        }
+        else if(sq == TEAM_ATTACKER) safety -= 200; //if pieces around the king are attackers, the threat of capture increases
+        else if(sq == TEAM_DEFENDER || sq == 4) safety += 25; //But if it's defenders or empty squares, the threat decreases
     }
 
-    return threat;
+    return safety;
 }
-/*
-    returns how many defenders are adjenct to the king
 
-    ** Doesn't return where or what direction they are, also
-    having defenders right next to the king is not really an advantage
-
-*/
-UBYTE kingShieldCount(GameState *s){
-    UBYTE kingPos = s->defenders[0].pos;
-    UBYTE shield = 0;
-    UBYTE adj[4] = {
-        kingPos +1,
-        kingPos -1,
-        kingPos +13,
-        kingPos -13
-    };
-
-    for(UBYTE i = 0; i < 4; i++){
-        if(s->boardState[adj[i]] == TEAM_DEFENDER) shield++;
-    }
-
-    return shield;
+// Manhattan distance from king to nearest corner
+UBYTE manhattanToCorner(UBYTE pos, UBYTE corner){
+    BYTE rowDiff = (pos / 13) - (corner / 13);
+    BYTE colDiff = (pos % 13) - (corner % 13);
+    if(rowDiff < 0) rowDiff = -rowDiff;
+    if(colDiff < 0) colDiff = -colDiff;
+    return (UBYTE)(rowDiff + colDiff);
 }
 
 /* 
@@ -261,65 +236,45 @@ UBYTE nearestCornerDist(GameState *s){
     return nearest;
 }
 
-// Manhattan distance from king to nearest corner
-UBYTE manhattanToCorner(UBYTE pos, UBYTE corner){
-    BYTE rowDiff = (pos / 13) - (corner / 13);
-    BYTE colDiff = (pos % 13) - (corner % 13);
-    if(rowDiff < 0) rowDiff = -rowDiff;
-    if(colDiff < 0) colDiff = -colDiff;
-    return (UBYTE)(rowDiff + colDiff);
-}
+WORD evaluateBoard(GameState *s){
+    if(s->kingState == KING_CAPTURED) return -30000;
+    if(s->kingState == KING_ESCAPED) return 30000;
 
-LONG evaluateBoard(GameState *s){
-    LONG score = 0;
+    WORD score = 0;
     //King is always the first position in the defender array
     UBYTE kingPos = s->defenders[0].pos;
 
-    if(s->kingState == KING_CAPTURED) {
-        #ifdef AI_LOGGING
-        logWrite("EVAL: King captured, returning -30000\n");
-        #endif
-        return -30000;
-    }
-    if(s->kingState == KING_ESCAPED) {
-        #ifdef AI_LOGGING
-        logWrite("EVAL: King escaped, returning 30000\n");
-        #endif
-        return 30000;
-    }
+    // Get the raw values from the tactical functions, these will be combined and weighted to give the final score
+    WORD perimeter = evaluatePerimeterControl(s);
+    //lanes
 
-    //Lookup the king pos table for nearest corner and corner paths
-    score += (kingPosWeights[kingPos] >> 2); //shift right to divide the score by 4 since the other factors are more important than just the position of the king, but this still gives a good incentive to move towards the corners.
-
-    //Corner danger
-    WORD danger = cornerDanger(s);
-    UBYTE dist = nearestCornerDist(s);
-    if(dist <= 3) score -= (danger << 6);
-    else score -= (danger << 4);
-
-    //King Safety
-    score += (kingShieldCount(s) << 4);
-    score -=(kingSidesThreatened(s) << 10); //this is a very important factor, having attackers on multiple sides of the king is a huge threat and should be weighted heavily.
-
-    //defender map control
-    score += (defenderCornerControl(s) << 4);
-
-    //Piece counting / scores
-    UBYTE attackersAlive = 0;
-    UBYTE defendersAlive = 0;
+    //king mobility
+    WORD corners = kingPosWeights[kingPos];
     
-    for(UBYTE k = 0; k < MAX_ATTACKERS; k ++){
-        if(!s->attackers[k].captured) attackersAlive++;
-    }
-    //start at 1 since the king is always the first position in the defenders array and we want to count the other defenders here.
-    for(UBYTE j = 1; j < MAX_DEFENDERS; j ++){
-        if(!s->defenders[j].captured) defendersAlive++;
-    }
+    WORD kingSafetyScore = kingSafety(s);
 
-    score -= (attackersAlive << 3); // Multiply by 8
-    score += (defendersAlive << 4); // Multiply by 16
-
-    //Attacker logic
+    // different phases of the game require different weightings to different parts of the board
+    
+    //Early game, focuses on establishing control of the perimeter and getting the king mobile (opposite for the attackers)
+    if(gameTurnCounter <= 7){
+        score += perimeter;
+        score += (corners >> 3); //reduce the impact of the corners in the early game.
+        score += (kingSafetyScore >> 1);
+    }
+    else if(gameTurnCounter >7 && gameTurnCounter <= 15){
+        score += (perimeter >> 1); //reduce the impact of perimeter control in the mid game
+        //lanes
+        score += (corners >> 1); //increase the impact of the corners in the mid game
+        //King 
+        score += kingSafetyScore;
+        
+    }
+    else{
+        score += (perimeter >> 2); //reduce the impact of perimeter control in the late game
+        //lanes
+        score += corners; //full impact of the corners in the late game
+        score += kingSafetyScore << 1; //increase the impact of king safety in the late game
+    }
 
     #ifdef AI_LOGGING
     logWrite("--- EVAL ---\n");
@@ -483,38 +438,44 @@ void undoMove(GameState *s, UndoInfo *undo){
     }
 }
 
-LONG minimax(GameState *s, UBYTE depth, LONG alpha, LONG beta, UBYTE maximizingPlayer){
+WORD minimax(GameState *s, UBYTE depth, WORD alpha, WORD beta, UBYTE maximizingPlayer){
     if(depth == 0 || s->kingState != KING_ALIVE){
         return evaluateBoard(s);
     }
 
     //ordering in move list?
-    AIMove *moveList = moveBuffer[depth]; // I don't actually know why the move list is the size of the board, it's just a list of moves.
+    AIMove *moveList = moveBuffer[depth];
     UBYTE moveCount;
 
     if(maximizingPlayer){
         getAllMoves(s, TEAM_DEFENDER, moveList, &moveCount);
-        LONG maxEval = -32768;
+        WORD maxEval = -AI_INF;
+
         for(UBYTE i = 0; i < moveCount; i++){
             UndoInfo undo;
             applyMoveWithUndo(s, moveList[i], &undo);
-            LONG eval = minimax(s, depth - 1, alpha, beta, 0);
+            WORD eval = minimax(s, depth - 1, alpha, beta, 0);
             undoMove(s, &undo);
+            
             if(eval > maxEval) maxEval = eval;
-            if(eval > alpha) alpha = eval;
+            if(maxEval > alpha) alpha = maxEval;
+
             if(beta <= alpha) break; //beta cut-off
         }
         return maxEval;
     } else {
         getAllMoves(s, TEAM_ATTACKER, moveList, &moveCount);
-        LONG minEval = 32767;
+        WORD minEval = AI_INF
+        ;
         for(UBYTE i = 0; i < moveCount; i++){
             UndoInfo undo;
             applyMoveWithUndo(s, moveList[i], &undo);
-            LONG eval = minimax(s, depth - 1, alpha, beta, 1);
+            WORD eval = minimax(s, depth - 1, alpha, beta, 1);
             undoMove(s, &undo);
+            
             if(eval < minEval) minEval = eval;
-            if(eval < beta) beta = eval;
+            if(minEval < beta) beta = minEval;
+
             if(beta <= alpha) break; //alpha cut-off
         }
         return minEval;
@@ -527,29 +488,49 @@ AIMove getBestMove(GameState *s){
     UBYTE moveCount;
     UBYTE maximisingPlayer = (s->currentPlayer == TEAM_DEFENDER);
     
-    getAllMoves(s, s->currentPlayer, moveList, &moveCount);
+    gameTurnCounter++;
     
     UBYTE seearchDepth = MAX_DEPTH; //this can be adjusted based on performance needs.
-    AIMove bestMove = moveList[0];
-    LONG bestEval = maximisingPlayer ? -32768 : 32767;
-    LONG alpha = -32775;
-    LONG beta = 32770;
+
+    WORD bestEval = maximisingPlayer ? -AI_INF : AI_INF;
+    WORD alpha = -AI_INF;
+    WORD beta = AI_INF;
+
+    getAllMoves(s, s->currentPlayer, moveList, &moveCount);
+    
+    if(moveCount == 0){
+        // No valid moves, return a dummy move (could also consider returning an error code or similar)
+        AIMove noMove = {0};
+        return noMove;
+    }
+
+    AIMove bestMove = moveList[0]; //bestmove is simply pulling the first move in the moveList, where does it get ordered by the actual best move with the highest score?
 
     for(UBYTE i = 0; i < moveCount; i++){
         UndoInfo undo;
         applyMoveWithUndo(s, moveList[i], &undo);
-        LONG eval = minimax(s, seearchDepth, alpha, beta, !maximisingPlayer); //depth of 2 for now, this can be adjusted based on performance needs
+        WORD eval = minimax(s, seearchDepth, alpha, beta, !maximisingPlayer); //depth of 2 for now, this can be adjusted based on performance needs
         undoMove(s, &undo);
 
-        if(maximisingPlayer && eval > bestEval){
-            bestEval = eval;
-            bestMove = moveList[i];
-            if(eval > alpha) alpha = eval;
-        }
-        else if(!maximisingPlayer && eval < bestEval){
-            bestEval = eval;
-            bestMove = moveList[i];
-            if(eval < beta) beta = eval;
+        if(maximisingPlayer){
+            if(eval > bestEval){
+                bestEval = eval;
+                bestMove = moveList[i];
+                if(eval > alpha) alpha = eval;
+            }
+            //tie breaker jitter (needs random number generator)
+            // else if(eval > bestEval){
+            //     if(ran)
+            // }
+        } else {
+            if(eval < bestEval){
+                bestEval = eval;
+                bestMove = moveList[i];
+                if(eval < beta) beta = eval;
+            }
+            //attacker tie breaker jitter (needs random number generator)
+             //else if(eval < bestEval){
+            //     if(ran)
         }
      
     }
@@ -561,7 +542,7 @@ AIMove getBestMove(GameState *s){
     logWrite("AI getBestMove: from %d to %d, score %d\n", 
         bestMove.fromIndex, bestMove.toIndex, bestEval);
     #endif
-    logWrite("AI getBestMove: from %d to %d, score %ld\n", 
+    logWrite("AI getBestMove: from %d to %d, score %d\n", 
         bestMove.fromIndex, bestMove.toIndex, bestEval);
 
     for(UBYTE i = 0; i < 10; i++){

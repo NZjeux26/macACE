@@ -277,6 +277,7 @@ void gameGsLoop(void) {
   */
 void gameGsDestroy(void) {
     systemUse();
+    AIgameReset();
     for(UBYTE i = 0; i < MAX_ATTACKERS; i++){
       bitmapDestroy(pBmAttackers[i]);
       bitmapDestroy(pBmAttackers_Mask[i]);
@@ -757,6 +758,7 @@ void checkForCaptures(GameState *state, UBYTE pieceIndex, MoveResult *result){
               if(state->attackers[k].pos == (neighbourIndex) && !state->attackers[k].captured){
                 
                 state->attackers[k].captured = 1; //mark the piece as captured and needs removed from screen
+                state->attackers[k].pos = 39;
                 UBYTE slot = result->capturedCount[s_ubBufferIndex];
                 if(slot < MAX_CAPTURES_PM){
                 
@@ -775,6 +777,7 @@ void checkForCaptures(GameState *state, UBYTE pieceIndex, MoveResult *result){
               if(state->defenders[j].pos == (neighbourIndex) && !state->defenders[j].captured){ 
                 
                 state->defenders[j].captured = 1; 
+                state->defenders[j].pos = 51;
                 UBYTE slot = result->capturedCount[s_ubBufferIndex];
                 if(slot < MAX_CAPTURES_PM){
                   result->capturedPieceIndexes[0][slot] = state->defenders[j].pos; 

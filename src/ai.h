@@ -6,6 +6,7 @@
 typedef struct{
     UBYTE fromIndex;
     UBYTE toIndex;
+    WORD score; 
 } AIMove;
 
 typedef struct{
@@ -25,20 +26,24 @@ typedef struct{
 /* *****AI Functions***** */
 AIMove getBestMove(GameState *s);
 void getAllMoves(GameState *s, UBYTE team, AIMove *moveList, UBYTE *moveCount);
-LONG evaluateBoard(GameState *s);
+WORD evaluateBoard(GameState *s);
 void stratagy(GameState *s);
-LONG minimax(GameState *s, UBYTE depth, LONG alpha, LONG beta, UBYTE maximising);
+WORD minimax(GameState *s, UBYTE depth, WORD alpha, WORD beta, UBYTE maximising);
 void applyMove(GameState *s, AIMove move);
 void applyMoveWithUndo(GameState *s, AIMove move, UndoInfo *undo);
 void undoMove(GameState *s, UndoInfo *undo);
 
 /* *****Helper Functions****** */
 UBYTE manhattanToCorner(UBYTE pos, UBYTE corner);
-UBYTE cornerDanger(GameState *s);
 UBYTE nearestCornerDist(GameState *s);
-UBYTE defenderCornerControl(GameState *s);
-BYTE kingSidesThreatened(GameState *s);
-UBYTE kingShieldCount(GameState *s);
-UBYTE kingMobility(GameState *s);
 void aiGetValidMoves(GameState *state, UBYTE selectedIndex);
+void AIgameReset(void);
+
+/* *****Tactical Functions***** */
+WORD evaluatePerimeterControl(GameState *s);
+UBYTE defenderCornerControl(GameState *s);
+WORD kingSafety(GameState *s);
+UBYTE cornerDanger(GameState *s);
+UBYTE kingMobility(GameState *s);
+
 #endif
