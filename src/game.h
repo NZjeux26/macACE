@@ -42,6 +42,7 @@ typedef struct
 typedef struct{
     UBYTE capturedPieceIndexes[2][MAX_CAPTURES_PM]; //the index of the piece that was captured in the last move.
     UBYTE capturedCount[2]; //the number of pieces that were captured in the last move, so we know how many backgrounds we need to restore
+    UBYTE capturedPieceTeam[MAX_CAPTURES_PM]; //the team of the pieces that were captured, so we know which piece array to restore them to.
     UBYTE clearHighlight;
     UBYTE moveComplete;
 } MoveResult;
@@ -78,5 +79,6 @@ void checkForCaptures(GameState *state, UBYTE pieceIndex, MoveResult *result);
 void checkShieldWallCaptures(GameState *state, UBYTE pieceIndex, MoveResult *result);
 void checkExitFort(GameState *state);
 void checkSurrounded(GameState *state, UBYTE pieceIndex);
+void checkforMisplacedPieces(void); //doesn't need the state passed since it's read only.
 
 #endif // _GAME_H_

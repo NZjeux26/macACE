@@ -12,24 +12,23 @@
 #define MAX_DEPTH 1
 #define AI_INF 30000
 
+static UBYTE gameTurnCounter = 0; //used to track the number of turns that have passed in the game, this is used to trigger certain strategies at certain points in the game, and also to track when to reset the AI's internal state if needed.
 UWORD aiValidMoves[BOARD_SIZE]; //Chnaging this to UWORD fixed the problem of max scores and the CPU just getting the same move as top
 UWORD aiValidGeneration = 0;
 //using this global buffer instead of local ones, at depth 2+ the amount of MoveList buffers is quite large and a overflow occurs somewhere
 AIMove moveBuffer[MAX_DEPTH + 1][400];
 
-static UBYTE gameTurnCounter = 0;
-
 const WORD kingPosWeights[BOARD_SIZE] = {
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,  // dead zone row
     0,  5000,   3000, 1000,  1000,  1000, 1000, 1000, 1000, 1000,  3000, 5000,  0,
     0,  3000,   500,  500,   500,   500,  500,  500,  500,   500,  500,  3000,  0,
-    0,  1000,   500,  200,   200,   200,  200,  200,  200,   200,  500,  1000,  0,
-    0,  1000,   500,  200,   100,   100,  100,  100,  100,   200,  500,  1000,  0,
-    0,  1000,   500,  200,   100,   75,   75,   75,   100,   200,  500,  1000,  0,
-    0,  1000,   500,  200,   100,   75,  -50,   75,   100,   200,  500,  1000,  0,
-    0,  1000,   500,  200,   100,   75,   75,   75,   100,   200,  500,  1000,  0,
-    0,  1000,   500,  200,   100,   100,  100,  100,  100,   200,  500,  1000,  0,
-    0,  1000,   500,  200,   200,   200,  200,  200,  200,   200,  500,  1000,  0,
+    0,  1000,   500,  250,   250,   250,  250,  250,  250,   250,  500,  1000,  0,
+    0,  1000,   500,  250,   175,   175,  175,  175,  175,   250,  500,  1000,  0,
+    0,  1000,   500,  250,   175,   150,  150,  150,  175,   250,  500,  1000,  0,
+    0,  1000,   500,  250,   175,   150, -150,  150,  175,   250,  500,  1000,  0,
+    0,  1000,   500,  250,   175,   150,  150,  150,  175,   250,  500,  1000,  0,
+    0,  1000,   500,  250,   175,   175,  175,  175,  175,   250,  500,  1000,  0,
+    0,  1000,   500,  250,   250,   250,  250,  250,  250,   250,  500,  1000,  0,
     0,  3000,   500,  500,   500,   500,  500,  500,  500,   500,  500,  3000,  0,
     0,  5000,   3000, 1000,  1000,  1000, 1000, 1000, 1000,  1000, 3000, 5000,  0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0   // dead zone row
@@ -231,13 +230,72 @@ WORD kingSafety(GameState *s){
         UBYTE sq = s->boardState[adj[i]];
         if(sq == 0){
             emptyCount++;
-            safety += 75; //empty squares increase safety
+            safety += 50; //empty squares increase safety
         }
-        else if(sq == TEAM_ATTACKER) safety -= 200; //if pieces around the king are attackers, the threat of capture increases
+        else if(sq == TEAM_ATTACKER) safety -= 300; //if pieces around the king are attackers, the threat of capture increases
         else if(sq == TEAM_DEFENDER || sq == 4) safety += 25; //But if it's defenders or empty squares, the threat decreases
     }
-
+    //check the second squares out from the king, the more emp
+    for(UBYTE i = 0; i < 4; i++){
+        UBYTE sq = s->boardState[adj[i] + adj[0]];
+        if(sq == 0){
+            emptyCount++;
+            safety += 25; //empty squares increase safety
+        }
+        else if(sq == TEAM_ATTACKER) safety -= 150; //if pieces around the king are attackers, the threat of capture increases
+        else if(sq == TEAM_DEFENDER || sq == 4) safety += 10; //But if it's defenders or empty squares, the threat decreases
+    }
     return safety;
+}
+
+/* Evaluates the overall strength of each team's forces on the board */
+
+WORD evaluateForces(GameState *s){
+    WORD forceScore = 0;
+
+    // Attacker scoring
+    for(UBYTE i = 0; i < MAX_ATTACKERS; i++){
+        if(!s->attackers[i].captured){
+            forceScore -= 20; // each attacker on the board reduces the score for the defender
+        }
+    }
+
+    // Defender scoring (starts at 1 since the King while a defender isn't a combatant)
+    for(UBYTE j = 1; j < MAX_DEFENDERS; j++){
+        if(!s->defenders[j].captured){
+            forceScore += 40; // each defender on the board increases the score for the defender
+        }
+    }
+
+    return forceScore;
+}
+/* Evaluates the potential for capturing pieces (non shield wall)*/
+WORD evaluateCapturePotential(GameState *s){
+    WORD captureScore = 0;
+    //We check if there is a empty square next to a piece that a piece is next to, meaning is vulnerable to capture on the next turn if the opponent moves into that square. 
+    //This is a very basic way to evaluate capture potential but it should give the AI some sense of which pieces are in danger and which pieces have good opportunities to capture on the next turn.
+    //Remembering in this game capturing pieces is NOT the objective, but a self defensive measure.
+    for (UBYTE i = 0; i < MAX_ATTACKERS; i++){
+        if(!s->attackers[i].captured){
+            UBYTE pos = s->attackers[i].pos;
+            //check if there's a defender on the other side of the attacker, if so, it's a potential capture
+            if((s->boardState[pos+1] == TEAM_DEFENDER || s->boardState[pos+1] == 4 || s->boardState[pos+1] == 3) && s->boardState[pos-1] == 0) captureScore += 20;
+            if((s->boardState[pos-1] == TEAM_DEFENDER || s->boardState[pos-1] == 4 || s->boardState[pos-1] == 3) && s->boardState[pos+1] == 0) captureScore += 20;
+            if((s->boardState[pos+13] == TEAM_DEFENDER || s->boardState[pos+13] == 4 || s->boardState[pos+13] == 3) && s->boardState[pos-13] == 0) captureScore += 20;
+            if((s->boardState[pos-13] == TEAM_DEFENDER || s->boardState[pos-13] == 4 || s->boardState[pos-13] == 3) && s->boardState[pos+13] == 0) captureScore += 20;
+        }
+    }
+    for (UBYTE j = 1; j < MAX_DEFENDERS; j++){
+        if(!s->defenders[j].captured){
+            UBYTE pos = s->defenders[j].pos;
+            //check if there's an attacker on the other side of the defender, if so, it's a potential capture
+            if((s->boardState[pos+1] == TEAM_ATTACKER || s->boardState[pos+1] == 4) && s->boardState[pos-1] == 0) captureScore -= 20;
+            if((s->boardState[pos-1] == TEAM_ATTACKER || s->boardState[pos-1] == 4) && s->boardState[pos+1] == 0) captureScore -= 20;
+            if((s->boardState[pos+13] == TEAM_ATTACKER || s->boardState[pos+13] == 4) && s->boardState[pos-13] == 0) captureScore -= 20;
+            if((s->boardState[pos-13] == TEAM_ATTACKER || s->boardState[pos-13] == 4) && s->boardState[pos+13] == 0) captureScore -= 20;
+        }
+    }
+    return captureScore;
 }
 
 WORD evaluateBoard(GameState *s){
@@ -249,28 +307,40 @@ WORD evaluateBoard(GameState *s){
     UBYTE kingPos = s->defenders[0].pos;
 
     // Get the raw values from the tactical functions, these will be combined and weighted to give the final score
-    WORD perimeter = evaluatePerimeterControl(s);
-    //lanes
 
-    //king mobility
+    /* Board Control*/
+    WORD perimeter = evaluatePerimeterControl(s);
+
+    //King Safety / Mobility
     WORD corners = kingPosWeights[kingPos];
-    
     WORD kingSafetyScore = kingSafety(s);
+
+    //Force Evaluation
+    WORD forceScore = evaluateForces(s);
+
+    //Capture Potential
+    WORD captureScore = evaluateCapturePotential(s);
 
     // different phases of the game require different weightings to different parts of the board
     
     //Early game, focuses on establishing control of the perimeter and getting the king mobile (opposite for the attackers)
-    if(gameTurnCounter <= 7){
+    if(gameTurnCounter <= 6){
         score += perimeter;
-        score += (corners >> 3); //reduce the impact of the corners in the early game.
+        score += (corners >> 2); //reduce the impact of the corners in the early game.
         score += (kingSafetyScore >> 1);
+        score += (forceScore >> 2); //reduce the impact of force in the early game
+        score += (captureScore >> 2); //reduce the impact of capture potential in the early game
+        
     }
-    else if(gameTurnCounter >7 && gameTurnCounter <= 15){
+    else if(gameTurnCounter >6 && gameTurnCounter <= 15){
         score += (perimeter >> 1); //reduce the impact of perimeter control in the mid game
         //lanes
-        score += (corners >> 1); //increase the impact of the corners in the mid game
+        score += corners; //increase the impact of the corners in the mid game
         //King 
         score += kingSafetyScore;
+        //Force
+        score += forceScore; 
+        score += captureScore; 
         
     }
     else{
@@ -278,19 +348,9 @@ WORD evaluateBoard(GameState *s){
         //lanes
         score += corners; //full impact of the corners in the late game
         score += kingSafetyScore << 1; //increase the impact of king safety in the late game
+        score += forceScore; 
+        score += captureScore; 
     }
-
-    #ifdef AI_LOGGING
-    logWrite("--- EVAL ---\n");
-    logWrite("  KingPos:       %d (idx %d)\n", kingPosWeights[kingPos], kingPos);
-    logWrite("  CornerDanger:  %d (dist %d, raw danger %d)\n", (dist <= 3) ? danger << 6 : danger << 4, dist, danger);
-    logWrite("  ShieldCount:   %d\n", kingShieldCount(s) << 4);
-    logWrite("  SidesThreat:   %d\n", kingSidesThreatened(s) << 10);
-    logWrite("  CornerCtrl:    %d\n", defenderCornerControl(s) << 4);
-    logWrite("  Pieces ATK:%d DEF:%d score: %d\n", attackersAlive, defendersAlive, score);
-    logWrite("  TOTAL:         %d\n", score);
-    logWrite("------------\n");
-    #endif
 
     return score;
 }
@@ -388,12 +448,7 @@ void applyMoveWithUndo(GameState *s, AIMove move, UndoInfo *undo){
 
     for(UBYTE i = 0; i < result.capturedCount[0] && undo->captureCount < MAX_CAPTURES_PM; i++){
         undo->capturedPieceIndexes[undo->captureCount] = result.capturedPieceIndexes[0][i];
-        undo->capturedTeams[undo->captureCount] = TEAM_DEFENDER;
-        undo->captureCount++;
-    }
-    for(UBYTE i = 0; i < result.capturedCount[0] && undo->captureCount < MAX_CAPTURES_PM; i++){
-        undo->capturedPieceIndexes[undo->captureCount] = result.capturedPieceIndexes[1][i];
-        undo->capturedTeams[undo->captureCount] = TEAM_ATTACKER;
+        undo->capturedTeams[undo->captureCount] = result.capturedPieceTeam[i];
         undo->captureCount++;
     }
 
@@ -422,7 +477,7 @@ void undoMove(GameState *s, UndoInfo *undo){
 
     for(UBYTE i = 0; i< undo->captureCount; i++){
         UBYTE boardPos = undo->capturedPieceIndexes[i];
-
+        //WHy when restoring do pieces sometimes come back and sometimes only come back in the BoardState or in the array for pieces?
         if(undo->capturedTeams[i] == TEAM_DEFENDER){
             for(UBYTE j = 0; j < MAX_DEFENDERS; j++){
                 if(s->defenders[j].pos == boardPos && s->defenders[j].captured){
@@ -552,7 +607,9 @@ AIMove getBestMove(GameState *s){
     #endif
     logWrite("AI getBestMove: from %d to %d, score %d\n", 
         bestMove.fromIndex, bestMove.toIndex, bestEval);
+    
     logWrite("moveCount: %d\n", moveCount);
+    logWrite("Game Turn: %d\n", gameTurnCounter);
         
     //add a log write here to print the first ten values of the movelist and their scores for review.
     return bestMove;

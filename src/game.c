@@ -245,24 +245,8 @@ void gameGsLoop(void) {
             pieceHasBGToRestore[0] = 1; //set the flag to restore the background
             pieceHasBGToRestore[1] = 1; //set the flag to restore the background 
           }
-          //Logging
-          UBYTE aliveCounter = 0;
-          for(UBYTE i = 0; i < MAX_ATTACKERS; i++){
-            if(!g_state.attackers[i].captured){
-              logWrite("Attacker %d at position %d\n", i, g_state.attackers[i].pos);
-              aliveCounter++;
-            }
-          }
-          logWrite("Total alive attackers: %d\n", aliveCounter);
-
-          UBYTE aliveCounterD = 0;
-          for(UBYTE i = 1; i < MAX_DEFENDERS; i++){
-            if(!g_state.defenders[i].captured){
-              logWrite("Defender %d at position %d\n", i, g_state.defenders[i].pos);
-              aliveCounterD++; 
-            }
-          }
-          logWrite("Total alive defenders: %d\n", aliveCounterD);
+          checkforMisplacedPieces(); //check for any pieces that are in an invalid position, such as on top of each other, and log them for debugging, this is needed because there was a bug where the AI would sometimes move a piece to the wrong position and it would end up on top of another piece, so this is to help track down that bug.
+          
           waitFrame = 0; //reset the wait frame flag, so that the CPU move only happens once per turn and not every frame while it's the CPU player's turn
         }
       else waitFrame = 1;
@@ -281,6 +265,165 @@ void gameGsLoop(void) {
     vPortWaitForEnd(s_pVpMain);
     systemIdleEnd();
 }
+
+void checkforMisplacedPieces(void){
+    BOOL mismatchFound = FALSE;
+    // --- PASS 1: Pieces -> boardState ---
+    for (UBYTE i = 0; i < MAX_ATTACKERS; i++) {
+        if (!g_state.attackers[i].captured) {
+            UBYTE pos = g_state.attackers[i].pos;
+
+            if (g_state.boardState[pos] != 2) {
+                if (!mismatchFound) {
+                    logWrite("---- MISMATCH DETECTED ----\n");
+                    mismatchFound = TRUE;
+                }
+                logWrite("Attacker %d at %d not correctly in boardState (found %d)\n",
+                         i, pos, g_state.boardState[pos]);
+            }
+        }
+    }
+
+    for (UBYTE i = 1; i < MAX_DEFENDERS; i++) {
+        if (!g_state.defenders[i].captured) {
+            UBYTE pos = g_state.defenders[i].pos;
+
+            if (g_state.boardState[pos] != 1) {
+                if (!mismatchFound) {
+                    logWrite("---- MISMATCH DETECTED ----\n");
+                    mismatchFound = TRUE;
+                }
+                logWrite("Defender %d at %d not correctly in boardState (found %d)\n",
+                         i, pos, g_state.boardState[pos]);
+            }
+        }
+    }
+
+    // --- PASS 2: boardState -> Pieces ---
+    for (UBYTE pos = 13; pos < 155; pos++) {
+
+        if (g_state.boardState[pos] == 1) {
+            BOOL found = FALSE;
+
+            for (UBYTE i = 1; i < MAX_DEFENDERS; i++) {
+                if (!g_state.defenders[i].captured &&
+                    g_state.defenders[i].pos == pos) {
+                    found = TRUE;
+                    break;
+                }
+            }
+
+            if (!found) {
+                if (!mismatchFound) {
+                    logWrite("---- MISMATCH DETECTED ----\n");
+                    mismatchFound = TRUE;
+                }
+                logWrite("boardState pos %d = DEFENDER but no matching defender struct\n", pos);
+            }
+        }
+
+        else if (g_state.boardState[pos] == 2) {
+            BOOL found = FALSE;
+
+            for (UBYTE i = 0; i < MAX_ATTACKERS; i++) {
+                if (!g_state.attackers[i].captured &&
+                    g_state.attackers[i].pos == pos) {
+                    found = TRUE;
+                    break;
+                }
+            }
+
+            if (!found) {
+                if (!mismatchFound) {
+                    logWrite("---- MISMATCH DETECTED ----\n");
+                    mismatchFound = TRUE;
+                }
+                logWrite("boardState pos %d = ATTACKER but no matching attacker struct\n", pos);
+            }
+        }
+
+        else {
+            for (UBYTE i = 1; i < MAX_DEFENDERS; i++) {
+                if (!g_state.defenders[i].captured &&
+                    g_state.defenders[i].pos == pos) {
+                    if (!mismatchFound) {
+                        logWrite("---- MISMATCH DETECTED ----\n");
+                        mismatchFound = TRUE;
+                    }
+                    logWrite("boardState pos %d EMPTY but Defender %d claims it\n", pos, i);
+                }
+            }
+
+            for (UBYTE i = 0; i < MAX_ATTACKERS; i++) {
+                if (!g_state.attackers[i].captured &&
+                    g_state.attackers[i].pos == pos) {
+                    if (!mismatchFound) {
+                        logWrite("---- MISMATCH DETECTED ----\n");
+                        mismatchFound = TRUE;
+                    }
+                    logWrite("boardState pos %d EMPTY but Attacker %d claims it\n", pos, i);
+                }
+            }
+        }
+    }
+
+    // --- PASS 3: Duplicate positions (this is the important new bit) ---
+
+    // Attacker vs attacker
+    for (UBYTE i = 0; i < MAX_ATTACKERS; i++) {
+        if (g_state.attackers[i].captured) continue;
+
+        for (UBYTE j = i + 1; j < MAX_ATTACKERS; j++) {
+            if (!g_state.attackers[j].captured &&
+                g_state.attackers[i].pos == g_state.attackers[j].pos) {
+
+                if (!mismatchFound) {
+                    logWrite("---- MISMATCH DETECTED ----\n");
+                    mismatchFound = TRUE;
+                }
+                logWrite("Attacker %d and Attacker %d both at %d\n",
+                         i, j, g_state.attackers[i].pos);
+            }
+        }
+    }
+
+    // Defender vs defender
+    for (UBYTE i = 1; i < MAX_DEFENDERS; i++) {
+        if (g_state.defenders[i].captured) continue;
+
+        for (UBYTE j = i + 1; j < MAX_DEFENDERS; j++) {
+            if (!g_state.defenders[j].captured &&
+                g_state.defenders[i].pos == g_state.defenders[j].pos) {
+
+                if (!mismatchFound) {
+                    logWrite("---- MISMATCH DETECTED ----\n");
+                    mismatchFound = TRUE;
+                }
+                logWrite("Defender %d and Defender %d both at %d\n",
+                         i, j, g_state.defenders[i].pos);
+            }
+        }
+    }
+
+    // Attacker vs defender
+    for (UBYTE i = 0; i < MAX_ATTACKERS; i++) {
+        if (g_state.attackers[i].captured) continue;
+
+        for (UBYTE j = 1; j < MAX_DEFENDERS; j++) {
+            if (!g_state.defenders[j].captured &&
+                g_state.attackers[i].pos == g_state.defenders[j].pos) {
+
+                if (!mismatchFound) {
+                    logWrite("---- MISMATCH DETECTED ----\n");
+                    mismatchFound = TRUE;
+                }
+                logWrite("Attacker %d and Defender %d both at %d\n",
+                         i, j, g_state.attackers[i].pos);
+            }
+        }
+    }
+}
+
   /* On click
   find the board position given the mouse x/y and the draw_pos array
   check if there's a piece in that position that belongs to the current player using the boardState array
@@ -774,16 +917,17 @@ void checkForCaptures(GameState *state, UBYTE pieceIndex, MoveResult *result){
               if(state->attackers[k].pos == (neighbourIndex) && !state->attackers[k].captured){
                 
                 state->attackers[k].captured = 1; //mark the piece as captured and needs removed from screen
+                
                 //state->attackers[k].pos = 39;
                 UBYTE slot = result->capturedCount[s_ubBufferIndex];
                 if(slot < MAX_CAPTURES_PM){
-                
-                result->capturedPieceIndexes[0][slot] = state->attackers[k].pos; //store the index of the captured piece
-                result->capturedPieceIndexes[1][slot] = state->attackers[k].pos;
-                result->capturedCount[0]++;
-                result->capturedCount[1]++;
-                state->boardState[neighbourIndex] = 0; //update the boardState array to remove it from the board
-                }
+                  result->capturedPieceTeam[slot] = TEAM_ATTACKER; //store the team of the captured piece for the undo function
+                  result->capturedPieceIndexes[0][slot] = state->attackers[k].pos; //store the index of the captured piece
+                  result->capturedPieceIndexes[1][slot] = state->attackers[k].pos;
+                  result->capturedCount[0]++;
+                  result->capturedCount[1]++;
+                  state->boardState[neighbourIndex] = 0; //update the boardState array to remove it from the board
+                  }
                 break;
               }
             }
@@ -796,6 +940,7 @@ void checkForCaptures(GameState *state, UBYTE pieceIndex, MoveResult *result){
                 //state->defenders[j].pos = 51; //why did this go off randomly? This is being called in the AI so 
                 UBYTE slot = result->capturedCount[s_ubBufferIndex]; //why is this tied to the buffer index? This is being used to store the captured pieces for the animation, so it needs to be per buffer to avoid conflicts between the two players when they both capture pieces on the same turn.
                 if(slot < MAX_CAPTURES_PM){
+                  result->capturedPieceTeam[slot] = TEAM_DEFENDER; //store the team of the captured piece for the undo function
                   result->capturedPieceIndexes[0][slot] = state->defenders[j].pos; 
                   result->capturedPieceIndexes[1][slot] = state->defenders[j].pos;
                   result->capturedCount[0]++;
@@ -933,6 +1078,7 @@ void checkShieldWallCaptures(GameState *state, UBYTE pieceIndex, MoveResult *res
             state->defenders[j].captured = 1;
             UBYTE slot = result->capturedCount[s_ubBufferIndex];
             if(slot < MAX_CAPTURES_PM){
+              result->capturedPieceTeam[slot] = TEAM_DEFENDER; //store the team of the captured piece for the undo function
               result->capturedPieceIndexes[0][slot] = idx;
               result->capturedPieceIndexes[1][slot] = idx;
               result->capturedCount[0]++;
@@ -948,6 +1094,7 @@ void checkShieldWallCaptures(GameState *state, UBYTE pieceIndex, MoveResult *res
             state->attackers[k].captured = 1;
             UBYTE slot = result->capturedCount[s_ubBufferIndex];
             if(slot < MAX_CAPTURES_PM){
+              result->capturedPieceTeam[slot] = TEAM_ATTACKER; //store the team of the captured piece for the undo function
               result->capturedPieceIndexes[0][slot] = idx;
               result->capturedPieceIndexes[1][slot] = idx;
               result->capturedCount[0]++;

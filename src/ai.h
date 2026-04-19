@@ -45,5 +45,7 @@ UBYTE defenderCornerControl(GameState *s);
 WORD kingSafety(GameState *s);
 UBYTE cornerDanger(GameState *s);
 UBYTE kingMobility(GameState *s);
+WORD evaluateForces(GameState *s);
+WORD evaluateCapturePotential(GameState *s);
 
 #endif

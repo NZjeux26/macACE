@@ -39,7 +39,7 @@ from pathlib import Path
 
 CSV_PATH  = "/Users/phillipb/Documents/macACE/dataSources/research/previousGameData/game_moves.csv"
 OUTPUT_DIR = Path("/Users/phillipb/Documents/macACE/dataSources/research/previousGameData/outputData")
-PLIES      = 10
+PLIES      = 15
 
 COLS    = list("abcdefghijk")
 ROWS    = list(range(1, 12))
