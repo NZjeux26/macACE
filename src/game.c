@@ -71,8 +71,11 @@ tFont *gFontSmall; //global font for screen
 
 /*-----Global Vars-----*/
 ULONG startTime;
-UBYTE validMoves[BOARD_SIZE]; //used to hold the valid moves for a selected piece.
-UBYTE validGeneration = 0; //used for tracking valid moves in the valid moves array.
+UWORD validMoves[BOARD_SIZE]; //used to hold the valid moves for a selected piece.
+UWORD validGeneration = 0; //used for tracking valid moves in the valid moves array.
+UWORD visited[BOARD_SIZE]; //used for the flood fill algorithm in the move generation, to prevent infinite recursion and to track which squares have been visited.
+UWORD queue[BOARD_SIZE]; //used for the flood fill algorithm in the move generation, to hold the squares that need to be visited.
+UWORD gen = 0;
 UBYTE s_ubBufferIndex = 0; //for double buffering, keeps track of which buffer we're currently drawing to
 UBYTE hightlightActive = 0; //whether the highlight for valid moves is currently active, so we know whether to draw it or not in the drawPieces function, and whether to update it when a piece is selected.
 UBYTE lastHighlightIndex[2] = {0, 0}; //the index of the last highlighted square, so we can restore the background when the highlight moves to a new square. This is needed because the highlight is drawn directly to the back buffer and not as a sprite, so we have to manually restore the background when it moves.
@@ -895,14 +898,19 @@ void checkForCaptures(GameState *state, UBYTE pieceIndex, MoveResult *result){
           //logWrite("Checking if king is captured, right: %d, left: %d, up: %d, down: %d\n", rightOfKing, leftOfKing, upOfKing, downOfKing);
           if((rightOfKing == 2 || rightOfKing == 4) && (leftOfKing == 2 || leftOfKing == 4) && (upOfKing == 2 || upOfKing == 4) && (downOfKing == 2 || downOfKing == 4)){
             state->defenders[0].captured = 1; //mark the king as captured and needs removed from screen the king is always at index 0 in the defenders array
-            result->capturedPieceIndexes[0][0] = state->defenders[0].pos; //store the index of the captured piece
-            result->capturedPieceIndexes[1][0] = state->defenders[0].pos;
-            result->capturedCount[0] = 1;
-            result->capturedCount[1] = 1;
+
+            UBYTE slot = result->capturedCount[0];
+            if(slot < MAX_CAPTURES_PM){
+              result->capturedPieceTeam[slot] = TEAM_DEFENDER;
+              result->capturedPieceIndexes[0][slot] = state->defenders[0].pos; //store the index of the captured piece
+              result->capturedPieceIndexes[1][slot] = state->defenders[0].pos;
+              result->capturedCount[0]++;
+              result->capturedCount[1]++;
+            }
             state->boardState[neighbourIndex] = 0; //update the boardState array to remove it from the board
             state->kingState = KING_CAPTURED; //set the flag to indicate the king is captured
+            state->defenders[0].pos = 51; //move to the deadzone for the king
           }  
-          //return; //exit the function since the game is over
         }
 
         if((state->boardState[neighbourIndex + direction]) == currentPieceTeam || //if the piece on the other side is on the same team
@@ -918,16 +926,17 @@ void checkForCaptures(GameState *state, UBYTE pieceIndex, MoveResult *result){
                 
                 state->attackers[k].captured = 1; //mark the piece as captured and needs removed from screen
                 
-                //state->attackers[k].pos = 39;
-                UBYTE slot = result->capturedCount[s_ubBufferIndex];
+                UBYTE slot = result->capturedCount[0];// marking this with 0 on the array seems to have fixed the ghost piece problem.
                 if(slot < MAX_CAPTURES_PM){
                   result->capturedPieceTeam[slot] = TEAM_ATTACKER; //store the team of the captured piece for the undo function
                   result->capturedPieceIndexes[0][slot] = state->attackers[k].pos; //store the index of the captured piece
                   result->capturedPieceIndexes[1][slot] = state->attackers[k].pos;
+                  result->capturedArrayIndexes[slot] = k; //store the index of the captured piece in the attackers array for the undo function
                   result->capturedCount[0]++;
                   result->capturedCount[1]++;
                   state->boardState[neighbourIndex] = 0; //update the boardState array to remove it from the board
-                  }
+                }
+                state->attackers[k].pos = (k < 13) ? k : (156 + (k - 13));
                 break;
               }
             }
@@ -937,16 +946,19 @@ void checkForCaptures(GameState *state, UBYTE pieceIndex, MoveResult *result){
               if(state->defenders[j].pos == (neighbourIndex) && !state->defenders[j].captured){ 
                 
                 state->defenders[j].captured = 1; 
-                //state->defenders[j].pos = 51; //why did this go off randomly? This is being called in the AI so 
-                UBYTE slot = result->capturedCount[s_ubBufferIndex]; //why is this tied to the buffer index? This is being used to store the captured pieces for the animation, so it needs to be per buffer to avoid conflicts between the two players when they both capture pieces on the same turn.
+                
+                UBYTE slot = result->capturedCount[0];
                 if(slot < MAX_CAPTURES_PM){
                   result->capturedPieceTeam[slot] = TEAM_DEFENDER; //store the team of the captured piece for the undo function
                   result->capturedPieceIndexes[0][slot] = state->defenders[j].pos; 
                   result->capturedPieceIndexes[1][slot] = state->defenders[j].pos;
+                  result->capturedArrayIndexes[slot] = j; //store the index of the captured piece in the defenders array for the undo function
                   result->capturedCount[0]++;
                   result->capturedCount[1]++;
                   state->boardState[neighbourIndex] = 0; 
                 }
+                //defenders exile is the left side dead zone of the board 13,26,39 etc
+                state->defenders[j].pos = (j * 13); // piece needs exiled from the board AFTER being marked captured
                 break;
               }
             }
@@ -1073,18 +1085,20 @@ void checkShieldWallCaptures(GameState *state, UBYTE pieceIndex, MoveResult *res
       UBYTE idx = wallPieces[w];
 
       if(currentPieceTeam == TEAM_ATTACKER){
-        for(UBYTE j = 0; j < MAX_DEFENDERS; j++){
+        for(UBYTE j = 1; j < MAX_DEFENDERS; j++){//set to one to skip the king
           if(state->defenders[j].pos == idx && !state->defenders[j].captured){
             state->defenders[j].captured = 1;
-            UBYTE slot = result->capturedCount[s_ubBufferIndex];
+            UBYTE slot = result->capturedCount[0];
             if(slot < MAX_CAPTURES_PM){
               result->capturedPieceTeam[slot] = TEAM_DEFENDER; //store the team of the captured piece for the undo function
               result->capturedPieceIndexes[0][slot] = idx;
               result->capturedPieceIndexes[1][slot] = idx;
+               result->capturedArrayIndexes[slot] = j;
               result->capturedCount[0]++;
               result->capturedCount[1]++;
             }
             state->boardState[idx] = 0;
+            state->defenders[j].pos = (j * 13);
             break;
           }
         }
@@ -1092,15 +1106,17 @@ void checkShieldWallCaptures(GameState *state, UBYTE pieceIndex, MoveResult *res
         for(UBYTE k = 0; k < MAX_ATTACKERS; k++){
           if(state->attackers[k].pos == idx && !state->attackers[k].captured){
             state->attackers[k].captured = 1;
-            UBYTE slot = result->capturedCount[s_ubBufferIndex];
+            UBYTE slot = result->capturedCount[0];
             if(slot < MAX_CAPTURES_PM){
               result->capturedPieceTeam[slot] = TEAM_ATTACKER; //store the team of the captured piece for the undo function
               result->capturedPieceIndexes[0][slot] = idx;
               result->capturedPieceIndexes[1][slot] = idx;
+              result->capturedArrayIndexes[slot] = k;
               result->capturedCount[0]++;
               result->capturedCount[1]++;
             }
             state->boardState[idx] = 0;
+            state->attackers[k].pos = (k < 13) ? k : (156 + (k - 13));
             break;
           }
         }
@@ -1172,6 +1188,13 @@ void checkSurrounded(GameState *state, UBYTE pieceIndex){
   //king is always the first in the defenders array, so we can just get the position from there.
   UBYTE kingPos = state->defenders[0].pos;
   
+  //just like valid generation in getValidMoves
+  gen++;
+  if(gen == 0){
+    memset(visited, 0, sizeof(visited));
+    gen = 1;
+  }
+
   // Count total non-captured defenders including king
   
   UBYTE totalDefenders = 0;
@@ -1180,11 +1203,11 @@ void checkSurrounded(GameState *state, UBYTE pieceIndex){
   }
   // visited[] tracks which squares the flood fill has already checked,
   // so we don't visit the same square twice and loop forever.
-  UBYTE visited[169] = {0};
+  //UBYTE visited[169] = {0};
   // queue[] is the list of squares waiting to be checked. 
   // qHead is the next square to process, qTail is where we add new squares.
   // When qHead == qTail, the queue is empty and the fill is complete.
-  UBYTE queue[169];
+  //UBYTE queue[169];
   UBYTE qHead = 0;
   UBYTE qTail = 0;
 
@@ -1193,7 +1216,7 @@ void checkSurrounded(GameState *state, UBYTE pieceIndex){
 
   // Seed the flood fill from the king's position
   queue[qTail++] = kingPos;
-  visited[kingPos] = 1;
+  visited[kingPos] = gen; // mark the king's square as visited with the current generation
 
   // The four directions to check from each square: right, left, up, down
   BYTE dirs[4] = {1, -1, 13, -13};
@@ -1205,8 +1228,8 @@ void checkSurrounded(GameState *state, UBYTE pieceIndex){
     for(UBYTE i = 0; i < 4; i++){
       UBYTE next = curr + dirs[i]; // the square in this direction
       
-      if(visited[next]) continue; // already checked this square, skip it
-      visited[next] = 1;          // mark it as visited so we don't check it again
+      if(visited[next] == gen) continue; // already checked this square, skip it
+      visited[next] = gen;          // mark it as visited so we don't check it again
 
       UBYTE piece = state->boardState[next];
 

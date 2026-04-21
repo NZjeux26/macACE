@@ -43,6 +43,7 @@ typedef struct{
     UBYTE capturedPieceIndexes[2][MAX_CAPTURES_PM]; //the index of the piece that was captured in the last move.
     UBYTE capturedCount[2]; //the number of pieces that were captured in the last move, so we know how many backgrounds we need to restore
     UBYTE capturedPieceTeam[MAX_CAPTURES_PM]; //the team of the pieces that were captured, so we know which piece array to restore them to.
+    UBYTE capturedArrayIndexes[MAX_CAPTURES_PM]; //the index of the captured piece in its respective array, so we can restore it to the correct position in the array when we undo the move.
     UBYTE clearHighlight;
     UBYTE moveComplete;
 } MoveResult;
@@ -57,8 +58,8 @@ typedef struct
 } GameState;
 
 extern GameState g_state;
-extern UBYTE validGeneration;
-extern UBYTE validMoves[BOARD_SIZE];
+extern UWORD validGeneration;
+extern UWORD validMoves[BOARD_SIZE];
 
 void gameGsCreate(void);
 void gameGsLoop(void);

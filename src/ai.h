@@ -20,6 +20,7 @@ typedef struct{
    UBYTE oldCurrentPlayer;
    UBYTE captureCount;
    UBYTE capturedPieceIndexes[MAX_CAPTURES_PM];
+   UBYTE capturedArrayIndexes[MAX_CAPTURES_PM];
    UBYTE capturedTeams[MAX_CAPTURES_PM];
 } UndoInfo;
 
