@@ -9,6 +9,7 @@ CMakeFiles/macACE.elf.dir/main.c.obj: /Users/phillipb/Documents/macACE/main.c \
   /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/game.h \
   /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/log.h \
   /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/memory.h \
+  /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/rand.h \
   /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/state.h \
   /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/system.h \
   /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/timer.h \
@@ -49,7 +50,8 @@ CMakeFiles/macACE.elf.dir/src/ai.c.obj: /Users/phillipb/Documents/macACE/src/ai.
   /Users/phillipb/Documents/macACE/deps/ace/include/mini_std/stdio.h \
   /Users/phillipb/Documents/macACE/deps/ace/include/mini_std/string.h \
   /Users/phillipb/Documents/macACE/src/ai.h \
-  /Users/phillipb/Documents/macACE/src/game.h
+  /Users/phillipb/Documents/macACE/src/game.h \
+  /Users/phillipb/Documents/macACE/src/opening_book.h
 
 CMakeFiles/macACE.elf.dir/src/game.c.obj: /Users/phillipb/Documents/macACE/src/game.c \
   /Users/phillipb/Documents/macACE/deps/ace/include/ace/macros.h \
@@ -150,7 +152,7 @@ CMakeFiles/macACE.elf.dir/src/menu.c.obj: /Users/phillipb/Documents/macACE/src/m
 
 /Users/phillipb/Documents/macACE/src/menu.h:
 
-/Users/phillipb/Documents/macACE/src/game.h:
+/Users/phillipb/Documents/macACE/src/input.h:
 
 /Users/phillipb/Documents/macACE/deps/ace/include/mini_std/stdio.h:
 
@@ -168,7 +170,13 @@ CMakeFiles/macACE.elf.dir/src/menu.c.obj: /Users/phillipb/Documents/macACE/src/m
 
 /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/bitmap.h:
 
-/Users/phillipb/Documents/macACE/src/input.h:
+/Users/phillipb/Documents/macACE/src/game.h:
+
+/Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/palette.h:
+
+/Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/blit.h:
+
+/Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/rand.h:
 
 /Users/phillipb/Documents/macACE/deps/ace/include/ace/types.h:
 
@@ -186,6 +194,8 @@ CMakeFiles/macACE.elf.dir/src/menu.c.obj: /Users/phillipb/Documents/macACE/src/m
 
 /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/viewport/simplebuffer.h:
 
+/Users/phillipb/Documents/macACE/src/opening_book.h:
+
 /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/game.h:
 
 /Users/phillipb/Documents/macACE/deps/ace/include/ace/generic/main.h:
@@ -195,12 +205,6 @@ CMakeFiles/macACE.elf.dir/src/menu.c.obj: /Users/phillipb/Documents/macACE/src/m
 /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/copper.h:
 
 /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/state.h:
-
-/Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/palette.h:
-
-/Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/rand.h:
-
-/Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/blit.h:
 
 /Users/phillipb/Documents/macACE/deps/ace/include/mini_std/string.h:
 

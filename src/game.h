@@ -2,6 +2,7 @@
 #define _GAME_H_
 
 #include <ace/utils/file.h>
+#include <ace/managers/rand.h>
 
 #define MAX_DEFENDERS 13  //12 Defenders + King
 #define MAX_ATTACKERS 24  //24 Attackers
@@ -60,6 +61,7 @@ typedef struct
 extern GameState g_state;
 extern UWORD validGeneration;
 extern UWORD validMoves[BOARD_SIZE];
+extern tRandManager *s_pRandManager;
 
 void gameGsCreate(void);
 void gameGsLoop(void);

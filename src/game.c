@@ -39,11 +39,12 @@
 static tView *s_pView; // View containing all the viewports
 static tVPort *s_pVpMain; // Viewport for playfield
 static tSimpleBufferManager *s_pMainBuffer; //only a main screen in this, no score ribbon
-//static tRandManager *s_pRandManager;
+tRandManager *s_pRandManager;
 
 /*-----Game State Setup-----*/
 GameState g_state;
 AIMove cpuMove;
+
 /*-----GFX Setup-----*/
 static tBitMap *pBmBoard;
 static tBitMap *pBmAttackers[MAX_ATTACKERS];
@@ -52,7 +53,7 @@ static tBitMap *pBmDefenders[MAX_DEFENDERS];
 static tBitMap *pBmDefenders_Mask[MAX_DEFENDERS];
 static tBitMap *pBmKing; //since the king is a different graphic
 static tBitMap *pBmKing_Mask;
-static tBitMap *pBmClashFX; //FX to flash when one piece takes another
+static tBitMap *pBmClashFX;
 static tBitMap *pBmClashFX_Mask;
 static tBitMap *pBmSquareHighlight; //for highlighting valid moves and selected pieces
 static tBitMap *pBmSquareHighlight_Mask;
@@ -67,7 +68,6 @@ tTextBitMap *gametextbitmapdefend; //bitmap for the font
 tTextBitMap *version;
 
 tFont *gFontSmall; //global font for screen
-
 
 /*-----Global Vars-----*/
 ULONG startTime;
@@ -87,17 +87,16 @@ UBYTE capturedPieceCount[2] = {0, 0}; //the number of pieces that were captured 
 UBYTE gameWinner = 0; //0 no one, 1 attackers, 2 defenders
 ScreenPos draw_pos[BOARD_SIZE];
 
-UBYTE moveHistory[10]; //Record the move history so we can track for repetitions
-UBYTE cpuPlayerTeam = TEAM_DEFENDER;//manually assigned for now, this will be set via the main menu in the future.
-UBYTE humanPlayerTeam = TEAM_ATTACKER;
+UBYTE cpuPlayerTeam = TEAM_ATTACKER;//manually assigned for now, this will be set via the main menu in the future.
+UBYTE humanPlayerTeam = TEAM_DEFENDER;
 UBYTE waitFrame = 0;
 
 void gameGsCreate(void) {
 
-    // tRayPos sRayPos = getRayPos();
-
-    // s_pRandManager = randCreate(1+(sRayPos.bfPosY << 8), 1 + sRayPos.bfPosX);
-
+    //Random number generator setup. Uses the positions of the raster beam as seeds.
+    tRayPos sRayPos = getRayPos();
+    s_pRandManager = randCreate(1+(sRayPos.bfPosY << 8), 1 + sRayPos.bfPosX);
+    
     s_pView = viewCreate(0,TAG_VIEW_GLOBAL_PALETTE, 1,TAG_END);
 
     s_pVpMain = vPortCreate(0,
@@ -144,6 +143,7 @@ void gameGsCreate(void) {
     //currentPlayer = TEAM_ATTACKER; //reset the current player to the attackers at the start of the game, in case we're coming from the menu after a game has ended.
     
     systemUnuse();
+
     // Load the view
     viewLoad(s_pView);
   
@@ -221,8 +221,8 @@ void gameGsLoop(void) {
         //update the board
         MoveResult cpuresult = {0};
         highlightIndex = cpuMove.fromIndex; 
-        
-        getValidMoves(&g_state,cpuMove.fromIndex);//this might be needed, it may increment valid generation and screw up the move
+        //Once a move comes out of the AI we run it through the getValidmoves again to correctly update the valid moves array and to act as a final move check.
+        getValidMoves(&g_state,cpuMove.fromIndex);
 
         lastHighlightIndex[s_ubBufferIndex] = cpuMove.fromIndex; //update the last highlighted index to the CPU move's from index, so that when the highlight moves to the to index we can restore the background of the from index.
         lastHighlightIndex[!s_ubBufferIndex] = cpuMove.fromIndex; 
@@ -664,7 +664,7 @@ void onClick(short mouseX, short mouseY){
     //check if the mouse is within the bounds of this square
     if(mouseX >= draw_pos[i].x && mouseX <= draw_pos[i].x + SQUARE_X &&
        mouseY >= draw_pos[i].y && mouseY <= draw_pos[i].y + SQUARE_Y){
-         logWrite("Clicked on square index %d\n", i); 
+         //logWrite("Clicked on square index %d\n", i); 
          //If a square is already Highlighted, set to zero for it to be restored
          if(!hightlightActive && g_state.boardState[i] == 0) return; //if the highlight isn't active and the square clicked is empty, do nothing
 
@@ -1126,6 +1126,7 @@ void checkShieldWallCaptures(GameState *state, UBYTE pieceIndex, MoveResult *res
 }
 // Uses a flood fill from the king to check if the king is surrounded by a ring of defenders and is against the edge.
 void checkExitFort(GameState *state){
+  
   UBYTE kingPos = 0;
   //the king is always the first piece in the defenders array.
   kingPos = state->defenders[0].pos;
@@ -1138,17 +1139,19 @@ void checkExitFort(GameState *state){
   UBYTE canMove = (state->boardState[kingPos + 1] == 0 || state->boardState[kingPos - 1] == 0 ||
                    state->boardState[kingPos - 13] == 0 || state->boardState[kingPos + 13] == 0);
   if(!canMove) return;
-
+  
+  gen++;
+  if(gen == 0){ memset(visited, 0, sizeof(visited)); gen = 1; }
+  
   // Flood fill from king position through empty squares
   // If we only ever hit defenders or 99 on the boundary, the fort is sealed
-  UBYTE visited[169] = {0};
-  UBYTE queue[169];
+
   UBYTE qHead = 0;
   UBYTE qTail = 0;
   UBYTE fortValid = 1;
 
   queue[qTail++] = kingPos;
-  visited[kingPos] = 1;
+  visited[kingPos] = gen;
 
   BYTE dirs[4] = {1, -1, 13, -13};
 
@@ -1157,8 +1160,8 @@ void checkExitFort(GameState *state){
 
     for(UBYTE i = 0; i < 4; i++){
       UBYTE next = curr + dirs[i];
-      if(visited[next]) continue;
-      visited[next] = 1;
+      if(visited[next] == gen) continue;
+      visited[next] = gen;
 
       UBYTE piece = state->boardState[next];
 
@@ -1178,7 +1181,6 @@ void checkExitFort(GameState *state){
   if(fortValid){
     state->kingState = KING_ESCAPED; //set the flag to indicate the king has escaped
   }
-
 }
 /*Checks if the King and all defenders are surrounded. We use a flood fill algorithm to check if the king/defenders are srrounded
 then we count the total amount of defenders inside the ring, if it matches the total number of alive defenders the king is caputred.*/
@@ -1203,11 +1205,10 @@ void checkSurrounded(GameState *state, UBYTE pieceIndex){
   }
   // visited[] tracks which squares the flood fill has already checked,
   // so we don't visit the same square twice and loop forever.
-  //UBYTE visited[169] = {0};
   // queue[] is the list of squares waiting to be checked. 
   // qHead is the next square to process, qTail is where we add new squares.
   // When qHead == qTail, the queue is empty and the fill is complete.
-  //UBYTE queue[169];
+  
   UBYTE qHead = 0;
   UBYTE qTail = 0;
 

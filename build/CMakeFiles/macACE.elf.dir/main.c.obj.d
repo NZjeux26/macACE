@@ -21,6 +21,7 @@ CMakeFiles/macACE.elf.dir/main.c.obj: \
  /Users/phillipb/Documents/macACE/deps/ace/include/mini_std/stdint.h \
  /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/state.h \
  /Users/phillipb/Documents/macACE/src/game.h \
+ /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/rand.h \
  /Users/phillipb/Documents/macACE/src/menu.h \
  /Users/phillipb/Documents/macACE/src/states.h \
  /Users/phillipb/Documents/macACE/src/input.h
@@ -45,6 +46,7 @@ CMakeFiles/macACE.elf.dir/main.c.obj: \
 /Users/phillipb/Documents/macACE/deps/ace/include/mini_std/stdint.h:
 /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/state.h:
 /Users/phillipb/Documents/macACE/src/game.h:
+/Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/rand.h:
 /Users/phillipb/Documents/macACE/src/menu.h:
 /Users/phillipb/Documents/macACE/src/states.h:
 /Users/phillipb/Documents/macACE/src/input.h:
