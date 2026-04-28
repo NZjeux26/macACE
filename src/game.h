@@ -62,6 +62,8 @@ extern GameState g_state;
 extern UWORD validGeneration;
 extern UWORD validMoves[BOARD_SIZE];
 extern tRandManager *s_pRandManager;
+extern UBYTE gameTurnCounter;
+extern WORD gamePlyCounter; //using a word just incase a game ever gets ridiculously long
 
 void gameGsCreate(void);
 void gameGsLoop(void);

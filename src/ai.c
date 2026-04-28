@@ -1,6 +1,6 @@
 #include "ai.h"
 #include "game.h"
-#include "opening_book.h"
+#include "openingBook.h"
 #include <ace/managers/key.h>
 #include <ace/managers/game.h>
 #include <ace/managers/system.h>
@@ -13,11 +13,6 @@
 #define MAX_DEPTH 1
 #define AI_INF 30000
 
-//used to track the number of turns that have passed in the game, this is used to trigger certain strategies at certain points in the game, and also to track when to reset the AI's internal state if needed.
-static UBYTE gameTurnCounter = 0; 
-
-
-AIMove moveHistory[10]; //Record the move history so we can track for repetitions
 //using this global buffer instead of local ones, at depth 2+ the amount of MoveList buffers is quite large and a overflow occurs somewhere
 AIMove moveBuffer[MAX_DEPTH + 1][400];
 
@@ -459,6 +454,33 @@ void undoMove(GameState *s, UndoInfo *undo){
     }
 }
 
+AIMove findBookMove(AIMove history[], UBYTE currentDepth){
+    if(currentDepth > MAX_BOOK_DEPTH) return (AIMove){0}; //if we somehow get a depth that is larger than our history, just return no book move, this is a sanity check to prevent out of bounds access to the history array.
+    
+    for(WORD i = 0; i < OPENING_BOOK_SIZE; i++){
+        const BookEntry *entry = &openingBook[i];
+
+        if(entry->numMoves > currentDepth) break; //if the number of moves in the book entry doesn't match our current depth, skip this entry
+
+        if(entry->numMoves != currentDepth) continue; //if the number of moves in the book entry doesn't match our current depth, skip this entry
+
+        BYTE match = 1;
+        for(UBYTE j = 0; j < currentDepth; j++){
+            if(entry->sequence[j].fromIndex != history[j].fromIndex || 
+               entry->sequence[j].toIndex != history[j].toIndex){
+                match = 0;
+                break;
+            }
+        }
+        if(match){
+            ((BookEntry*)entry)->best_next_move.score = AI_INF; 
+            return entry->best_next_move; //if we find a match, return the book move for that entry
+        }
+    }
+    
+    return (AIMove){0}; //if we don't find a match, return a blank move.
+}
+
 /* ------AI Move Evaluation Functions------*/
 
 WORD minimax(GameState *s, UBYTE depth, WORD alpha, WORD beta, UBYTE maximizingPlayer){
@@ -466,7 +488,6 @@ WORD minimax(GameState *s, UBYTE depth, WORD alpha, WORD beta, UBYTE maximizingP
         return evaluateBoard(s);
     }
 
-    //ordering in move list?
     AIMove *moveList = moveBuffer[depth];
     UBYTE moveCount;
 
@@ -505,19 +526,11 @@ WORD minimax(GameState *s, UBYTE depth, WORD alpha, WORD beta, UBYTE maximizingP
     }
 }
 
-// UBYTE isOpeningBookMove(GameState *s, AIMove *bookMove){
-//     const AIMove *moves;
-//     if
-// }
-
 AIMove getBestMove(GameState *s){
     
     AIMove *moveList = moveBuffer[0];
     UBYTE moveCount;
     UBYTE maximisingPlayer = (s->currentPlayer == TEAM_DEFENDER);
-    
-
-    gameTurnCounter++;
     
     UBYTE seearchDepth = MAX_DEPTH; //this can be adjusted based on performance needs.
 

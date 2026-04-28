@@ -8,7 +8,6 @@ typedef struct{
     UBYTE toIndex;
     WORD score; 
 } AIMove;
-
 typedef struct{
    UBYTE fromIndex;
    UBYTE toIndex;
@@ -26,14 +25,14 @@ typedef struct{
 
 /* *****AI Functions***** */
 AIMove getBestMove(GameState *s);
-void getAllMoves(GameState *s, UBYTE team, AIMove *moveList, UBYTE *moveCount);
-WORD evaluateBoard(GameState *s);
-void stratagy(GameState *s);
+AIMove findBookMove(AIMove history[], UBYTE currentDepth); 
 WORD minimax(GameState *s, UBYTE depth, WORD alpha, WORD beta, UBYTE maximising);
+WORD evaluateBoard(GameState *s);
+void getAllMoves(GameState *s, UBYTE team, AIMove *moveList, UBYTE *moveCount);
+void stratagy(GameState *s);
 void applyMove(GameState *s, AIMove move);
 void applyMoveWithUndo(GameState *s, AIMove move, UndoInfo *undo);
 void undoMove(GameState *s, UndoInfo *undo);
-UBYTE bookMove(GameState *s, AIMove *move); //returns 1 if a book move was found and applied, 0 otherwise.
 
 /* *****Helper Functions****** */
 UBYTE manhattanToCorner(UBYTE pos, UBYTE corner);
@@ -46,5 +45,7 @@ WORD kingSafety(GameState *s);
 WORD evaluateLanes(GameState *s);
 WORD evaluateForces(GameState *s);
 WORD evaluateCapturePotential(GameState *s);
+
+extern AIMove moveHistory[255]; //Record the move history so we can track for repetitions
 
 #endif

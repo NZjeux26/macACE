@@ -51,7 +51,7 @@ CMakeFiles/macACE.elf.dir/src/ai.c.obj: /Users/phillipb/Documents/macACE/src/ai.
   /Users/phillipb/Documents/macACE/deps/ace/include/mini_std/string.h \
   /Users/phillipb/Documents/macACE/src/ai.h \
   /Users/phillipb/Documents/macACE/src/game.h \
-  /Users/phillipb/Documents/macACE/src/opening_book.h
+  /Users/phillipb/Documents/macACE/src/openingBook.h
 
 CMakeFiles/macACE.elf.dir/src/game.c.obj: /Users/phillipb/Documents/macACE/src/game.c \
   /Users/phillipb/Documents/macACE/deps/ace/include/ace/macros.h \
@@ -140,6 +140,8 @@ CMakeFiles/macACE.elf.dir/src/menu.c.obj: /Users/phillipb/Documents/macACE/src/m
 
 /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/mouse.h:
 
+/Users/phillipb/Documents/macACE/src/openingBook.h:
+
 /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/extview.h:
 
 /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/sprite.h:
@@ -193,8 +195,6 @@ CMakeFiles/macACE.elf.dir/src/menu.c.obj: /Users/phillipb/Documents/macACE/src/m
 /Users/phillipb/Documents/macACE/deps/ace/include/mini_std/printf.h:
 
 /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/viewport/simplebuffer.h:
-
-/Users/phillipb/Documents/macACE/src/opening_book.h:
 
 /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/game.h:
 

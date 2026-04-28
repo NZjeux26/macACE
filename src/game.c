@@ -86,10 +86,13 @@ UBYTE capturedPieceIndex[2][MAX_CAPTURES_PM]; //the index of the piece that was 
 UBYTE capturedPieceCount[2] = {0, 0}; //the number of pieces that were captured in the last move, so we know how many backgrounds we need to restore
 UBYTE gameWinner = 0; //0 no one, 1 attackers, 2 defenders
 ScreenPos draw_pos[BOARD_SIZE];
+AIMove moveHistory[255]; //Record the move history so we can track for repetitions
 
 UBYTE cpuPlayerTeam = TEAM_ATTACKER;//manually assigned for now, this will be set via the main menu in the future.
 UBYTE humanPlayerTeam = TEAM_DEFENDER;
 UBYTE waitFrame = 0;
+UBYTE gameTurnCounter = 0;
+WORD gamePlyCounter = 0;
 
 void gameGsCreate(void) {
 
@@ -180,7 +183,9 @@ void gameGsLoop(void) {
         MoveResult result = {0};
         lastHighlightIndex[!s_ubBufferIndex] = lastHighlightIndex[s_ubBufferIndex]; 
         movePiece(&g_state, lastHighlightIndex[s_ubBufferIndex], highlightIndex, &result); //move the piece in the game state and update the board array, the old and new piece index will need to be passed in here once we have the selection and move working.
-        
+        gamePlyCounter++; //increment the ply counter, this counts the number of half moves that have been made in the game.
+        moveHistory[gamePlyCounter] = (AIMove){lastHighlightIndex[s_ubBufferIndex], highlightIndex}; //record the move in the move history for repetition checking in the AI
+       
         if(result.moveComplete){
           //if the move is complete, we need to check if the CPU player needs to make a move next, and if so, we can set a flag to trigger the CPU move in the next frame, this is needed to prevent the CPU move from happening in the same frame as the human move which can cause issues with the game state and rendering.
           if(result.clearHighlight == 1){ //if the move function set the flag to clear the highlight, then we need to clear it
@@ -227,7 +232,12 @@ void gameGsLoop(void) {
         lastHighlightIndex[s_ubBufferIndex] = cpuMove.fromIndex; //update the last highlighted index to the CPU move's from index, so that when the highlight moves to the to index we can restore the background of the from index.
         lastHighlightIndex[!s_ubBufferIndex] = cpuMove.fromIndex; 
         highlightIndex = cpuMove.toIndex;
+        
         movePiece(&g_state, cpuMove.fromIndex, cpuMove.toIndex, &cpuresult);
+        
+        gamePlyCounter++;
+        moveHistory[gamePlyCounter] = (AIMove){cpuMove.fromIndex, cpuMove.toIndex}; //record the move in the move history for repetition checking in the AI
+        gameTurnCounter = gamePlyCounter >> 1; //this is broken, it works in theory if the CPU player is the defender but not if they are the attacker.
         
         if(cpuresult.moveComplete){
           if(cpuresult.clearHighlight == 1){ //if the move function set the flag to clear the highlight, then we need to clear it
