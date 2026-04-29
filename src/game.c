@@ -236,8 +236,8 @@ void gameGsLoop(void) {
         movePiece(&g_state, cpuMove.fromIndex, cpuMove.toIndex, &cpuresult);
         
         gamePlyCounter++;
+        gameTurnCounter++; //increment the turn counter, this counts the number of full turns that have been made in the game
         moveHistory[gamePlyCounter] = (AIMove){cpuMove.fromIndex, cpuMove.toIndex}; //record the move in the move history for repetition checking in the AI
-        gameTurnCounter = gamePlyCounter >> 1; //this is broken, it works in theory if the CPU player is the defender but not if they are the attacker.
         
         if(cpuresult.moveComplete){
           if(cpuresult.clearHighlight == 1){ //if the move function set the flag to clear the highlight, then we need to clear it
@@ -258,7 +258,7 @@ void gameGsLoop(void) {
             pieceHasBGToRestore[0] = 1; //set the flag to restore the background
             pieceHasBGToRestore[1] = 1; //set the flag to restore the background 
           }
-          checkforMisplacedPieces(); //check for any pieces that are in an invalid position, such as on top of each other, and log them for debugging, this is needed because there was a bug where the AI would sometimes move a piece to the wrong position and it would end up on top of another piece, so this is to help track down that bug.
+          checkforMisplacedPieces(); //check for any pieces that are in an invalid position, such as on top of each other, and log them for debugging.
           
           waitFrame = 0; //reset the wait frame flag, so that the CPU move only happens once per turn and not every frame while it's the CPU player's turn
         }
@@ -674,7 +674,7 @@ void onClick(short mouseX, short mouseY){
     //check if the mouse is within the bounds of this square
     if(mouseX >= draw_pos[i].x && mouseX <= draw_pos[i].x + SQUARE_X &&
        mouseY >= draw_pos[i].y && mouseY <= draw_pos[i].y + SQUARE_Y){
-         //logWrite("Clicked on square index %d\n", i); 
+         logWrite("Clicked on square index %d\n", i); 
          //If a square is already Highlighted, set to zero for it to be restored
          if(!hightlightActive && g_state.boardState[i] == 0) return; //if the highlight isn't active and the square clicked is empty, do nothing
 
@@ -720,7 +720,7 @@ void drawSquareHighlight(void){
 
 /* This function will calculate the valid moves for the currently highlighted piece and populate the validMoves array, which is indexed the same as the board array, with a value over 0 for valid moves and 0 for invalid moves.*/
 void getValidMoves(GameState *state, UBYTE selectedIndex){
-  //selectedIndex == highlightedindex
+  
   //First check if the square is empty, a special square or out of bounds, there are no valid moves to calculate, so return
   if(state->boardState[selectedIndex] == 0 || state->boardState[selectedIndex] == 4 || state->boardState[selectedIndex] == 99){ 
     return;

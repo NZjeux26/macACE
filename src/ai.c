@@ -455,13 +455,21 @@ void undoMove(GameState *s, UndoInfo *undo){
 }
 
 AIMove findBookMove(AIMove history[], UBYTE currentDepth){
-    if(currentDepth > MAX_BOOK_DEPTH) return (AIMove){0}; //if we somehow get a depth that is larger than our history, just return no book move, this is a sanity check to prevent out of bounds access to the history array.
+    if(currentDepth > MAX_BOOK_DEPTH) {
+        logWrite("findBookMove: depth %d exceeds MAX_BOOK_DEPTH %d\n", currentDepth, MAX_BOOK_DEPTH);
+        return (AIMove){0}; //if we somehow get a depth that is larger than our history, just return no book move, this is a sanity check to prevent out of bounds access to the history array.
+    }
+
+    logWrite("findBookMove: searching for book move at depth %d\n", currentDepth);
     
+    ULONG totalWeight = 0;
+    UBYTE candidateIndexes[16];//16 = the max amoutn of matches we'll look at.
+    UBYTE candidateCount = 0;
+
     for(WORD i = 0; i < OPENING_BOOK_SIZE; i++){
         const BookEntry *entry = &openingBook[i];
 
         if(entry->numMoves > currentDepth) break; //if the number of moves in the book entry doesn't match our current depth, skip this entry
-
         if(entry->numMoves != currentDepth) continue; //if the number of moves in the book entry doesn't match our current depth, skip this entry
 
         BYTE match = 1;
@@ -472,9 +480,30 @@ AIMove findBookMove(AIMove history[], UBYTE currentDepth){
                 break;
             }
         }
-        if(match){
-            ((BookEntry*)entry)->best_next_move.score = AI_INF; 
-            return entry->best_next_move; //if we find a match, return the book move for that entry
+        if(match && candidateCount < 16){ //if we find a match, and we have room in our candidate list, add it to the list of potential book moves to choose from.
+            candidateIndexes[candidateCount] = i;
+            totalWeight += ((BookEntry*)entry)->best_next_move.score; //the score field in the best_next_move struct is being used to store the weight of that move in the opening book, this is a bit of a hack but it saves us from having to add an additional field to the BookEntry struct just for the weight.
+            candidateCount++;
+            //((BookEntry*)entry)->best_next_move.score = AI_INF; 
+            //return entry->best_next_move; //if we find a match, return the book move for that entry
+        }
+    }
+    if(candidateCount > 0){
+        ULONG r = randUwMax(s_pRandManager, totalWeight); //get a random number between 0 and totalWeight-1
+        ULONG cumulativeWeight = 0;
+
+        for(UBYTE i = 0; i < candidateCount; i++){
+            UBYTE idx = candidateIndexes[i];
+            cumulativeWeight += ((BookEntry*)(&openingBook[idx]))->best_next_move.score; //again, using the score field to store the weight of the move in the opening book
+
+            if(r < cumulativeWeight){
+                AIMove selectedMove = ((BookEntry*)(&openingBook[idx]))->best_next_move;
+                selectedMove.score = AI_INF; //set the score of the selected book move to a very high value so that the AI will always choose it over any calculated move, this is a bit of a hack but it saves us from having to add an additional field to the AIMove struct just for marking book moves.
+
+                logWrite("findBookMove: found book move at index %d with weight %d\n", candidateIndexes[i], ((BookEntry*)(&openingBook[idx]))->best_next_move.score);
+                
+                return selectedMove; //return the selected book move
+            }
         }
     }
     
@@ -529,6 +558,13 @@ WORD minimax(GameState *s, UBYTE depth, WORD alpha, WORD beta, UBYTE maximizingP
 AIMove getBestMove(GameState *s){
     
     AIMove *moveList = moveBuffer[0];
+    
+    AIMove bookMove = findBookMove(moveHistory, gamePlyCounter);
+    if(bookMove.score == AI_INF){
+        logWrite("Book move found: from %d to %d\n", bookMove.fromIndex, bookMove.toIndex);
+        return bookMove; //if we found a book move, return it immediately without doing any further calculations, since book moves are pre-evaluated to be the best move for that position.
+    } 
+
     UBYTE moveCount;
     UBYTE maximisingPlayer = (s->currentPlayer == TEAM_DEFENDER);
     
@@ -537,6 +573,7 @@ AIMove getBestMove(GameState *s){
     WORD bestEval = maximisingPlayer ? -AI_INF : AI_INF;
     WORD alpha = -AI_INF;
     WORD beta = AI_INF;
+
 
     getAllMoves(s, s->currentPlayer, moveList, &moveCount);
     
