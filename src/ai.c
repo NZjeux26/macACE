@@ -463,8 +463,8 @@ AIMove findBookMove(AIMove history[], UBYTE currentDepth){
     logWrite("findBookMove: searching for book move at depth %d\n", currentDepth);
     
     ULONG totalWeight = 0;
-    UBYTE candidateIndexes[16];//16 = the max amoutn of matches we'll look at.
-    UBYTE candidateCount = 0;
+    UWORD candidateIndexes[16];//16 = the max amoutn of matches we'll look at.
+    UWORD candidateCount = 0;
 
     for(WORD i = 0; i < OPENING_BOOK_SIZE; i++){
         const BookEntry *entry = &openingBook[i];
@@ -489,11 +489,12 @@ AIMove findBookMove(AIMove history[], UBYTE currentDepth){
         }
     }
     if(candidateCount > 0){
-        ULONG r = randUwMax(s_pRandManager, totalWeight); //get a random number between 0 and totalWeight-1
+        ULONG r = randUlMax(s_pRandManager, totalWeight); //get a random number between 0 and totalWeight-1
+        logWrite("findBookMove: random value is: %ld\n",r);
         ULONG cumulativeWeight = 0;
 
         for(UBYTE i = 0; i < candidateCount; i++){
-            UBYTE idx = candidateIndexes[i];
+            UWORD idx = candidateIndexes[i];
             cumulativeWeight += ((BookEntry*)(&openingBook[idx]))->best_next_move.score; //again, using the score field to store the weight of the move in the opening book
 
             if(r < cumulativeWeight){
@@ -501,7 +502,7 @@ AIMove findBookMove(AIMove history[], UBYTE currentDepth){
                 selectedMove.score = AI_INF; //set the score of the selected book move to a very high value so that the AI will always choose it over any calculated move, this is a bit of a hack but it saves us from having to add an additional field to the AIMove struct just for marking book moves.
 
                 logWrite("findBookMove: found book move at index %d with weight %d\n", candidateIndexes[i], ((BookEntry*)(&openingBook[idx]))->best_next_move.score);
-                
+                logWrite("findBookMove: totalWeight %ld, r %ld, candidateCount %d\n", totalWeight, r, candidateCount);
                 return selectedMove; //return the selected book move
             }
         }

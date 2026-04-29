@@ -183,8 +183,6 @@ void gameGsLoop(void) {
         MoveResult result = {0};
         lastHighlightIndex[!s_ubBufferIndex] = lastHighlightIndex[s_ubBufferIndex]; 
         movePiece(&g_state, lastHighlightIndex[s_ubBufferIndex], highlightIndex, &result); //move the piece in the game state and update the board array, the old and new piece index will need to be passed in here once we have the selection and move working.
-        gamePlyCounter++; //increment the ply counter, this counts the number of half moves that have been made in the game.
-        moveHistory[gamePlyCounter] = (AIMove){lastHighlightIndex[s_ubBufferIndex], highlightIndex}; //record the move in the move history for repetition checking in the AI
        
         if(result.moveComplete){
           //if the move is complete, we need to check if the CPU player needs to make a move next, and if so, we can set a flag to trigger the CPU move in the next frame, this is needed to prevent the CPU move from happening in the same frame as the human move which can cause issues with the game state and rendering.
@@ -235,9 +233,9 @@ void gameGsLoop(void) {
         
         movePiece(&g_state, cpuMove.fromIndex, cpuMove.toIndex, &cpuresult);
         
-        gamePlyCounter++;
+        //gamePlyCounter++;
         gameTurnCounter++; //increment the turn counter, this counts the number of full turns that have been made in the game
-        moveHistory[gamePlyCounter] = (AIMove){cpuMove.fromIndex, cpuMove.toIndex}; //record the move in the move history for repetition checking in the AI
+        //moveHistory[gamePlyCounter] = (AIMove){cpuMove.fromIndex, cpuMove.toIndex}; //record the move in the move history for repetition checking in the AI
         
         if(cpuresult.moveComplete){
           if(cpuresult.clearHighlight == 1){ //if the move function set the flag to clear the highlight, then we need to clear it
@@ -863,6 +861,9 @@ void movePiece(GameState *state, UBYTE oldIndex, UBYTE newIndex, MoveResult *res
     if(g_state.currentPlayer == TEAM_DEFENDER) checkExitFort(&g_state); //exit fort only applys to defenders
     if(g_state.currentPlayer == TEAM_ATTACKER) checkSurrounded(&g_state, newIndex); //only the attackers surround and no point checking when defenders move
   }
+
+  moveHistory[gamePlyCounter] = (AIMove){oldIndex, newIndex}; //record the move in the move history for repetition checking in the AI
+  gamePlyCounter++; //increment the ply counter, this counts the number of half moves that have been made in the game.
   
   checkGameEnd();
 }

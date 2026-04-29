@@ -1,187 +1,189 @@
 
 Discarded input sections
 
- .text          0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- .data          0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- .bss           0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+ .text          0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ .data          0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ .bss           0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text._out_char
-                0x00000000       0x38 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00000000       0x38 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.vsnprintf
-                0x00000000       0x22 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- .text.fwrite   0x00000000       0x48 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00000000       0x22 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ .text.fwrite   0x00000000       0x48 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.__clzsi2
-                0x00000000       0x4a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00000000       0x4a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.__muldi3
-                0x00000000       0xb0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- .text.printf   0x00000000       0x28 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00000000       0xb0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ .text.printf   0x00000000       0x28 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.snprintf
-                0x00000000       0x28 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- .text.vprintf  0x00000000       0x28 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- .text          0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans1.ltrans.o
- .data          0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans1.ltrans.o
- .bss           0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans1.ltrans.o
- .text.memcmp   0x00000000       0x3c /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans1.ltrans.o
- .text.strchr   0x00000000       0x26 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans1.ltrans.o
- .text.strrchr  0x00000000       0x2c /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans1.ltrans.o
- .text.strcmp   0x00000000       0x30 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans1.ltrans.o
- .text.strcpy   0x00000000       0x34 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans1.ltrans.o
- .text.strcat   0x00000000       0x50 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans1.ltrans.o
- .text.strncpy  0x00000000       0x62 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans1.ltrans.o
- .text.memmove  0x00000000       0x44 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans1.ltrans.o
+                0x00000000       0x28 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ .text.vprintf  0x00000000       0x28 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ .text          0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans1.ltrans.o
+ .data          0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans1.ltrans.o
+ .bss           0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans1.ltrans.o
+ .text.memcmp   0x00000000       0x3c /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans1.ltrans.o
+ .text.strchr   0x00000000       0x26 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans1.ltrans.o
+ .text.strrchr  0x00000000       0x2c /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans1.ltrans.o
+ .text.strcmp   0x00000000       0x30 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans1.ltrans.o
+ .text.strcpy   0x00000000       0x34 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans1.ltrans.o
+ .text.strcat   0x00000000       0x50 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans1.ltrans.o
+ .text.strncpy  0x00000000       0x62 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans1.ltrans.o
+ .text.memmove  0x00000000       0x44 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans1.ltrans.o
  .bss.mt_MusicChannels
-                0x00000000        0x1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans1.ltrans.o
+                0x00000000        0x1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans1.ltrans.o
  .bss.mt_E8Trigger
-                0x00000000        0x1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans1.ltrans.o
+                0x00000000        0x1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans1.ltrans.o
  .bss.mt_Enable
-                0x00000000        0x1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans1.ltrans.o
+                0x00000000        0x1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans1.ltrans.o
  .bss.s_isNextTimerBSetRep
-                0x00000000        0x1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans1.ltrans.o
- .debug_str     0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccyhLbrf.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccyhLbrf.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccvYfaSL.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc16afuo.debug.temp.o
- .debug_str     0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc4DvjX6.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc4DvjX6.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc6D8VAb.debug.temp.o
- .debug_info    0x00000000      0xd6f /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cck9pDbx.debug.temp.o
- .debug_abbrev  0x00000000      0x188 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cck9pDbx.debug.temp.o
- .debug_line    0x00000000      0x31d /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cck9pDbx.debug.temp.o
- .debug_str     0x00000000       0x56 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cck9pDbx.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cck9pDbx.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccUDaeVu.debug.temp.o
- .debug_info    0x00000000     0x18a4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc37hhXl.debug.temp.o
- .debug_abbrev  0x00000000      0x2eb /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc37hhXl.debug.temp.o
- .debug_line    0x00000000      0x344 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc37hhXl.debug.temp.o
- .debug_str     0x00000000       0x88 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc37hhXl.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc37hhXl.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccS76xFH.debug.temp.o
- .debug_str     0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccu0NskG.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccu0NskG.debug.temp.o
- .debug_info    0x00000000     0x178f /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccNUe3Rd.debug.temp.o
- .debug_abbrev  0x00000000      0x205 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccNUe3Rd.debug.temp.o
- .debug_line    0x00000000      0x305 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccNUe3Rd.debug.temp.o
- .debug_str     0x00000000       0x34 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccNUe3Rd.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccNUe3Rd.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjW6nnN.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc6mqQij.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccDork39.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc11Wkgm.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cct3mLyM.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccIcw80k.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cchiOCdw.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccf5N8RZ.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccMjxIKK.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc8ZYezw.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccRP8SET.debug.temp.o
- .debug_info    0x00000000     0x2330 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccml2dtg.debug.temp.o
- .debug_abbrev  0x00000000      0x309 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccml2dtg.debug.temp.o
- .debug_line    0x00000000      0x49e /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccml2dtg.debug.temp.o
- .debug_str     0x00000000       0xbc /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccml2dtg.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccml2dtg.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccT2rxSk.debug.temp.o
- .debug_info    0x00000000     0x2c58 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccmOrf3R.debug.temp.o
- .debug_abbrev  0x00000000      0x356 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccmOrf3R.debug.temp.o
- .debug_line    0x00000000      0x4e0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccmOrf3R.debug.temp.o
- .debug_str     0x00000000      0x1f7 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccmOrf3R.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccmOrf3R.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccXMk1qQ.debug.temp.o
- .debug_info    0x00000000      0x73d /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc5d4e06.debug.temp.o
- .debug_abbrev  0x00000000       0xef /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc5d4e06.debug.temp.o
- .debug_line    0x00000000      0x25c /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc5d4e06.debug.temp.o
- .debug_str     0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc5d4e06.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc5d4e06.debug.temp.o
- .debug_info    0x00000000      0xbd2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccOW4Wgw.debug.temp.o
- .debug_abbrev  0x00000000      0x168 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccOW4Wgw.debug.temp.o
- .debug_line    0x00000000      0x351 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccOW4Wgw.debug.temp.o
- .debug_str     0x00000000       0x12 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccOW4Wgw.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccOW4Wgw.debug.temp.o
- .debug_str     0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc0tFNug.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc0tFNug.debug.temp.o
- .debug_info    0x00000000     0x13c9 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccYKUwL5.debug.temp.o
- .debug_abbrev  0x00000000      0x1c3 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccYKUwL5.debug.temp.o
- .debug_line    0x00000000      0x4d0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccYKUwL5.debug.temp.o
- .debug_str     0x00000000       0x1d /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccYKUwL5.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccYKUwL5.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cczYNbIC.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccUJKHil.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccNA1ioq.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cctMqfUt.debug.temp.o
- .debug_info    0x00000000     0x141b /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccmbuVOO.debug.temp.o
- .debug_abbrev  0x00000000      0x273 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccmbuVOO.debug.temp.o
- .debug_line    0x00000000      0x2c8 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccmbuVOO.debug.temp.o
- .debug_str     0x00000000      0x10c /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccmbuVOO.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccmbuVOO.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccHtSWVF.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cctC4A7H.debug.temp.o
- .debug_info    0x00000000      0x6a0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc7bdBaV.debug.temp.o
- .debug_abbrev  0x00000000       0xcc /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc7bdBaV.debug.temp.o
- .debug_line    0x00000000      0x197 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc7bdBaV.debug.temp.o
- .debug_str     0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc7bdBaV.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc7bdBaV.debug.temp.o
- .debug_str     0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cccAZxAK.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cccAZxAK.debug.temp.o
- .debug_info    0x00000000      0xa68 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cchVyQld.debug.temp.o
- .debug_abbrev  0x00000000      0x151 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cchVyQld.debug.temp.o
- .debug_line    0x00000000      0x1a2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cchVyQld.debug.temp.o
- .debug_str     0x00000000       0x25 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cchVyQld.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cchVyQld.debug.temp.o
- .debug_info    0x00000000      0x811 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccWnX1Zf.debug.temp.o
- .debug_abbrev  0x00000000       0xf0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccWnX1Zf.debug.temp.o
- .debug_line    0x00000000      0x1a1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccWnX1Zf.debug.temp.o
- .debug_str     0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccWnX1Zf.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccWnX1Zf.debug.temp.o
- .debug_info    0x00000000      0x682 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccPGJDvu.debug.temp.o
- .debug_abbrev  0x00000000       0xa3 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccPGJDvu.debug.temp.o
- .debug_line    0x00000000      0x1a3 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccPGJDvu.debug.temp.o
- .debug_str     0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccPGJDvu.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccPGJDvu.debug.temp.o
- .debug_info    0x00000000      0x804 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccUrIHxE.debug.temp.o
- .debug_abbrev  0x00000000      0x132 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccUrIHxE.debug.temp.o
- .debug_line    0x00000000      0x1e5 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccUrIHxE.debug.temp.o
- .debug_str     0x00000000        0x9 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccUrIHxE.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccUrIHxE.debug.temp.o
- .debug_info    0x00000000      0x83b /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccYwYS6e.debug.temp.o
- .debug_abbrev  0x00000000       0xea /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccYwYS6e.debug.temp.o
- .debug_line    0x00000000      0x1a3 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccYwYS6e.debug.temp.o
- .debug_str     0x00000000        0x8 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccYwYS6e.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccYwYS6e.debug.temp.o
- .debug_info    0x00000000      0x5d2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccgJAlNQ.debug.temp.o
- .debug_abbrev  0x00000000       0x8a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccgJAlNQ.debug.temp.o
- .debug_line    0x00000000      0x19f /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccgJAlNQ.debug.temp.o
- .debug_str     0x00000000        0x8 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccgJAlNQ.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccgJAlNQ.debug.temp.o
- .debug_info    0x00000000      0x4ec /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccIRsMij.debug.temp.o
- .debug_abbrev  0x00000000       0x61 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccIRsMij.debug.temp.o
- .debug_line    0x00000000      0x158 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccIRsMij.debug.temp.o
- .debug_str     0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccIRsMij.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccIRsMij.debug.temp.o
- .debug_info    0x00000000      0x4bd /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjbTdvD.debug.temp.o
- .debug_abbrev  0x00000000       0x9a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjbTdvD.debug.temp.o
- .debug_line    0x00000000      0x117 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjbTdvD.debug.temp.o
- .debug_str     0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjbTdvD.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjbTdvD.debug.temp.o
- .debug_info    0x00000000      0x41f /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccCP79ud.debug.temp.o
- .debug_abbrev  0x00000000       0x41 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccCP79ud.debug.temp.o
- .debug_line    0x00000000      0x117 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccCP79ud.debug.temp.o
- .debug_str     0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccCP79ud.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccCP79ud.debug.temp.o
- .debug_str     0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc5uctps.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc5uctps.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccxMKLZK.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccnNr26j.debug.temp.o
- .debug_str     0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc1oRkK2.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc1oRkK2.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccKQJ4iL.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccKigBF5.debug.temp.o
- .debug_info    0x00000000      0x544 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccb2D7GO.debug.temp.o
- .debug_abbrev  0x00000000       0xac /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccb2D7GO.debug.temp.o
- .debug_line    0x00000000      0x124 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccb2D7GO.debug.temp.o
- .debug_str     0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccb2D7GO.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccb2D7GO.debug.temp.o
- .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccFowYY5.debug.temp.o
+                0x00000000        0x1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans1.ltrans.o
+ .debug_str     0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc7oUiHn.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc7oUiHn.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccAycJU7.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccf352ZN.debug.temp.o
+ .debug_str     0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc9OZSX1.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc9OZSX1.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc0lT8D3.debug.temp.o
+ .debug_info    0x00000000      0xd6f /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cccAsA3y.debug.temp.o
+ .debug_abbrev  0x00000000      0x188 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cccAsA3y.debug.temp.o
+ .debug_line    0x00000000      0x31d /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cccAsA3y.debug.temp.o
+ .debug_str     0x00000000       0x56 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cccAsA3y.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cccAsA3y.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccMz6JRp.debug.temp.o
+ .debug_info    0x00000000     0x18a4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc8OV5hS.debug.temp.o
+ .debug_abbrev  0x00000000      0x2eb /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc8OV5hS.debug.temp.o
+ .debug_line    0x00000000      0x344 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc8OV5hS.debug.temp.o
+ .debug_str     0x00000000       0x88 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc8OV5hS.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc8OV5hS.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cccpC2pG.debug.temp.o
+ .debug_str     0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccw7DPmd.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccw7DPmd.debug.temp.o
+ .debug_info    0x00000000     0x178f /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cceq8bG8.debug.temp.o
+ .debug_abbrev  0x00000000      0x205 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cceq8bG8.debug.temp.o
+ .debug_line    0x00000000      0x305 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cceq8bG8.debug.temp.o
+ .debug_str     0x00000000       0x34 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cceq8bG8.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cceq8bG8.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccz9ZSUo.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccT8noax.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccP6RlrM.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc2tKmxJ.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccFkAWJe.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccuFvQMN.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccyTjZB1.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccNGVst7.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccnryHDl.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc65ZusQ.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccHwNasa.debug.temp.o
+ .debug_info    0x00000000     0x2330 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccrUeRNk.debug.temp.o
+ .debug_abbrev  0x00000000      0x309 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccrUeRNk.debug.temp.o
+ .debug_line    0x00000000      0x49e /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccrUeRNk.debug.temp.o
+ .debug_str     0x00000000       0xbc /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccrUeRNk.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccrUeRNk.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccvXb6Si.debug.temp.o
+ .debug_info    0x00000000     0x2c58 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cceC3QmN.debug.temp.o
+ .debug_abbrev  0x00000000      0x356 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cceC3QmN.debug.temp.o
+ .debug_line    0x00000000      0x4e0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cceC3QmN.debug.temp.o
+ .debug_str     0x00000000      0x1f7 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cceC3QmN.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cceC3QmN.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccHPR7VM.debug.temp.o
+ .debug_info    0x00000000      0x73d /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc4zkdtR.debug.temp.o
+ .debug_abbrev  0x00000000       0xef /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc4zkdtR.debug.temp.o
+ .debug_line    0x00000000      0x25c /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc4zkdtR.debug.temp.o
+ .debug_str     0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc4zkdtR.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc4zkdtR.debug.temp.o
+ .debug_info    0x00000000      0xbd2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccGoCTJv.debug.temp.o
+ .debug_abbrev  0x00000000      0x168 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccGoCTJv.debug.temp.o
+ .debug_line    0x00000000      0x351 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccGoCTJv.debug.temp.o
+ .debug_str     0x00000000       0x12 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccGoCTJv.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccGoCTJv.debug.temp.o
+ .debug_str     0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc0A7MNa.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc0A7MNa.debug.temp.o
+ .debug_info    0x00000000     0x13c9 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc7CmBXw.debug.temp.o
+ .debug_abbrev  0x00000000      0x1c3 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc7CmBXw.debug.temp.o
+ .debug_line    0x00000000      0x4d0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc7CmBXw.debug.temp.o
+ .debug_str     0x00000000       0x1d /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc7CmBXw.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc7CmBXw.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccwqJ6MP.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccAoPqPe.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc1l9n2J.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc0kqpBM.debug.temp.o
+ .debug_info    0x00000000     0x141b /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccT5HwEo.debug.temp.o
+ .debug_abbrev  0x00000000      0x273 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccT5HwEo.debug.temp.o
+ .debug_line    0x00000000      0x2c8 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccT5HwEo.debug.temp.o
+ .debug_str     0x00000000      0x10c /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccT5HwEo.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccT5HwEo.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccNo0a3A.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc3GanME.debug.temp.o
+ .debug_info    0x00000000      0x6a0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccklRgFG.debug.temp.o
+ .debug_abbrev  0x00000000       0xcc /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccklRgFG.debug.temp.o
+ .debug_line    0x00000000      0x197 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccklRgFG.debug.temp.o
+ .debug_str     0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccklRgFG.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccklRgFG.debug.temp.o
+ .debug_str     0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccs8EHeH.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccs8EHeH.debug.temp.o
+ .debug_info    0x00000000      0xa68 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccShB4SL.debug.temp.o
+ .debug_abbrev  0x00000000      0x151 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccShB4SL.debug.temp.o
+ .debug_line    0x00000000      0x1a2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccShB4SL.debug.temp.o
+ .debug_str     0x00000000       0x25 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccShB4SL.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccShB4SL.debug.temp.o
+ .debug_info    0x00000000      0x811 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccMw678K.debug.temp.o
+ .debug_abbrev  0x00000000       0xf0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccMw678K.debug.temp.o
+ .debug_line    0x00000000      0x1a1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccMw678K.debug.temp.o
+ .debug_str     0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccMw678K.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccMw678K.debug.temp.o
+ .debug_info    0x00000000      0x682 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccnufwHb.debug.temp.o
+ .debug_abbrev  0x00000000       0xa3 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccnufwHb.debug.temp.o
+ .debug_line    0x00000000      0x1a3 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccnufwHb.debug.temp.o
+ .debug_str     0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccnufwHb.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccnufwHb.debug.temp.o
+ .debug_info    0x00000000      0x804 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccStdYPG.debug.temp.o
+ .debug_abbrev  0x00000000      0x132 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccStdYPG.debug.temp.o
+ .debug_line    0x00000000      0x1e5 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccStdYPG.debug.temp.o
+ .debug_str     0x00000000        0x9 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccStdYPG.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccStdYPG.debug.temp.o
+ .debug_info    0x00000000      0x83b /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cclSVthQ.debug.temp.o
+ .debug_abbrev  0x00000000       0xea /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cclSVthQ.debug.temp.o
+ .debug_line    0x00000000      0x1a3 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cclSVthQ.debug.temp.o
+ .debug_str     0x00000000        0x8 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cclSVthQ.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cclSVthQ.debug.temp.o
+ .debug_info    0x00000000      0x5d2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cccdh7Pp.debug.temp.o
+ .debug_abbrev  0x00000000       0x8a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cccdh7Pp.debug.temp.o
+ .debug_line    0x00000000      0x19f /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cccdh7Pp.debug.temp.o
+ .debug_str     0x00000000        0x8 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cccdh7Pp.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cccdh7Pp.debug.temp.o
+ .debug_info    0x00000000      0x4ec /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc12D0XR.debug.temp.o
+ .debug_abbrev  0x00000000       0x61 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc12D0XR.debug.temp.o
+ .debug_line    0x00000000      0x158 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc12D0XR.debug.temp.o
+ .debug_str     0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc12D0XR.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc12D0XR.debug.temp.o
+ .debug_info    0x00000000      0x4bd /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccnaZxWe.debug.temp.o
+ .debug_abbrev  0x00000000       0x9a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccnaZxWe.debug.temp.o
+ .debug_line    0x00000000      0x117 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccnaZxWe.debug.temp.o
+ .debug_str     0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccnaZxWe.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccnaZxWe.debug.temp.o
+ .debug_info    0x00000000      0x41f /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccKk5m8I.debug.temp.o
+ .debug_abbrev  0x00000000       0x41 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccKk5m8I.debug.temp.o
+ .debug_line    0x00000000      0x117 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccKk5m8I.debug.temp.o
+ .debug_str     0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccKk5m8I.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccKk5m8I.debug.temp.o
+ .debug_str     0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccqVoujU.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccqVoujU.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc4txZQ8.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccuBLlCF.debug.temp.o
+ .debug_str     0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccy8JhW8.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccy8JhW8.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccSVcmzZ.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cchel0F1.debug.temp.o
+ .debug_info    0x00000000      0x544 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc1pC6bH.debug.temp.o
+ .debug_abbrev  0x00000000       0xac /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc1pC6bH.debug.temp.o
+ .debug_line    0x00000000      0x124 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc1pC6bH.debug.temp.o
+ .debug_str     0x00000000        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc1pC6bH.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc1pC6bH.debug.temp.o
+ .comment       0x00000000       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccbg8kei.debug.temp.o
  .text          0x00000000        0x0 _deps/bartman_gcc_support-build/CMakeFiles/bartman_gcc_support.dir/src/gcc8_a_support.s.obj
  .data          0x00000000        0x0 _deps/bartman_gcc_support-build/CMakeFiles/bartman_gcc_support.dir/src/gcc8_a_support.s.obj
  .bss           0x00000000        0x0 _deps/bartman_gcc_support-build/CMakeFiles/bartman_gcc_support.dir/src/gcc8_a_support.s.obj
+ .text.__modsi3
+                0x00000000       0x2e _deps/bartman_gcc_support-build/CMakeFiles/bartman_gcc_support.dir/src/gcc8_a_support.s.obj
  .text.KPutCharX
                 0x00000000        0xe _deps/bartman_gcc_support-build/CMakeFiles/bartman_gcc_support.dir/src/gcc8_a_support.s.obj
  .text.PutChar  0x00000000        0x4 _deps/bartman_gcc_support-build/CMakeFiles/bartman_gcc_support.dir/src/gcc8_a_support.s.obj
@@ -194,64 +196,64 @@ Name             Origin             Length             Attributes
 Linker script and memory map
 
 Address of section .text set to 0x0
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans1.ltrans.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccyhLbrf.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccvYfaSL.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc16afuo.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc4DvjX6.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc6D8VAb.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cck9pDbx.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccUDaeVu.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc37hhXl.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccS76xFH.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccu0NskG.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccNUe3Rd.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjW6nnN.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc6mqQij.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccDork39.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc11Wkgm.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cct3mLyM.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccIcw80k.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cchiOCdw.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccf5N8RZ.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccMjxIKK.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc8ZYezw.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccRP8SET.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccml2dtg.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccT2rxSk.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccmOrf3R.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccXMk1qQ.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc5d4e06.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccOW4Wgw.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc0tFNug.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccYKUwL5.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cczYNbIC.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccUJKHil.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccNA1ioq.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cctMqfUt.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccmbuVOO.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccHtSWVF.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cctC4A7H.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc7bdBaV.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cccAZxAK.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cchVyQld.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccWnX1Zf.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccPGJDvu.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccUrIHxE.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccYwYS6e.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccgJAlNQ.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccIRsMij.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjbTdvD.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccCP79ud.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc5uctps.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccxMKLZK.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccnNr26j.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc1oRkK2.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccKQJ4iL.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccKigBF5.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccb2D7GO.debug.temp.o
-LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccFowYY5.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans1.ltrans.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc7oUiHn.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccAycJU7.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccf352ZN.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc9OZSX1.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc0lT8D3.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cccAsA3y.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccMz6JRp.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc8OV5hS.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cccpC2pG.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccw7DPmd.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cceq8bG8.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccz9ZSUo.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccT8noax.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccP6RlrM.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc2tKmxJ.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccFkAWJe.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccuFvQMN.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccyTjZB1.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccNGVst7.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccnryHDl.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc65ZusQ.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccHwNasa.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccrUeRNk.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccvXb6Si.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cceC3QmN.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccHPR7VM.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc4zkdtR.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccGoCTJv.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc0A7MNa.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc7CmBXw.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccwqJ6MP.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccAoPqPe.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc1l9n2J.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc0kqpBM.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccT5HwEo.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccNo0a3A.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc3GanME.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccklRgFG.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccs8EHeH.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccShB4SL.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccMw678K.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccnufwHb.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccStdYPG.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cclSVthQ.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cccdh7Pp.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc12D0XR.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccnaZxWe.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccKk5m8I.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccqVoujU.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc4txZQ8.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccuBLlCF.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccy8JhW8.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccSVcmzZ.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cchel0F1.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc1pC6bH.debug.temp.o
+LOAD /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccbg8kei.debug.temp.o
 LOAD _deps/bartman_gcc_support-build/CMakeFiles/bartman_gcc_support.dir/src/gcc8_a_support.s.obj
                 [!provide]                        PROVIDE (__executable_start = SEGMENT_START ("text-segment", 0x80000000))
                 0x80000074                        . = (SEGMENT_START ("text-segment", 0x80000000) + SIZEOF_HEADERS)
@@ -311,247 +313,244 @@ LOAD _deps/bartman_gcc_support-build/CMakeFiles/bartman_gcc_support.dir/src/gcc8
 .iplt
  *(.iplt)
 
-.text           0x00000000     0xeaf0
+.text           0x00000000     0xe86a
  *(.text.unlikely .text.*_unlikely .text.unlikely.*)
  .text.unlikely
-                0x00000000       0x84 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans1.ltrans.o
+                0x00000000       0x84 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans1.ltrans.o
                 0x00000000                _start
  *(.text.exit .text.exit.*)
- .text.exit     0x00000084       0x12 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+ .text.exit     0x00000084       0x12 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
                 0x00000084                exit
  *(.text.startup .text.startup.*)
  .text.startup.main
-                0x00000096      0xea2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00000096      0xea2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
                 0x00000096                main
  *(.text.hot .text.hot.*)
  .text.hot.onKeyInterrupt
-                0x00000f38       0x86 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00000f38       0x86 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.hot.int4Handler
-                0x00000fbe       0x38 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00000fbe       0x38 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.hot.int2Handler
-                0x00000ff6       0xc0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00000ff6       0xc0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.hot.int3Handler
-                0x000010b6       0x62 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000010b6       0x62 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.hot.int6Handler
-                0x00001118      0x102 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00001118      0x102 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.hot.int7Handler
-                0x0000121a       0x22 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0000121a       0x22 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.hot.int1Handler
-                0x0000123c        0x6 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0000123c        0x6 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.hot.int5Handler
-                0x00001242        0x6 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00001242        0x6 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  *(SORT_BY_NAME(.text.sorted.*))
  *(.text .stub .text.* .gnu.linkonce.t.*)
  .text.onRawKeyInput
-                0x00001248       0x38 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00001248       0x38 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.aceInputHandler
-                0x00001280       0x44 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00001280       0x44 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.evaluateBoard.constprop.0
-                0x000012c4      0xb58 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000012c4      0xb58 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.undoMove.constprop.0
-                0x00001e1c      0x418 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00001e1c      0x418 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.checkForCaptures.constprop.0
-                0x00002234      0x418 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00002234      0x418 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.checkShieldWallCaptures.constprop.0
-                0x0000264c      0x4e0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0000264c      0x4e0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.blitUnsafeCopy.isra.0
-                0x00002b2c      0x494 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00002b2c      0x494 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.blitUnsafeCopyMask.constprop.0.isra.0
-                0x00002fc0      0x25c /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00002fc0      0x25c /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text._out_buffer
-                0x0000321c       0x18 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0000321c       0x18 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.mouseProcessPort
-                0x00003234      0x12e /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00003234      0x12e /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.ciaIcrHandler
-                0x00003362       0x1a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00003362       0x1a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.osIntVector
-                0x0000337c       0x44 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0000337c       0x44 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.osIntServer
-                0x000033c0       0x6e /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000033c0       0x6e /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.msgPortCreate.constprop.0
-                0x0000342e       0x7a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0000342e       0x7a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.msgPortDelete
-                0x000034a8       0x34 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000034a8       0x34 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.interruptHandlerRemove
-                0x000034dc       0x7a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000034dc       0x7a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.systemOsDisable
-                0x00003556      0x216 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00003556      0x216 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.systemFlushIo
-                0x0000376c       0x96 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0000376c       0x96 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.systemSetDmaMask.part.0
-                0x00003802       0x38 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00003802       0x38 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.systemSetDmaMask
-                0x0000383a       0x42 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0000383a       0x42 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.timerGetPrec
-                0x0000387c       0x92 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0000387c       0x92 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.timerProcess
-                0x0000390e       0x4c /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0000390e       0x4c /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.cameraProcess
-                0x0000395a       0x28 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0000395a       0x28 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.setBitplanePtrs
-                0x00003982       0x78 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00003982       0x78 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.simpleBufferCalcBplOffsAndShift
-                0x000039fa       0x6e /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000039fa       0x6e /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.simpleBufferProcess
-                0x00003a68      0x2c8 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00003a68      0x2c8 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text._out_null
-                0x00003d30        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00003d30        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text._ntoa_long
-                0x00003d32      0x908 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00003d32      0x908 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text._vsnprintf
-                0x0000463a      0x72a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0000463a      0x72a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text._logWrite
-                0x00004d64       0x20 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00004d64       0x20 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text._blitCheck
-                0x00004d84      0x308 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00004d84      0x308 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.drawPieces
-                0x0000508c      0x4d2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0000508c      0x4d2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.blitSafeCopyAligned.constprop.0.isra.0
-                0x0000555e      0x2fc /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0000555e      0x2fc /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text._memCheckIntegrity
-                0x0000585a       0xea /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0000585a       0xea /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.systemUnuse
-                0x00005944       0xc8 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00005944       0xc8 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.systemUse
-                0x00005a0c      0x1c4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00005a0c      0x1c4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text._logWriteVa.part.0
-                0x00005bd0      0x184 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00005bd0      0x184 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text._memAllocDbg
-                0x00005d54      0x246 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00005d54      0x246 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text._memFreeDbg
-                0x00005f9a      0x11e /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00005f9a      0x11e /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.copProcessBlocks
-                0x000060b8      0x28a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000060b8      0x28a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.systemGetBlitterFromOs
-                0x00006342       0x54 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00006342       0x54 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.diskFileClose
-                0x00006396       0x96 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00006396       0x96 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.diskFileGetPos
-                0x0000642c       0x84 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0000642c       0x84 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.diskFileIsEof
-                0x000064b0       0x70 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000064b0       0x70 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.diskFileFlush
-                0x00006520       0x5a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00006520       0x5a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.cameraDestroy
-                0x0000657a       0x3c /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0000657a       0x3c /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.diskFileRead
-                0x000065b6      0x1ca /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000065b6      0x1ca /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.diskFileSeek
-                0x00006780      0x1bc /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00006780      0x1bc /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.diskFileGetSize
-                0x0000693c       0x92 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0000693c       0x92 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.vPortWaitForPos
-                0x000069ce       0xf6 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000069ce       0xf6 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.vPortAddManager
-                0x00006ac4       0xa8 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00006ac4       0xa8 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.fontMeasureText
-                0x00006b6c       0x98 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00006b6c       0x98 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.fontFillTextBitMap
-                0x00006c04      0x2c4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00006c04      0x2c4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.fontDrawTextBitMap.constprop.0
-                0x00006ec8       0xf2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00006ec8       0xf2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text._logBlockBegin
-                0x00006fba       0xba /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- .text.tagGet   0x00007074       0x5a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- .text.sprintf  0x000070ce       0x28 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00006fba       0xba /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ .text.tagGet   0x00007074       0x5a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ .text.sprintf  0x000070ce       0x28 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
                 0x000070ce                sprintf
  .text._logBlockEnd.part.0
-                0x000070f6      0x1f0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000070f6      0x1f0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text._logBlockEnd
-                0x000072e6       0x18 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000072e6       0x18 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.stateCreate.constprop.0
-                0x000072fe       0x6a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000072fe       0x6a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.copBlockCreate
-                0x00007368      0x102 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00007368      0x102 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.copBlockDestroy
-                0x0000746a       0xb0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0000746a       0xb0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.copListDestroy
-                0x0000751a       0xec /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0000751a       0xec /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.copListCreate.constprop.0
-                0x00007606      0x1f0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00007606      0x1f0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.stateChange
-                0x000077f6       0xe2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000077f6       0xe2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.menuGsLoop
-                0x000078d8       0xb0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000078d8       0xb0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.bitmapDestroy
-                0x00007988      0x13e /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00007988      0x13e /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.simpleBufferDestroy
-                0x00007ac6       0xa0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00007ac6       0xa0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.diskFileOpen
-                0x00007b66      0x16e /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00007b66      0x16e /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.viewCreate.constprop.0
-                0x00007cd4      0x322 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00007cd4      0x322 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.viewLoad
-                0x00007ff6      0x2d8 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00007ff6      0x2d8 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.viewDestroy
-                0x000082ce      0x19e /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000082ce      0x19e /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.menuGsDestroy
-                0x0000846c       0x60 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0000846c       0x60 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.paletteLoadFromPath.constprop.0
-                0x000084cc      0x14e /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000084cc      0x14e /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.systemKill
-                0x0000861a       0x9e /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0000861a       0x9e /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.gameGsDestroy
-                0x000086b8      0x1fa /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000086b8      0x1fa /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.getValidMoves.constprop.0
-                0x000088b2      0x1fe /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000088b2      0x1fe /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.getAllMoves.constprop.0
-                0x00008ab0       0xe6 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00008ab0       0xe6 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.checkExitFort.constprop.0
-                0x00008b96      0x202 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00008b96      0x202 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.checkSurrounded.constprop.0
-                0x00008d98      0x316 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00008d98      0x316 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.applyMoveWithUndo.constprop.0.isra.0
-                0x000090ae      0x432 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000090ae      0x432 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.minimax.part.0.constprop.0
-                0x000094e0      0x1e2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000094e0      0x1e2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.movePiece.constprop.0
-                0x000096c2      0x344 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000096c2      0x344 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.gameGsLoop
-                0x00009a06     0x2540 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00009a06     0x22e8 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.interruptHandlerAdd
-                0x0000bf46       0xc8 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0000bcee       0xc8 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.ciaIcrHandlerAdd.constprop.0
-                0x0000c00e       0xba /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0000bdb6       0xba /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.bitmapCreate
-                0x0000c0c8      0x39a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0000be70      0x39a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.simpleBufferCreate.constprop.0
-                0x0000c462      0x802 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0000c20a      0x802 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.bitmapCreateFromFd.constprop.0
-                0x0000cc64      0x338 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0000ca0c      0x338 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.fontCreateFromFd
-                0x0000cf9c      0x236 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0000cd44      0x236 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.fontCreateTextBitMapFromStr
-                0x0000d1d2      0x12a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0000cf7a      0x12a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.diskFileWrite
-                0x0000d2fc      0x10e /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0000d0a4      0x10e /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.vPortCreate.constprop.0
-                0x0000d40a      0x2b2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0000d1b2      0x2b2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.gameGsCreate
-                0x0000d6bc      0xf92 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0000d464      0xf92 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .text.menuGsCreate
-                0x0000e64e      0x344 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- .text.strlen   0x0000e992       0x18 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans1.ltrans.o
-                0x0000e992                strlen
- .text.memset   0x0000e9aa       0x20 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans1.ltrans.o
-                0x0000e9aa                memset
- .text.memcpy   0x0000e9ca       0x1e /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans1.ltrans.o
-                0x0000e9ca                memcpy
+                0x0000e3f6      0x344 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ .text.strlen   0x0000e73a       0x18 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans1.ltrans.o
+                0x0000e73a                strlen
+ .text.memset   0x0000e752       0x20 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans1.ltrans.o
+                0x0000e752                memset
+ .text.memcpy   0x0000e772       0x1e /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans1.ltrans.o
+                0x0000e772                memcpy
  .text.__mulsi3
-                0x0000e9e8       0x22 _deps/bartman_gcc_support-build/CMakeFiles/bartman_gcc_support.dir/src/gcc8_a_support.s.obj
-                0x0000e9e8                __mulsi3
+                0x0000e790       0x22 _deps/bartman_gcc_support-build/CMakeFiles/bartman_gcc_support.dir/src/gcc8_a_support.s.obj
+                0x0000e790                __mulsi3
  .text.__udivsi3
-                0x0000ea0a       0x5c _deps/bartman_gcc_support-build/CMakeFiles/bartman_gcc_support.dir/src/gcc8_a_support.s.obj
-                0x0000ea0a                __udivsi3
+                0x0000e7b2       0x5c _deps/bartman_gcc_support-build/CMakeFiles/bartman_gcc_support.dir/src/gcc8_a_support.s.obj
+                0x0000e7b2                __udivsi3
  .text.__divsi3
-                0x0000ea66       0x2e _deps/bartman_gcc_support-build/CMakeFiles/bartman_gcc_support.dir/src/gcc8_a_support.s.obj
-                0x0000ea66                __divsi3
- .text.__modsi3
-                0x0000ea94       0x2e _deps/bartman_gcc_support-build/CMakeFiles/bartman_gcc_support.dir/src/gcc8_a_support.s.obj
-                0x0000ea94                __modsi3
+                0x0000e80e       0x2e _deps/bartman_gcc_support-build/CMakeFiles/bartman_gcc_support.dir/src/gcc8_a_support.s.obj
+                0x0000e80e                __divsi3
  .text.__umodsi3
-                0x0000eac2       0x2e _deps/bartman_gcc_support-build/CMakeFiles/bartman_gcc_support.dir/src/gcc8_a_support.s.obj
-                0x0000eac2                __umodsi3
+                0x0000e83c       0x2e _deps/bartman_gcc_support-build/CMakeFiles/bartman_gcc_support.dir/src/gcc8_a_support.s.obj
+                0x0000e83c                __umodsi3
  *(.gnu.warning)
 
 .fini
@@ -560,22 +559,23 @@ LOAD _deps/bartman_gcc_support-build/CMakeFiles/bartman_gcc_support.dir/src/gcc8
                 [!provide]                        PROVIDE (_etext = .)
                 [!provide]                        PROVIDE (etext = .)
 
-.rodata         0x0000eaf0     0x7fae
+.rodata         0x0000e86a     0x800c
  *(.rodata .rodata.* .gnu.linkonce.r.*)
- .rodata        0x0000eaf0     0x24a2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+ .rodata        0x0000e86a     0x24ff /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ *fill*         0x00010d69        0x1 
  .rodata.s_sDiskFileCallbacks
-                0x00010f92       0x20 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00010d6a       0x20 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .rodata.s_pCopperWaitXByBitplanes
-                0x00010fb2       0x12 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00010d8a       0x12 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .rodata.s_pAceInterrupts
-                0x00010fc4       0x78 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00010d9c       0x78 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .rodata.openingBook
-                0x0001103c     0x5910 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00010e14     0x5910 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .rodata.kingPosWeights
-                0x0001694c      0x152 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00016724      0x152 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
 
-text            0x00016a9e       0x12
- text           0x00016a9e       0x12 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+text            0x00016876       0x12
+ text           0x00016876       0x12 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
 
 .rodata1
  *(.rodata1)
@@ -624,7 +624,7 @@ text            0x00016a9e       0x12
 
 .note.openbsd.ident
  *(.note.openbsd.ident)
-                0x00018ab0                        . = DATA_SEGMENT_ALIGN (CONSTANT (MAXPAGESIZE), CONSTANT (COMMONPAGESIZE))
+                0x00018888                        . = DATA_SEGMENT_ALIGN (CONSTANT (MAXPAGESIZE), CONSTANT (COMMONPAGESIZE))
 
 .eh_frame
  *(.eh_frame)
@@ -643,7 +643,7 @@ text            0x00016a9e       0x12
 .exception_ranges
  *(.exception_ranges*)
 
-.tdata          0x00018ab0        0x0
+.tdata          0x00018888        0x0
                 [!provide]                        PROVIDE (__tdata_start = .)
  *(.tdata .tdata.* .gnu.linkonce.td.*)
 
@@ -651,22 +651,22 @@ text            0x00016a9e       0x12
  *(.tbss .tbss.* .gnu.linkonce.tb.*)
  *(.tcommon)
 
-.preinit_array  0x00018ab0        0x0
-                0x00018ab0                        PROVIDE (__preinit_array_start = .)
+.preinit_array  0x00018888        0x0
+                0x00018888                        PROVIDE (__preinit_array_start = .)
  *(.preinit_array)
-                0x00018ab0                        PROVIDE (__preinit_array_end = .)
+                0x00018888                        PROVIDE (__preinit_array_end = .)
 
-.init_array     0x00018ab0        0x0
-                0x00018ab0                        PROVIDE (__init_array_start = .)
+.init_array     0x00018888        0x0
+                0x00018888                        PROVIDE (__init_array_start = .)
  *(SORT_BY_INIT_PRIORITY(.init_array.*) SORT_BY_INIT_PRIORITY(.ctors.*))
  *(.init_array EXCLUDE_FILE(*crtend?.o *crtend.o *crtbegin?.o *crtbegin.o) .ctors)
-                0x00018ab0                        PROVIDE (__init_array_end = .)
+                0x00018888                        PROVIDE (__init_array_end = .)
 
-.fini_array     0x00018ab0        0x0
-                0x00018ab0                        PROVIDE (__fini_array_start = .)
+.fini_array     0x00018888        0x0
+                0x00018888                        PROVIDE (__fini_array_start = .)
  *(SORT_BY_INIT_PRIORITY(.fini_array.*) SORT_BY_INIT_PRIORITY(.dtors.*))
  *(.fini_array EXCLUDE_FILE(*crtend?.o *crtend.o *crtbegin?.o *crtbegin.o) .dtors)
-                0x00018ab0                        PROVIDE (__fini_array_end = .)
+                0x00018888                        PROVIDE (__fini_array_end = .)
 
 .ctors
  *crtbegin.o(.ctors)
@@ -691,7 +691,7 @@ text            0x00016a9e       0x12
 
 .dynamic
  *(.dynamic)
-                0x00018ab0                        . = DATA_SEGMENT_RELRO_END (., 0x0)
+                0x00018888                        . = DATA_SEGMENT_RELRO_END (., 0x0)
 
 .got
  *(.got.plt)
@@ -699,237 +699,237 @@ text            0x00016a9e       0x12
  *(.got)
  *(.igot)
 
-.data           0x00018ab0        0x1
+.data           0x00018888        0x1
  *(.data .data.* .gnu.linkonce.d.*)
  .data.s_isGameRunning
-                0x00018ab0        0x1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00018888        0x1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
 
 .data1
  *(.data1)
-                0x00018ab1                        _edata = .
+                0x00018889                        _edata = .
                 [!provide]                        PROVIDE (edata = .)
-                0x00018ab1                        . = ALIGN (ALIGNOF (NEXT_SECTION))
-                0x00018ab2                        __bss_start = .
+                0x00018889                        . = ALIGN (ALIGNOF (NEXT_SECTION))
+                0x0001888a                        __bss_start = .
 
-.bss            0x00018ab2     0x2956
+.bss            0x0001888a     0x2956
  *(.dynbss)
  *(.bss .bss.* .gnu.linkonce.b.*)
  .bss.s_sTmpDest
-                0x00018ab2       0x28 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- .bss.s_isPAL   0x00018ada        0x1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- *fill*         0x00018adb        0x1 
+                0x0001888a       0x28 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ .bss.s_isPAL   0x000188b2        0x1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ *fill*         0x000188b3        0x1 
  .bss.s_pOsHwInterrupts
-                0x00018adc       0x1c /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000188b4       0x1c /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_uwOsCiaBTimerB
-                0x00018af8        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000188d0        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_uwOsCiaATimerA
-                0x00018afa        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000188d2        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_pOsCiaCrb
-                0x00018afc        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000188d4        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_pOsCiaCra
-                0x00018afe        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000188d6        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_pOsCiaIcr
-                0x00018b00        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000188d8        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_pOsOldInterruptHandlers
-                0x00018b02       0x38 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000188da       0x38 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_pOsInterruptHandlers
-                0x00018b3a      0x134 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- .bss.s_szMsg   0x00018c6e      0x400 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00018912      0x134 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ .bss.s_szMsg   0x00018a46      0x400 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.menutextbitmap
-                0x0001906e        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- .bss.menufont  0x00019072        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00018e46        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ .bss.menufont  0x00018e4a        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.pBmAckwin
-                0x00019076        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- .bss.pBDefwin  0x0001907a        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00018e4e        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ .bss.pBDefwin  0x00018e52        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_pMainBuffer.lto_priv.1
-                0x0001907e        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00018e56        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_pVpMain.lto_priv.1
-                0x00019082        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00018e5a        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_pMenuView
-                0x00019086        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- .bss.queue     0x0001908a      0x152 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- .bss.visited   0x000191dc      0x152 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- .bss.gen       0x0001932e        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- .bss.cpuMove   0x00019330        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- .bss.waitFrame
-                0x00019334        0x1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- .bss.pieceHasBGToRestore
-                0x00019335        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- .bss.capturedPieceCount
-                0x00019337        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- .bss.capturedPieceIndex
-                0x00019339       0x12 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- .bss.HLhasBGToRestore
-                0x0001934b        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- .bss.hightlightActive
-                0x0001934d        0x1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00018e5e        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ .bss.queue     0x00018e62      0x152 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ .bss.visited   0x00018fb4      0x152 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ .bss.gen       0x00019106        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.moveHistory
-                0x0001934e      0x3fc /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00019108      0x3fc /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.gamePlyCounter
-                0x0001974a        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00019504        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ .bss.cpuMove   0x00019506        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ .bss.waitFrame
+                0x0001950a        0x1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ .bss.pieceHasBGToRestore
+                0x0001950b        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ .bss.capturedPieceCount
+                0x0001950d        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ .bss.capturedPieceIndex
+                0x0001950f       0x12 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ .bss.HLhasBGToRestore
+                0x00019521        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ .bss.hightlightActive
+                0x00019523        0x1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.lastHighlightIndex
-                0x0001974c        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00019524        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_ubBufferIndex
-                0x0001974e        0x1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00019526        0x1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.highlightIndex
-                0x0001974f        0x1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- .bss.pBmBoard  0x00019750        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00019527        0x1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ .bss.pBmBoard  0x00019528        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_pInitialClearCopBlock
-                0x00019754        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001952c        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_pBlankSprite
-                0x00019758        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00019530        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_isOwningBlankSprite
-                0x0001975c        0x1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- *fill*         0x0001975d        0x1 
+                0x00019534        0x1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ *fill*         0x00019535        0x1 
  .bss.s_pView.lto_priv.1
-                0x0001975e        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00019536        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_pChannelsData
-                0x00019762       0x60 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001953a       0x60 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.pBmSquareHighlight_BG
-                0x000197c2        0x8 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001959a        0x8 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.pBmSquareHighlight_Mask
-                0x000197ca        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000195a2        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.pBmSquareHighlight
-                0x000197ce        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000195a6        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.pBmClashFX_Mask
-                0x000197d2        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000195aa        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.pBmClashFX
-                0x000197d6        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000195ae        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.pBmKing_Mask
-                0x000197da        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- .bss.pBmKing   0x000197de        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000195b2        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ .bss.pBmKing   0x000195b6        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.pBmDefenders_Mask
-                0x000197e2       0x34 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000195ba       0x34 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.pBmDefenders
-                0x00019816       0x34 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000195ee       0x34 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.pBmAttackers_Mask
-                0x0001984a       0x60 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00019622       0x60 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.pBmAttackers
-                0x000198aa       0x60 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- .bss.draw_pos  0x0001990a      0x2a4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00019682       0x60 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ .bss.draw_pos  0x000196e2      0x2a4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.gameWinner
-                0x00019bae        0x1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- *fill*         0x00019baf        0x1 
- .bss.version   0x00019bb0        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00019986        0x1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ *fill*         0x00019987        0x1 
+ .bss.version   0x00019988        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.gametextbitmapdefend
-                0x00019bb4        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001998c        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.gametextbitmapattack
-                0x00019bb8        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00019990        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.pSMouseCursor
-                0x00019bbc        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00019994        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.pBmMouseCursorData
-                0x00019bc0        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00019998        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.pBmMouseCursorSrc
-                0x00019bc4        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001999c        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.gFontSmall
-                0x00019bc8        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000199a0        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_pMainBuffer.lto_priv.0
-                0x00019bcc        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000199a4        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_pVpMain.lto_priv.0
-                0x00019bd0        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000199a8        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_pView.lto_priv.0
-                0x00019bd4        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000199ac        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_pRandManager
-                0x00019bd8        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000199b0        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.moveBuffer
-                0x00019bdc      0xc80 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x000199b4      0xc80 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.validGeneration
-                0x0001a85c        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001a634        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.validMoves
-                0x0001a85e      0x152 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- .bss.g_state   0x0001a9b0      0x268 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001a636      0x152 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ .bss.g_state   0x0001a788      0x268 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.gameTurnCounter
-                0x0001ac18        0x1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- *fill*         0x0001ac19        0x1 
+                0x0001a9f0        0x1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ *fill*         0x0001a9f1        0x1 
  .bss.s_uwOsIntEna
-                0x0001ac1a        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001a9f2        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_pHwVectors
-                0x0001ac1c        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001a9f4        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_uwOsInitialIntEna
-                0x0001ac20        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001a9f8        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_uwLastId
-                0x0001ac22        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001a9fa        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_ulFastUsage
-                0x0001ac24        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001a9fc        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_ulChipUsage
-                0x0001ac28        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001aa00        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.g_sKeyManager
-                0x0001ac2c       0x69 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- *fill*         0x0001ac95        0x1 
+                0x0001aa04       0x69 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ *fill*         0x0001aa6d        0x1 
  .bss.g_sTimerManager
-                0x0001ac96        0xc /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001aa6e        0xc /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.g_pMenuState
-                0x0001aca2        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001aa7a        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.g_sMouseManager
-                0x0001aca6       0x3a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001aa7e       0x3a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_pAceCiaInterrupts
-                0x0001ace0       0x50 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001aab8       0x50 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_cbKeyInputHandler
-                0x0001ad30        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001ab08        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_bInitCount
-                0x0001ad34        0x1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- *fill*         0x0001ad35        0x1 
+                0x0001ab0c        0x1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ *fill*         0x0001ab0d        0x1 
  .bss.g_pGameState
-                0x0001ad36        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001ab0e        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.g_pStateManager
-                0x0001ad3a        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001ab12        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.g_sCopManager
-                0x0001ad3e        0x8 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001ab16        0x8 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_uwOsDmaCon
-                0x0001ad46        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001ab1e        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_uwAceDmaCon
-                0x0001ad48        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001ab20        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_ulChipPeakUsage
-                0x0001ad4a        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001ab22        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_ulFastPeakUsage
-                0x0001ad4e        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001ab26        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_pMemTail
-                0x0001ad52        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001ab2a        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.g_sLogManager
-                0x0001ad56      0x50c /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001ab2e      0x50c /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_wSystemBlitterUses
-                0x0001b262        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001b03a        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_sIoAudio
-                0x0001b264       0x44 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001b03c       0x44 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_pCdtvIOReq
-                0x0001b2a8        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001b080        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_pCdtvIOPort
-                0x0001b2ac        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001b084        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_sOsHandlerIo
-                0x0001b2b0       0x16 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001b088       0x16 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_sIoRequestInput
-                0x0001b2c6       0x30 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001b09e       0x30 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_pReturnMsg
-                0x0001b2f6        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- .bss.SysBase   0x0001b2fa        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001b0ce        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ .bss.SysBase   0x0001b0d2        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_pOldWindow
-                0x0001b2fe        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001b0d6        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_pProcess
-                0x0001b302        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- .bss.DOSBase   0x0001b306        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001b0da        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ .bss.DOSBase   0x0001b0de        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_bpStartLock
-                0x0001b30a        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001b0e2        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_pOsView
-                0x0001b30e        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- .bss.GfxBase   0x0001b312        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001b0e6        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ .bss.GfxBase   0x0001b0ea        0x4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_pOsCiaIcrHandlers
-                0x0001b316       0xdc /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001b0ee       0xdc /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_pCiaResource
-                0x0001b3f2        0x8 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001b1ca        0x8 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_uwOsInitialDma
-                0x0001b3fa        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001b1d2        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_wSystemUses
-                0x0001b3fc        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001b1d4        0x2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .bss.s_sCpuCacheFlags
-                0x0001b3fe        0xa /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x0001b1d6        0xa /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  *(COMMON)
-                0x0001b408                        . = ALIGN ((. != 0x0)?0x4:0x1)
-                0x0001b408                        . = ALIGN (0x4)
-                0x0001b408                        . = SEGMENT_START ("ldata-segment", .)
-                0x0001b408                        . = ALIGN (0x4)
-                0x0001b408                        _end = .
+                0x0001b1e0                        . = ALIGN ((. != 0x0)?0x4:0x1)
+                0x0001b1e0                        . = ALIGN (0x4)
+                0x0001b1e0                        . = SEGMENT_START ("ldata-segment", .)
+                0x0001b1e0                        . = ALIGN (0x4)
+                0x0001b1e0                        _end = .
                 [!provide]                        PROVIDE (end = .)
-                0x0001b408                        . = DATA_SEGMENT_END (.)
+                0x0001b1e0                        . = DATA_SEGMENT_END (.)
 
 .stab
  *(.stab)
@@ -951,9 +951,9 @@ text            0x00016a9e       0x12
 
 .comment        0x00000000       0x12
  *(.comment)
- .comment       0x00000000       0x12 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+ .comment       0x00000000       0x12 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
                                  0x13 (size before relaxing)
- .comment       0x00000012       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans1.ltrans.o
+ .comment       0x00000012       0x13 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans1.ltrans.o
 
 .gnu.build.attributes
  *(.gnu.build.attributes .gnu.build.attributes.*)
@@ -973,217 +973,217 @@ text            0x00016a9e       0x12
 .debug_aranges  0x00000000      0x468
  *(.debug_aranges)
  .debug_aranges
-                0x00000000      0x3a0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00000000      0x3a0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .debug_aranges
-                0x000003a0       0x78 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans1.ltrans.o
+                0x000003a0       0x78 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans1.ltrans.o
  .debug_aranges
                 0x00000418       0x50 _deps/bartman_gcc_support-build/CMakeFiles/bartman_gcc_support.dir/src/gcc8_a_support.s.obj
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000    0x3e389
+.debug_info     0x00000000    0x3e405
  *(.debug_info .gnu.linkonce.wi.*)
- .debug_info    0x00000000     0xf3ca /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- .debug_info    0x0000f3ca      0x8a3 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans1.ltrans.o
- .debug_info    0x0000fc6d      0x8e7 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccyhLbrf.debug.temp.o
-                0x0000fc6d                main.c.a8e839dd
- .debug_info    0x00010554     0x1495 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccvYfaSL.debug.temp.o
-                0x00010554                ai.c.7b8539c7
- .debug_info    0x000119e9     0x2d8b /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc16afuo.debug.temp.o
-                0x000119e9                game.c.6e967b8d
- .debug_info    0x00014774      0x514 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc4DvjX6.debug.temp.o
-                0x00014774                input.c.c8b14b0b
- .debug_info    0x00014c88     0x15f5 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc6D8VAb.debug.temp.o
-                0x00014c88                menu.c.eace2dd4
- .debug_info    0x0001627d     0x1c4b /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccUDaeVu.debug.temp.o
-                0x0001627d                blit.c.5bd35e66
- .debug_info    0x00017ec8     0x2c1b /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccS76xFH.debug.temp.o
-                0x00017ec8                copper.c.fe84e9bb
- .debug_info    0x0001aae3      0x4c5 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccu0NskG.debug.temp.o
-                0x0001aae3                game.c.ca454ffb
- .debug_info    0x0001afa8     0x14bc /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjW6nnN.debug.temp.o
-                0x0001afa8                key.c.ba4cc617
- .debug_info    0x0001c464      0xe98 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc6mqQij.debug.temp.o
-                0x0001c464                log.c.5a31bcea
- .debug_info    0x0001d2fc      0xccf /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccDork39.debug.temp.o
-                0x0001d2fc                memory.c.d0a7dc93
- .debug_info    0x0001dfcb     0x14cd /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc11Wkgm.debug.temp.o
-                0x0001dfcb                mouse.c.aa0aed0b
- .debug_info    0x0001f498     0x3f76 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cct3mLyM.debug.temp.o
-                0x0001f498                ptplayer.c.3f21487b
- .debug_info    0x0002340e      0x7a9 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccIcw80k.debug.temp.o
-                0x0002340e                rand.c.8075a443
- .debug_info    0x00023bb7     0x14c8 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cchiOCdw.debug.temp.o
-                0x00023bb7                sprite.c.a42fe381
- .debug_info    0x0002507f      0x831 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccf5N8RZ.debug.temp.o
-                0x0002507f                state.c.bc553a83
- .debug_info    0x000258b0     0x7271 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccMjxIKK.debug.temp.o
-                0x000258b0                system.c.bfc4a61a
- .debug_info    0x0002cb21      0x834 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc8ZYezw.debug.temp.o
-                0x0002cb21                timer.c.0dc7d29c
- .debug_info    0x0002d355      0xed2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccRP8SET.debug.temp.o
-                0x0002d355                camera.c.3ecd9374
- .debug_info    0x0002e227     0x2066 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccT2rxSk.debug.temp.o
-                0x0002e227                simplebuffer.c.9d437e8d
- .debug_info    0x0003028d     0x1141 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccXMk1qQ.debug.temp.o
-                0x0003028d                bitmap.c.9e71a818
- .debug_info    0x000313ce     0x12cc /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc0tFNug.debug.temp.o
-                0x000313ce                custom.c.51ef73d8
- .debug_info    0x0003269a      0xee1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cczYNbIC.debug.temp.o
-                0x0003269a                disk_file.c.ee7d7ff0
- .debug_info    0x0003357b     0x1e8c /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccUJKHil.debug.temp.o
-                0x0003357b                extview.c.9b60aa40
- .debug_info    0x00035407      0x937 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccNA1ioq.debug.temp.o
-                0x00035407                file.c.41c4edf6
- .debug_info    0x00035d3e     0x1092 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cctMqfUt.debug.temp.o
-                0x00035d3e                font.c.20d96dbf
- .debug_info    0x00036dd0      0xc8e /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccHtSWVF.debug.temp.o
-                0x00036dd0                palette.c.adb37632
- .debug_info    0x00037a5e      0xad1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cctC4A7H.debug.temp.o
-                0x00037a5e                sprite.c.2e6fdfab
- .debug_info    0x0003852f      0x5ca /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cccAZxAK.debug.temp.o
-                0x0003852f                tag.c.dd32d3b5
- .debug_info    0x00038af9      0x5e9 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc5uctps.debug.temp.o
-                0x00038af9                intrin.c.d6014f4c
- .debug_info    0x000390e2      0xc3a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccxMKLZK.debug.temp.o
-                0x000390e2                printf.c.706ab427
- .debug_info    0x00039d1c     0x12ff /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccnNr26j.debug.temp.o
-                0x00039d1c                stdio_file.c.956e2d20
- .debug_info    0x0003b01b      0xcd9 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc1oRkK2.debug.temp.o
-                0x0003b01b                stdio_putchar.c.b8050990
- .debug_info    0x0003bcf4      0xf3a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccKQJ4iL.debug.temp.o
-                0x0003bcf4                stdlib.c.e117ea65
- .debug_info    0x0003cc2e      0x685 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccKigBF5.debug.temp.o
-                0x0003cc2e                string.c.5ddbc6ca
- .debug_info    0x0003d2b3     0x1051 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccFowYY5.debug.temp.o
-                0x0003d2b3                gcc8_c_support.c.c8ce3952
- .debug_info    0x0003e304       0x85 _deps/bartman_gcc_support-build/CMakeFiles/bartman_gcc_support.dir/src/gcc8_a_support.s.obj
+ .debug_info    0x00000000     0xf446 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ .debug_info    0x0000f446      0x8a3 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans1.ltrans.o
+ .debug_info    0x0000fce9      0x8e7 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc7oUiHn.debug.temp.o
+                0x0000fce9                main.c.a8e839dd
+ .debug_info    0x000105d0     0x1495 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccAycJU7.debug.temp.o
+                0x000105d0                ai.c.64ec2033
+ .debug_info    0x00011a65     0x2d8b /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccf352ZN.debug.temp.o
+                0x00011a65                game.c.04df0abc
+ .debug_info    0x000147f0      0x514 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc9OZSX1.debug.temp.o
+                0x000147f0                input.c.c8b14b0b
+ .debug_info    0x00014d04     0x15f5 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc0lT8D3.debug.temp.o
+                0x00014d04                menu.c.eace2dd4
+ .debug_info    0x000162f9     0x1c4b /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccMz6JRp.debug.temp.o
+                0x000162f9                blit.c.5bd35e66
+ .debug_info    0x00017f44     0x2c1b /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cccpC2pG.debug.temp.o
+                0x00017f44                copper.c.fe84e9bb
+ .debug_info    0x0001ab5f      0x4c5 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccw7DPmd.debug.temp.o
+                0x0001ab5f                game.c.ca454ffb
+ .debug_info    0x0001b024     0x14bc /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccz9ZSUo.debug.temp.o
+                0x0001b024                key.c.ba4cc617
+ .debug_info    0x0001c4e0      0xe98 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccT8noax.debug.temp.o
+                0x0001c4e0                log.c.5a31bcea
+ .debug_info    0x0001d378      0xccf /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccP6RlrM.debug.temp.o
+                0x0001d378                memory.c.d0a7dc93
+ .debug_info    0x0001e047     0x14cd /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc2tKmxJ.debug.temp.o
+                0x0001e047                mouse.c.aa0aed0b
+ .debug_info    0x0001f514     0x3f76 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccFkAWJe.debug.temp.o
+                0x0001f514                ptplayer.c.3f21487b
+ .debug_info    0x0002348a      0x7a9 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccuFvQMN.debug.temp.o
+                0x0002348a                rand.c.8075a443
+ .debug_info    0x00023c33     0x14c8 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccyTjZB1.debug.temp.o
+                0x00023c33                sprite.c.a42fe381
+ .debug_info    0x000250fb      0x831 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccNGVst7.debug.temp.o
+                0x000250fb                state.c.bc553a83
+ .debug_info    0x0002592c     0x7271 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccnryHDl.debug.temp.o
+                0x0002592c                system.c.bfc4a61a
+ .debug_info    0x0002cb9d      0x834 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc65ZusQ.debug.temp.o
+                0x0002cb9d                timer.c.0dc7d29c
+ .debug_info    0x0002d3d1      0xed2 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccHwNasa.debug.temp.o
+                0x0002d3d1                camera.c.3ecd9374
+ .debug_info    0x0002e2a3     0x2066 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccvXb6Si.debug.temp.o
+                0x0002e2a3                simplebuffer.c.9d437e8d
+ .debug_info    0x00030309     0x1141 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccHPR7VM.debug.temp.o
+                0x00030309                bitmap.c.9e71a818
+ .debug_info    0x0003144a     0x12cc /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc0A7MNa.debug.temp.o
+                0x0003144a                custom.c.51ef73d8
+ .debug_info    0x00032716      0xee1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccwqJ6MP.debug.temp.o
+                0x00032716                disk_file.c.ee7d7ff0
+ .debug_info    0x000335f7     0x1e8c /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccAoPqPe.debug.temp.o
+                0x000335f7                extview.c.9b60aa40
+ .debug_info    0x00035483      0x937 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc1l9n2J.debug.temp.o
+                0x00035483                file.c.41c4edf6
+ .debug_info    0x00035dba     0x1092 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc0kqpBM.debug.temp.o
+                0x00035dba                font.c.20d96dbf
+ .debug_info    0x00036e4c      0xc8e /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccNo0a3A.debug.temp.o
+                0x00036e4c                palette.c.adb37632
+ .debug_info    0x00037ada      0xad1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc3GanME.debug.temp.o
+                0x00037ada                sprite.c.2e6fdfab
+ .debug_info    0x000385ab      0x5ca /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccs8EHeH.debug.temp.o
+                0x000385ab                tag.c.dd32d3b5
+ .debug_info    0x00038b75      0x5e9 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccqVoujU.debug.temp.o
+                0x00038b75                intrin.c.d6014f4c
+ .debug_info    0x0003915e      0xc3a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc4txZQ8.debug.temp.o
+                0x0003915e                printf.c.706ab427
+ .debug_info    0x00039d98     0x12ff /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccuBLlCF.debug.temp.o
+                0x00039d98                stdio_file.c.956e2d20
+ .debug_info    0x0003b097      0xcd9 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccy8JhW8.debug.temp.o
+                0x0003b097                stdio_putchar.c.b8050990
+ .debug_info    0x0003bd70      0xf3a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccSVcmzZ.debug.temp.o
+                0x0003bd70                stdlib.c.e117ea65
+ .debug_info    0x0003ccaa      0x685 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cchel0F1.debug.temp.o
+                0x0003ccaa                string.c.5ddbc6ca
+ .debug_info    0x0003d32f     0x1051 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccbg8kei.debug.temp.o
+                0x0003d32f                gcc8_c_support.c.c8ce3952
+ .debug_info    0x0003e380       0x85 _deps/bartman_gcc_support-build/CMakeFiles/bartman_gcc_support.dir/src/gcc8_a_support.s.obj
 
 .debug_abbrev   0x00000000     0x4973
  *(.debug_abbrev)
- .debug_abbrev  0x00000000      0x3eb /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- .debug_abbrev  0x000003eb       0xd6 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans1.ltrans.o
- .debug_abbrev  0x000004c1      0x13c /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccyhLbrf.debug.temp.o
- .debug_abbrev  0x000005fd      0x215 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccvYfaSL.debug.temp.o
- .debug_abbrev  0x00000812      0x356 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc16afuo.debug.temp.o
- .debug_abbrev  0x00000b68       0x73 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc4DvjX6.debug.temp.o
- .debug_abbrev  0x00000bdb      0x20a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc6D8VAb.debug.temp.o
- .debug_abbrev  0x00000de5      0x26d /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccUDaeVu.debug.temp.o
- .debug_abbrev  0x00001052      0x315 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccS76xFH.debug.temp.o
- .debug_abbrev  0x00001367       0x63 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccu0NskG.debug.temp.o
- .debug_abbrev  0x000013ca      0x205 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjW6nnN.debug.temp.o
- .debug_abbrev  0x000015cf      0x26b /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc6mqQij.debug.temp.o
- .debug_abbrev  0x0000183a      0x1f7 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccDork39.debug.temp.o
- .debug_abbrev  0x00001a31      0x1d1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc11Wkgm.debug.temp.o
- .debug_abbrev  0x00001c02      0x2ec /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cct3mLyM.debug.temp.o
- .debug_abbrev  0x00001eee      0x123 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccIcw80k.debug.temp.o
- .debug_abbrev  0x00002011      0x2da /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cchiOCdw.debug.temp.o
- .debug_abbrev  0x000022eb      0x139 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccf5N8RZ.debug.temp.o
- .debug_abbrev  0x00002424      0x3c1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccMjxIKK.debug.temp.o
- .debug_abbrev  0x000027e5      0x19e /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc8ZYezw.debug.temp.o
- .debug_abbrev  0x00002983      0x1e3 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccRP8SET.debug.temp.o
- .debug_abbrev  0x00002b66      0x320 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccT2rxSk.debug.temp.o
- .debug_abbrev  0x00002e86      0x26d /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccXMk1qQ.debug.temp.o
- .debug_abbrev  0x000030f3      0x17d /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc0tFNug.debug.temp.o
- .debug_abbrev  0x00003270      0x26f /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cczYNbIC.debug.temp.o
- .debug_abbrev  0x000034df      0x31a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccUJKHil.debug.temp.o
- .debug_abbrev  0x000037f9      0x139 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccNA1ioq.debug.temp.o
- .debug_abbrev  0x00003932      0x258 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cctMqfUt.debug.temp.o
- .debug_abbrev  0x00003b8a      0x19d /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccHtSWVF.debug.temp.o
- .debug_abbrev  0x00003d27      0x1d0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cctC4A7H.debug.temp.o
- .debug_abbrev  0x00003ef7       0xaa /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cccAZxAK.debug.temp.o
- .debug_abbrev  0x00003fa1       0xbe /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc5uctps.debug.temp.o
- .debug_abbrev  0x0000405f      0x18b /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccxMKLZK.debug.temp.o
- .debug_abbrev  0x000041ea      0x14d /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccnNr26j.debug.temp.o
- .debug_abbrev  0x00004337      0x113 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc1oRkK2.debug.temp.o
- .debug_abbrev  0x0000444a      0x1e1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccKQJ4iL.debug.temp.o
- .debug_abbrev  0x0000462b       0xbd /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccKigBF5.debug.temp.o
- .debug_abbrev  0x000046e8      0x26c /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccFowYY5.debug.temp.o
+ .debug_abbrev  0x00000000      0x3eb /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ .debug_abbrev  0x000003eb       0xd6 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans1.ltrans.o
+ .debug_abbrev  0x000004c1      0x13c /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc7oUiHn.debug.temp.o
+ .debug_abbrev  0x000005fd      0x215 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccAycJU7.debug.temp.o
+ .debug_abbrev  0x00000812      0x356 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccf352ZN.debug.temp.o
+ .debug_abbrev  0x00000b68       0x73 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc9OZSX1.debug.temp.o
+ .debug_abbrev  0x00000bdb      0x20a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc0lT8D3.debug.temp.o
+ .debug_abbrev  0x00000de5      0x26d /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccMz6JRp.debug.temp.o
+ .debug_abbrev  0x00001052      0x315 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cccpC2pG.debug.temp.o
+ .debug_abbrev  0x00001367       0x63 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccw7DPmd.debug.temp.o
+ .debug_abbrev  0x000013ca      0x205 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccz9ZSUo.debug.temp.o
+ .debug_abbrev  0x000015cf      0x26b /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccT8noax.debug.temp.o
+ .debug_abbrev  0x0000183a      0x1f7 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccP6RlrM.debug.temp.o
+ .debug_abbrev  0x00001a31      0x1d1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc2tKmxJ.debug.temp.o
+ .debug_abbrev  0x00001c02      0x2ec /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccFkAWJe.debug.temp.o
+ .debug_abbrev  0x00001eee      0x123 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccuFvQMN.debug.temp.o
+ .debug_abbrev  0x00002011      0x2da /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccyTjZB1.debug.temp.o
+ .debug_abbrev  0x000022eb      0x139 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccNGVst7.debug.temp.o
+ .debug_abbrev  0x00002424      0x3c1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccnryHDl.debug.temp.o
+ .debug_abbrev  0x000027e5      0x19e /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc65ZusQ.debug.temp.o
+ .debug_abbrev  0x00002983      0x1e3 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccHwNasa.debug.temp.o
+ .debug_abbrev  0x00002b66      0x320 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccvXb6Si.debug.temp.o
+ .debug_abbrev  0x00002e86      0x26d /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccHPR7VM.debug.temp.o
+ .debug_abbrev  0x000030f3      0x17d /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc0A7MNa.debug.temp.o
+ .debug_abbrev  0x00003270      0x26f /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccwqJ6MP.debug.temp.o
+ .debug_abbrev  0x000034df      0x31a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccAoPqPe.debug.temp.o
+ .debug_abbrev  0x000037f9      0x139 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc1l9n2J.debug.temp.o
+ .debug_abbrev  0x00003932      0x258 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc0kqpBM.debug.temp.o
+ .debug_abbrev  0x00003b8a      0x19d /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccNo0a3A.debug.temp.o
+ .debug_abbrev  0x00003d27      0x1d0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc3GanME.debug.temp.o
+ .debug_abbrev  0x00003ef7       0xaa /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccs8EHeH.debug.temp.o
+ .debug_abbrev  0x00003fa1       0xbe /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccqVoujU.debug.temp.o
+ .debug_abbrev  0x0000405f      0x18b /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc4txZQ8.debug.temp.o
+ .debug_abbrev  0x000041ea      0x14d /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccuBLlCF.debug.temp.o
+ .debug_abbrev  0x00004337      0x113 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccy8JhW8.debug.temp.o
+ .debug_abbrev  0x0000444a      0x1e1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccSVcmzZ.debug.temp.o
+ .debug_abbrev  0x0000462b       0xbd /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cchel0F1.debug.temp.o
+ .debug_abbrev  0x000046e8      0x26c /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccbg8kei.debug.temp.o
  .debug_abbrev  0x00004954       0x1f _deps/bartman_gcc_support-build/CMakeFiles/bartman_gcc_support.dir/src/gcc8_a_support.s.obj
 
-.debug_line     0x00000000    0x1e9a0
+.debug_line     0x00000000    0x1e76f
  *(.debug_line .debug_line.* .debug_line_end)
- .debug_line    0x00000000    0x179ba /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- .debug_line    0x000179ba      0x891 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans1.ltrans.o
- .debug_line    0x0001824b      0x2b4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccyhLbrf.debug.temp.o
- .debug_line    0x000184ff      0x200 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccvYfaSL.debug.temp.o
- .debug_line    0x000186ff      0x3d1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc16afuo.debug.temp.o
- .debug_line    0x00018ad0      0x174 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc4DvjX6.debug.temp.o
- .debug_line    0x00018c44      0x328 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc6D8VAb.debug.temp.o
- .debug_line    0x00018f6c      0x336 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccUDaeVu.debug.temp.o
- .debug_line    0x000192a2      0x429 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccS76xFH.debug.temp.o
- .debug_line    0x000196cb      0x153 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccu0NskG.debug.temp.o
- .debug_line    0x0001981e      0x26d /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjW6nnN.debug.temp.o
- .debug_line    0x00019a8b      0x2e8 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc6mqQij.debug.temp.o
- .debug_line    0x00019d73      0x221 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccDork39.debug.temp.o
- .debug_line    0x00019f94      0x35f /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc11Wkgm.debug.temp.o
- .debug_line    0x0001a2f3      0x29b /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cct3mLyM.debug.temp.o
- .debug_line    0x0001a58e      0x1ab /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccIcw80k.debug.temp.o
- .debug_line    0x0001a739      0x32d /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cchiOCdw.debug.temp.o
- .debug_line    0x0001aa66      0x1ae /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccf5N8RZ.debug.temp.o
- .debug_line    0x0001ac14      0x777 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccMjxIKK.debug.temp.o
- .debug_line    0x0001b38b      0x228 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc8ZYezw.debug.temp.o
- .debug_line    0x0001b5b3      0x29b /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccRP8SET.debug.temp.o
- .debug_line    0x0001b84e      0x496 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccT2rxSk.debug.temp.o
- .debug_line    0x0001bce4      0x41b /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccXMk1qQ.debug.temp.o
- .debug_line    0x0001c0ff      0x216 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc0tFNug.debug.temp.o
- .debug_line    0x0001c315      0x33d /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cczYNbIC.debug.temp.o
- .debug_line    0x0001c652      0x40c /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccUJKHil.debug.temp.o
- .debug_line    0x0001ca5e      0x2a7 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccNA1ioq.debug.temp.o
- .debug_line    0x0001cd05      0x2cd /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cctMqfUt.debug.temp.o
- .debug_line    0x0001cfd2      0x278 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccHtSWVF.debug.temp.o
- .debug_line    0x0001d24a      0x21f /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cctC4A7H.debug.temp.o
- .debug_line    0x0001d469      0x255 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cccAZxAK.debug.temp.o
- .debug_line    0x0001d6be       0xd5 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc5uctps.debug.temp.o
- .debug_line    0x0001d793      0x1b3 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccxMKLZK.debug.temp.o
- .debug_line    0x0001d946      0x3c4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccnNr26j.debug.temp.o
- .debug_line    0x0001dd0a      0x305 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc1oRkK2.debug.temp.o
- .debug_line    0x0001e00f      0x3bd /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccKQJ4iL.debug.temp.o
- .debug_line    0x0001e3cc      0x211 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccKigBF5.debug.temp.o
- .debug_line    0x0001e5dd      0x280 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccFowYY5.debug.temp.o
- .debug_line    0x0001e85d      0x143 _deps/bartman_gcc_support-build/CMakeFiles/bartman_gcc_support.dir/src/gcc8_a_support.s.obj
+ .debug_line    0x00000000    0x17789 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ .debug_line    0x00017789      0x891 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans1.ltrans.o
+ .debug_line    0x0001801a      0x2b4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc7oUiHn.debug.temp.o
+ .debug_line    0x000182ce      0x200 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccAycJU7.debug.temp.o
+ .debug_line    0x000184ce      0x3d1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccf352ZN.debug.temp.o
+ .debug_line    0x0001889f      0x174 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc9OZSX1.debug.temp.o
+ .debug_line    0x00018a13      0x328 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc0lT8D3.debug.temp.o
+ .debug_line    0x00018d3b      0x336 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccMz6JRp.debug.temp.o
+ .debug_line    0x00019071      0x429 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cccpC2pG.debug.temp.o
+ .debug_line    0x0001949a      0x153 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccw7DPmd.debug.temp.o
+ .debug_line    0x000195ed      0x26d /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccz9ZSUo.debug.temp.o
+ .debug_line    0x0001985a      0x2e8 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccT8noax.debug.temp.o
+ .debug_line    0x00019b42      0x221 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccP6RlrM.debug.temp.o
+ .debug_line    0x00019d63      0x35f /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc2tKmxJ.debug.temp.o
+ .debug_line    0x0001a0c2      0x29b /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccFkAWJe.debug.temp.o
+ .debug_line    0x0001a35d      0x1ab /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccuFvQMN.debug.temp.o
+ .debug_line    0x0001a508      0x32d /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccyTjZB1.debug.temp.o
+ .debug_line    0x0001a835      0x1ae /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccNGVst7.debug.temp.o
+ .debug_line    0x0001a9e3      0x777 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccnryHDl.debug.temp.o
+ .debug_line    0x0001b15a      0x228 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc65ZusQ.debug.temp.o
+ .debug_line    0x0001b382      0x29b /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccHwNasa.debug.temp.o
+ .debug_line    0x0001b61d      0x496 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccvXb6Si.debug.temp.o
+ .debug_line    0x0001bab3      0x41b /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccHPR7VM.debug.temp.o
+ .debug_line    0x0001bece      0x216 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc0A7MNa.debug.temp.o
+ .debug_line    0x0001c0e4      0x33d /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccwqJ6MP.debug.temp.o
+ .debug_line    0x0001c421      0x40c /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccAoPqPe.debug.temp.o
+ .debug_line    0x0001c82d      0x2a7 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc1l9n2J.debug.temp.o
+ .debug_line    0x0001cad4      0x2cd /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc0kqpBM.debug.temp.o
+ .debug_line    0x0001cda1      0x278 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccNo0a3A.debug.temp.o
+ .debug_line    0x0001d019      0x21f /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc3GanME.debug.temp.o
+ .debug_line    0x0001d238      0x255 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccs8EHeH.debug.temp.o
+ .debug_line    0x0001d48d       0xd5 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccqVoujU.debug.temp.o
+ .debug_line    0x0001d562      0x1b3 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc4txZQ8.debug.temp.o
+ .debug_line    0x0001d715      0x3c4 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccuBLlCF.debug.temp.o
+ .debug_line    0x0001dad9      0x305 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccy8JhW8.debug.temp.o
+ .debug_line    0x0001ddde      0x3bd /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccSVcmzZ.debug.temp.o
+ .debug_line    0x0001e19b      0x211 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cchel0F1.debug.temp.o
+ .debug_line    0x0001e3ac      0x280 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccbg8kei.debug.temp.o
+ .debug_line    0x0001e62c      0x143 _deps/bartman_gcc_support-build/CMakeFiles/bartman_gcc_support.dir/src/gcc8_a_support.s.obj
 
-.debug_frame    0x00000000     0x54b8
+.debug_frame    0x00000000     0x54a0
  *(.debug_frame)
- .debug_frame   0x00000000     0x5224 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- .debug_frame   0x00005224      0x1c8 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans1.ltrans.o
- .debug_frame   0x000053ec       0xcc _deps/bartman_gcc_support-build/CMakeFiles/bartman_gcc_support.dir/src/gcc8_a_support.s.obj
+ .debug_frame   0x00000000     0x520c /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ .debug_frame   0x0000520c      0x1c8 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans1.ltrans.o
+ .debug_frame   0x000053d4       0xcc _deps/bartman_gcc_support-build/CMakeFiles/bartman_gcc_support.dir/src/gcc8_a_support.s.obj
 
-.debug_str      0x00000000     0x110f
+.debug_str      0x00000000     0x1106
  *(.debug_str)
- .debug_str     0x00000000       0x25 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
- .debug_str     0x00000025        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans1.ltrans.o
- .debug_str     0x00000025       0x70 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccvYfaSL.debug.temp.o
- .debug_str     0x00000095       0x90 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc16afuo.debug.temp.o
- .debug_str     0x00000125       0x28 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc6D8VAb.debug.temp.o
- .debug_str     0x0000014d      0x165 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccUDaeVu.debug.temp.o
- .debug_str     0x000002b2       0x60 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccS76xFH.debug.temp.o
- .debug_str     0x00000312       0x1e /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjW6nnN.debug.temp.o
- .debug_str     0x00000330       0x46 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc6mqQij.debug.temp.o
- .debug_str     0x00000376       0x99 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccDork39.debug.temp.o
- .debug_str     0x0000040f       0x24 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc11Wkgm.debug.temp.o
- .debug_str     0x00000433      0x1da /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cct3mLyM.debug.temp.o
- .debug_str     0x0000060d        0x6 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccIcw80k.debug.temp.o
- .debug_str     0x00000613       0xb7 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cchiOCdw.debug.temp.o
- .debug_str     0x000006ca       0x3b /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccf5N8RZ.debug.temp.o
- .debug_str     0x00000705      0x4d1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccMjxIKK.debug.temp.o
- .debug_str     0x00000bd6        0xd /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc8ZYezw.debug.temp.o
- .debug_str     0x00000be3       0x41 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccRP8SET.debug.temp.o
- .debug_str     0x00000c24       0x84 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccT2rxSk.debug.temp.o
- .debug_str     0x00000ca8       0x79 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccXMk1qQ.debug.temp.o
- .debug_str     0x00000d21       0x6e /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cczYNbIC.debug.temp.o
- .debug_str     0x00000d8f       0x6e /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccUJKHil.debug.temp.o
- .debug_str     0x00000dfd       0x15 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccNA1ioq.debug.temp.o
- .debug_str     0x00000e12       0x5c /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cctMqfUt.debug.temp.o
- .debug_str     0x00000e6e       0x4c /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccHtSWVF.debug.temp.o
- .debug_str     0x00000eba       0x3c /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cctC4A7H.debug.temp.o
- .debug_str     0x00000ef6       0x3a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccxMKLZK.debug.temp.o
- .debug_str     0x00000f30       0x4b /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccnNr26j.debug.temp.o
- .debug_str     0x00000f7b        0x7 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccKQJ4iL.debug.temp.o
- .debug_str     0x00000f82       0x12 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccKigBF5.debug.temp.o
- .debug_str     0x00000f94       0x8a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccFowYY5.debug.temp.o
- .debug_str     0x0000101e       0xf1 _deps/bartman_gcc_support-build/CMakeFiles/bartman_gcc_support.dir/src/gcc8_a_support.s.obj
+ .debug_str     0x00000000       0x1c /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
+ .debug_str     0x0000001c        0x0 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans1.ltrans.o
+ .debug_str     0x0000001c       0x70 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccAycJU7.debug.temp.o
+ .debug_str     0x0000008c       0x90 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccf352ZN.debug.temp.o
+ .debug_str     0x0000011c       0x28 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc0lT8D3.debug.temp.o
+ .debug_str     0x00000144      0x165 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccMz6JRp.debug.temp.o
+ .debug_str     0x000002a9       0x60 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cccpC2pG.debug.temp.o
+ .debug_str     0x00000309       0x1e /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccz9ZSUo.debug.temp.o
+ .debug_str     0x00000327       0x46 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccT8noax.debug.temp.o
+ .debug_str     0x0000036d       0x99 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccP6RlrM.debug.temp.o
+ .debug_str     0x00000406       0x24 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc2tKmxJ.debug.temp.o
+ .debug_str     0x0000042a      0x1da /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccFkAWJe.debug.temp.o
+ .debug_str     0x00000604        0x6 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccuFvQMN.debug.temp.o
+ .debug_str     0x0000060a       0xb7 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccyTjZB1.debug.temp.o
+ .debug_str     0x000006c1       0x3b /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccNGVst7.debug.temp.o
+ .debug_str     0x000006fc      0x4d1 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccnryHDl.debug.temp.o
+ .debug_str     0x00000bcd        0xd /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc65ZusQ.debug.temp.o
+ .debug_str     0x00000bda       0x41 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccHwNasa.debug.temp.o
+ .debug_str     0x00000c1b       0x84 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccvXb6Si.debug.temp.o
+ .debug_str     0x00000c9f       0x79 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccHPR7VM.debug.temp.o
+ .debug_str     0x00000d18       0x6e /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccwqJ6MP.debug.temp.o
+ .debug_str     0x00000d86       0x6e /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccAoPqPe.debug.temp.o
+ .debug_str     0x00000df4       0x15 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc1l9n2J.debug.temp.o
+ .debug_str     0x00000e09       0x5c /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc0kqpBM.debug.temp.o
+ .debug_str     0x00000e65       0x4c /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccNo0a3A.debug.temp.o
+ .debug_str     0x00000eb1       0x3c /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc3GanME.debug.temp.o
+ .debug_str     0x00000eed       0x3a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cc4txZQ8.debug.temp.o
+ .debug_str     0x00000f27       0x4b /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccuBLlCF.debug.temp.o
+ .debug_str     0x00000f72        0x7 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccSVcmzZ.debug.temp.o
+ .debug_str     0x00000f79       0x12 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//cchel0F1.debug.temp.o
+ .debug_str     0x00000f8b       0x8a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccbg8kei.debug.temp.o
+ .debug_str     0x00001015       0xf1 _deps/bartman_gcc_support-build/CMakeFiles/bartman_gcc_support.dir/src/gcc8_a_support.s.obj
 
 .debug_loc
  *(.debug_loc)
@@ -1217,12 +1217,12 @@ text            0x00016a9e       0x12
  *(.debug_line_str)
 
 .debug_loclists
-                0x00000000    0x170f7
+                0x00000000    0x16ea8
  *(.debug_loclists)
  .debug_loclists
-                0x00000000    0x168e6 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00000000    0x16697 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .debug_loclists
-                0x000168e6      0x811 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans1.ltrans.o
+                0x00016697      0x811 /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans1.ltrans.o
 
 .debug_macro
  *(.debug_macro)
@@ -1231,12 +1231,12 @@ text            0x00016a9e       0x12
  *(.debug_names)
 
 .debug_rnglists
-                0x00000000     0x2539
+                0x00000000     0x2498
  *(.debug_rnglists)
  .debug_rnglists
-                0x00000000     0x243b /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans0.ltrans.o
+                0x00000000     0x239a /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans0.ltrans.o
  .debug_rnglists
-                0x0000243b       0xfe /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccjWsJWU.ltrans1.ltrans.o
+                0x0000239a       0xfe /var/folders/cd/0s72k2v14299px3vkqj0bhsr0000gp/T//ccG09tZA.ltrans1.ltrans.o
 
 .debug_str_offsets
  *(.debug_str_offsets)
