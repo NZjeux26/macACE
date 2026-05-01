@@ -85,5 +85,5 @@ void checkShieldWallCaptures(GameState *state, UBYTE pieceIndex, MoveResult *res
 void checkExitFort(GameState *state);
 void checkSurrounded(GameState *state, UBYTE pieceIndex);
 void checkforMisplacedPieces(void); //doesn't need the state passed since it's read only.
-
+void findCPUType(void);
 #endif // _GAME_H_

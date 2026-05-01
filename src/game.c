@@ -16,6 +16,8 @@
 #include <ace/utils/string.h>
 #include <ace/utils/palette.h>
 #include <mini_std/stdio.h>
+#include <exec/execbase.h>
+#include <proto/exec.h>
 
 /*------DEFINES Setup------*/
 //Amiga Pal LOWRES is 320x256
@@ -88,8 +90,8 @@ UBYTE gameWinner = 0; //0 no one, 1 attackers, 2 defenders
 ScreenPos draw_pos[BOARD_SIZE];
 AIMove moveHistory[255]; //Record the move history so we can track for repetitions
 
-UBYTE cpuPlayerTeam = TEAM_ATTACKER;//manually assigned for now, this will be set via the main menu in the future.
-UBYTE humanPlayerTeam = TEAM_DEFENDER;
+UBYTE cpuPlayerTeam = TEAM_DEFENDER;//manually assigned for now, this will be set via the main menu in the future.
+UBYTE humanPlayerTeam = TEAM_ATTACKER;
 UBYTE waitFrame = 0;
 UBYTE gameTurnCounter = 0;
 WORD gamePlyCounter = 0;
@@ -136,6 +138,8 @@ void gameGsCreate(void) {
     pBmMouseCursorData,0,0,CURSOR_SPRITE_WIDTH,CURSOR_SPRITE_HEIGHT,MINTERM_COOKIE);
 
     gameWinner = 0; //reset the game winner at the start of the game, in case we're coming from the menu after a game has ended.
+    gamePlyCounter = 0;
+    gameTurnCounter = 0;
 
     loadAssets();
     setupPieces(&g_state); //sets up the pieces in their starting positions in the board array and in the piece structs
@@ -143,7 +147,8 @@ void gameGsCreate(void) {
     buildBoard(&g_state); //sets up the board array with the pieces in their starting positions and the special squares marked
     drawPieces(); //draws the board and pieces to the screen, will need to be called again every time a piece moves or is captured
     g_state.currentPlayer = TEAM_ATTACKER;
-    //currentPlayer = TEAM_ATTACKER; //reset the current player to the attackers at the start of the game, in case we're coming from the menu after a game has ended.
+    
+    findCPUType();
     
     systemUnuse();
 
@@ -233,9 +238,7 @@ void gameGsLoop(void) {
         
         movePiece(&g_state, cpuMove.fromIndex, cpuMove.toIndex, &cpuresult);
         
-        //gamePlyCounter++;
         gameTurnCounter++; //increment the turn counter, this counts the number of full turns that have been made in the game
-        //moveHistory[gamePlyCounter] = (AIMove){cpuMove.fromIndex, cpuMove.toIndex}; //record the move in the move history for repetition checking in the AI
         
         if(cpuresult.moveComplete){
           if(cpuresult.clearHighlight == 1){ //if the move function set the flag to clear the highlight, then we need to clear it
@@ -256,7 +259,7 @@ void gameGsLoop(void) {
             pieceHasBGToRestore[0] = 1; //set the flag to restore the background
             pieceHasBGToRestore[1] = 1; //set the flag to restore the background 
           }
-          checkforMisplacedPieces(); //check for any pieces that are in an invalid position, such as on top of each other, and log them for debugging.
+          //checkforMisplacedPieces(); //check for any pieces that are in an invalid position, such as on top of each other, and log them for debugging.
           
           waitFrame = 0; //reset the wait frame flag, so that the CPU move only happens once per turn and not every frame while it's the CPU player's turn
         }
@@ -277,162 +280,16 @@ void gameGsLoop(void) {
     systemIdleEnd();
 }
 
-void checkforMisplacedPieces(void){
-    BOOL mismatchFound = FALSE;
-    // --- PASS 1: Pieces -> boardState ---
-    for (UBYTE i = 0; i < MAX_ATTACKERS; i++) {
-        if (!g_state.attackers[i].captured) {
-            UBYTE pos = g_state.attackers[i].pos;
-
-            if (g_state.boardState[pos] != 2) {
-                if (!mismatchFound) {
-                    logWrite("---- MISMATCH DETECTED ----\n");
-                    mismatchFound = TRUE;
-                }
-                logWrite("Attacker %d at %d not correctly in boardState (found %d)\n",
-                         i, pos, g_state.boardState[pos]);
-            }
-        }
-    }
-
-    for (UBYTE i = 1; i < MAX_DEFENDERS; i++) {
-        if (!g_state.defenders[i].captured) {
-            UBYTE pos = g_state.defenders[i].pos;
-
-            if (g_state.boardState[pos] != 1) {
-                if (!mismatchFound) {
-                    logWrite("---- MISMATCH DETECTED ----\n");
-                    mismatchFound = TRUE;
-                }
-                logWrite("Defender %d at %d not correctly in boardState (found %d)\n",
-                         i, pos, g_state.boardState[pos]);
-            }
-        }
-    }
-
-    // --- PASS 2: boardState -> Pieces ---
-    for (UBYTE pos = 13; pos < 155; pos++) {
-
-        if (g_state.boardState[pos] == 1) {
-            BOOL found = FALSE;
-
-            for (UBYTE i = 1; i < MAX_DEFENDERS; i++) {
-                if (!g_state.defenders[i].captured &&
-                    g_state.defenders[i].pos == pos) {
-                    found = TRUE;
-                    break;
-                }
-            }
-
-            if (!found) {
-                if (!mismatchFound) {
-                    logWrite("---- MISMATCH DETECTED ----\n");
-                    mismatchFound = TRUE;
-                }
-                logWrite("boardState pos %d = DEFENDER but no matching defender struct\n", pos);
-            }
-        }
-
-        else if (g_state.boardState[pos] == 2) {
-            BOOL found = FALSE;
-
-            for (UBYTE i = 0; i < MAX_ATTACKERS; i++) {
-                if (!g_state.attackers[i].captured &&
-                    g_state.attackers[i].pos == pos) {
-                    found = TRUE;
-                    break;
-                }
-            }
-
-            if (!found) {
-                if (!mismatchFound) {
-                    logWrite("---- MISMATCH DETECTED ----\n");
-                    mismatchFound = TRUE;
-                }
-                logWrite("boardState pos %d = ATTACKER but no matching attacker struct\n", pos);
-            }
-        }
-
-        else {
-            for (UBYTE i = 1; i < MAX_DEFENDERS; i++) {
-                if (!g_state.defenders[i].captured &&
-                    g_state.defenders[i].pos == pos) {
-                    if (!mismatchFound) {
-                        logWrite("---- MISMATCH DETECTED ----\n");
-                        mismatchFound = TRUE;
-                    }
-                    logWrite("boardState pos %d EMPTY but Defender %d claims it\n", pos, i);
-                }
-            }
-
-            for (UBYTE i = 0; i < MAX_ATTACKERS; i++) {
-                if (!g_state.attackers[i].captured &&
-                    g_state.attackers[i].pos == pos) {
-                    if (!mismatchFound) {
-                        logWrite("---- MISMATCH DETECTED ----\n");
-                        mismatchFound = TRUE;
-                    }
-                    logWrite("boardState pos %d EMPTY but Attacker %d claims it\n", pos, i);
-                }
-            }
-        }
-    }
-
-    // --- PASS 3: Duplicate positions (this is the important new bit) ---
-
-    // Attacker vs attacker
-    for (UBYTE i = 0; i < MAX_ATTACKERS; i++) {
-        if (g_state.attackers[i].captured) continue;
-
-        for (UBYTE j = i + 1; j < MAX_ATTACKERS; j++) {
-            if (!g_state.attackers[j].captured &&
-                g_state.attackers[i].pos == g_state.attackers[j].pos) {
-
-                if (!mismatchFound) {
-                    logWrite("---- MISMATCH DETECTED ----\n");
-                    mismatchFound = TRUE;
-                }
-                logWrite("Attacker %d and Attacker %d both at %d\n",
-                         i, j, g_state.attackers[i].pos);
-            }
-        }
-    }
-
-    // Defender vs defender
-    for (UBYTE i = 1; i < MAX_DEFENDERS; i++) {
-        if (g_state.defenders[i].captured) continue;
-
-        for (UBYTE j = i + 1; j < MAX_DEFENDERS; j++) {
-            if (!g_state.defenders[j].captured &&
-                g_state.defenders[i].pos == g_state.defenders[j].pos) {
-
-                if (!mismatchFound) {
-                    logWrite("---- MISMATCH DETECTED ----\n");
-                    mismatchFound = TRUE;
-                }
-                logWrite("Defender %d and Defender %d both at %d\n",
-                         i, j, g_state.defenders[i].pos);
-            }
-        }
-    }
-
-    // Attacker vs defender
-    for (UBYTE i = 0; i < MAX_ATTACKERS; i++) {
-        if (g_state.attackers[i].captured) continue;
-
-        for (UBYTE j = 1; j < MAX_DEFENDERS; j++) {
-            if (!g_state.defenders[j].captured &&
-                g_state.attackers[i].pos == g_state.defenders[j].pos) {
-
-                if (!mismatchFound) {
-                    logWrite("---- MISMATCH DETECTED ----\n");
-                    mismatchFound = TRUE;
-                }
-                logWrite("Attacker %d and Defender %d both at %d\n",
-                         i, j, g_state.attackers[i].pos);
-            }
-        }
-    }
+void findCPUType(void){
+    struct ExecBase *SysBase = *((struct ExecBase **)4); // ExecBase is always at address 4
+    
+    UWORD attnFlags = SysBase->AttnFlags;
+    
+    if(attnFlags & AFF_68060) logWrite("CPU: 68060\n");
+    else if(attnFlags & AFF_68040) logWrite("CPU: 68040\n");
+    else if(attnFlags & AFF_68030) logWrite("CPU: 68030\n");
+    else if(attnFlags & AFF_68020) logWrite("CPU: 68020\n");
+    else logWrite("CPU: 68000\n");
 }
 
   /* On click
@@ -864,7 +721,7 @@ void movePiece(GameState *state, UBYTE oldIndex, UBYTE newIndex, MoveResult *res
 
   moveHistory[gamePlyCounter] = (AIMove){oldIndex, newIndex}; //record the move in the move history for repetition checking in the AI
   gamePlyCounter++; //increment the ply counter, this counts the number of half moves that have been made in the game.
-  
+
   checkGameEnd();
 }
 

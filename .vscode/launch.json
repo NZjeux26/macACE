@@ -16,7 +16,7 @@
       "name": "Amiga 1200 Mac",
       "config": "A1200",
       "program": "${workspaceFolder}/build/macAce",
-      "kickstart": "/Users/phillipb/Documents/FS-UAE/Kickstarts/Kickstart v3.1 r40.68.rom",
+      "kickstart": "/Users/phillipb/Documents/FS-UAE/Kickstarts/Kickstart v3.1r4068.rom",
       "internalConsoleOptions": "openOnSessionStart"
     },
     {

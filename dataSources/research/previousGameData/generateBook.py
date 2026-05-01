@@ -4,7 +4,7 @@ from collections import defaultdict
 # --- Configuration ---
 CSV_PATH = '/Users/phillipb/Documents/macACE/dataSources/research/previousGameData/boardstate_games.csv'
 OUTPUT_HEADER = '/Users/phillipb/Documents/macACE/dataSources/research/previousGameData/openingBook.h'
-MAX_DEPTH = 6       # Number of plies (half-moves) deep to generate the book
+MAX_DEPTH = 15       # Number of plies (half-moves) deep to generate the book
 MIN_COUNT = 2       # Minimum times a sequence must be played to be included
 
 def reconstruct_moves(attacker, defender):
@@ -78,7 +78,7 @@ def main():
         f.write(f"#define OPENING_BOOK_SIZE {len(entries)}\n\n")
         
         f.write("typedef struct {\n")
-        f.write("    UWORD num_moves;\n")
+        f.write("    UWORD numMoves;\n")
         f.write("    AIMove sequence[MAX_BOOK_DEPTH];\n")
         f.write("    AIMove best_next_move;\n")
         f.write("} BookEntry;\n\n")

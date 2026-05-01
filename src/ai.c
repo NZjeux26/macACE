@@ -15,18 +15,19 @@
 
 //using this global buffer instead of local ones, at depth 2+ the amount of MoveList buffers is quite large and a overflow occurs somewhere
 AIMove moveBuffer[MAX_DEPTH + 1][400];
+BYTE stopbookmoves = 0;
 
 const WORD kingPosWeights[BOARD_SIZE] = {
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,  // dead zone row
     0,  7500,   3000, 1250,  1250,  1250, 1250, 1250, 1250, 1250,  3000, 7500,  0,
     0,  3000,   750,  750,   750,   750,  750,  750,  750,   750,  750,  3000,  0,
-    0,  1250,   750,  350,   350,   350,  350,  350,  350,   350,  750,  1250,  0,
-    0,  1250,   750,  350,   225,   225,  225,  225,  225,   350,  750,  1250,  0,
-    0,  1250,   750,  350,   225,   200,  200,  200,  225,   350,  750,  1250,  0,
-    0,  1250,   750,  350,   225,   200, -120,  200,  225,   350,  750,  1250,  0,
-    0,  1250,   750,  350,   225,   200,  200,  200,  225,   350,  750,  1250,  0,
-    0,  1250,   750,  350,   225,   225,  225,  225,  225,   350,  750,  1250,  0,
-    0,  1250,   750,  350,   350,   350,  350,  350,  350,   350,  750,  1250,  0,
+    0,  1250,   750,  360,   360,   360,  360,  360,  360,   360,  750,  1250,  0,
+    0,  1250,   750,  360,   280,   280,  280,  280,  280,   360,  750,  1250,  0,
+    0,  1250,   750,  360,   280,   200,  200,  200,  280,   360,  750,  1250,  0,
+    0,  1250,   750,  360,   280,   200, -160,  200,  280,   360,  750,  1250,  0,
+    0,  1250,   750,  360,   280,   200,  200,  200,  280,   360,  750,  1250,  0,
+    0,  1250,   750,  360,   280,   280,  280,  280,  280,   360,  750,  1250,  0,
+    0,  1250,   750,  360,   360,   360,  360,  360,  360,   360,  750,  1250,  0,
     0,  3000,   750,  750,   750,   750,  750,  750,  750,   750,  750,  3000,  0,
     0,  7500,   3000, 1250,  1250,  1250, 1250, 1250, 1250,  1250, 3000, 7500,  0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0   // dead zone row
@@ -35,8 +36,7 @@ const WORD kingPosWeights[BOARD_SIZE] = {
 /* ------Helper Functions------ */
 
 void AIgameReset(void){
-    gameTurnCounter = 0;
-    validGeneration = 0;
+    stopbookmoves = 0;
     memset(validMoves, 0, sizeof(validMoves));
 }
 
@@ -146,7 +146,7 @@ WORD kingSafety(GameState *s){
         }
         else if(sq == TEAM_ATTACKER) safety -= 304; //if pieces around the king are attackers, the threat of capture increases
         else if(sq == TEAM_DEFENDER || sq == 4) safety += 28; //But if it's defenders or empty squares, the threat decreases
-        else if(sq == 99) safety += 101; //if the king is against the board edge, it cannot be captured and can relax
+        else if(sq == 99) safety += 141; //if the king is against the board edge, it cannot be captured and can relax
     }
     //check the second squares out from the king, the more emp
     for(UBYTE i = 0; i < 4; i++){
@@ -155,7 +155,7 @@ WORD kingSafety(GameState *s){
             emptyCount++;
             safety += 26; //empty squares increase safety
         }
-        else if(sq == TEAM_ATTACKER) safety -= 122; //if pieces around the king are attackers, the threat of capture increases
+        else if(sq == TEAM_ATTACKER) safety -= 102; //if pieces around the king are attackers, the threat of capture increases
         else if(sq == TEAM_DEFENDER || sq == 4) safety += 12; //But if it's defenders or empty squares, the threat decreases
     }
     return safety;
@@ -239,13 +239,10 @@ WORD evaluateLanes(GameState *s){
         //if there are no enemy blockers in the lane, it's a potential escape route for the king, increasing the score for the defender
         if(enemyBlockers == 0) laneScore += 504;
         //if there are enemy blockers but also friend blockers, it's a contested lane, slightly increasing the score for the defender since they have some presence there
-        else if(friendBlockers > 0 && friendBlockers < 3) laneScore += 286; //This should be less than two.
+        else if(friendBlockers > 0 && friendBlockers < 3) laneScore += 286; //This should be less than two. **Might this accidently encourage blocking lanes?
         //if there are enemy blockers and no friend blockers, it's a dangerous lane for the king, decreasing the score for the defender
-        else laneScore -= 31; //IDK about this, I want to encourage the attack to block, but the AI not to avoid but to attack those pieces.
+        else laneScore -= 131; //IDK about this, I want to encourage the attack to block, but the AI not to avoid but to attack those pieces.
     }   
-
-        
-
     return laneScore;
 }
 
@@ -264,6 +261,7 @@ WORD evaluateBoard(GameState *s){
     WORD lanes = evaluateLanes(s);
 
     //King Safety / Mobility
+    //** I think the corners is influencing normal pieces not just the king. */
     WORD corners = kingPosWeights[kingPos]; //this needs to have a flip enabled so the attackers get a penalty for allowing the king to manouver
     WORD kingSafetyScore = kingSafety(s);
 
@@ -282,13 +280,12 @@ WORD evaluateBoard(GameState *s){
         score += (kingSafetyScore >> 1);
         score += (forceScore >> 2); //reduce the impact of force in the early game
         score += (captureScore >> 1); //reduce the impact of capture potential in the early game
-        
     }
     //Mid game, we start to focus on creating lanes for the king to escape, but maintain our perimeter control so we don't get encircled.
     else if(gameTurnCounter >6 && gameTurnCounter <= 16){
-        score += perimeter; //reduce the impact of perimeter control in the mid game
+        score += perimeter; 
         //lanes
-        score += (lanes >> 1); //reduce the impact of the corners in the mid game, but not as much as early game since they start to become more important as the king starts to move towards them
+        score += lanes; //reduce the impact of the corners in the mid game, but not as much as early game since they start to become more important as the king starts to move towards them
         score += corners; //increase the impact of the corners in the mid game
         //King 
         score += kingSafetyScore;
@@ -301,9 +298,9 @@ WORD evaluateBoard(GameState *s){
     else{
         score += (perimeter >> 1); //reduce the impact of perimeter control in the late game
         //lanes
-        score += lanes; //lanes become more important in the late game as the king starts to try to escape and needs open lanes to do so
-        score += corners; //full impact of the corners in the late game
-        score += kingSafetyScore << 1; //increase the impact of king safety in the late game
+        score += (lanes << 1); //lanes become more important in the late game as the king starts to try to escape and needs open lanes to do so
+        score += (corners << 1); //full impact of the corners in the late game
+        score += (kingSafetyScore << 1); //increase the impact of king safety in the late game
         score += forceScore; 
         score += captureScore; 
     }
@@ -454,9 +451,15 @@ void undoMove(GameState *s, UndoInfo *undo){
     }
 }
 
+/*
+    Searchs through the openingBook for a move to play.
+    Each entry in the book has a score assoicated with it,
+    then using weighted random selection we select a move if we have more than 1 option
+*/
 AIMove findBookMove(AIMove history[], UBYTE currentDepth){
     if(currentDepth > MAX_BOOK_DEPTH) {
         logWrite("findBookMove: depth %d exceeds MAX_BOOK_DEPTH %d\n", currentDepth, MAX_BOOK_DEPTH);
+        stopbookmoves = 1;
         return (AIMove){0}; //if we somehow get a depth that is larger than our history, just return no book move, this is a sanity check to prevent out of bounds access to the history array.
     }
 
@@ -482,17 +485,16 @@ AIMove findBookMove(AIMove history[], UBYTE currentDepth){
         }
         if(match && candidateCount < 16){ //if we find a match, and we have room in our candidate list, add it to the list of potential book moves to choose from.
             candidateIndexes[candidateCount] = i;
-            totalWeight += ((BookEntry*)entry)->best_next_move.score; //the score field in the best_next_move struct is being used to store the weight of that move in the opening book, this is a bit of a hack but it saves us from having to add an additional field to the BookEntry struct just for the weight.
+            //the score field in the best_next_move struct is being used to store the weight of that move in the opening book, this is a bit of a hack 
+            totalWeight += ((BookEntry*)entry)->best_next_move.score; 
             candidateCount++;
-            //((BookEntry*)entry)->best_next_move.score = AI_INF; 
-            //return entry->best_next_move; //if we find a match, return the book move for that entry
         }
     }
     if(candidateCount > 0){
         ULONG r = randUlMax(s_pRandManager, totalWeight); //get a random number between 0 and totalWeight-1
         logWrite("findBookMove: random value is: %ld\n",r);
         ULONG cumulativeWeight = 0;
-
+        //for each candidate we 
         for(UBYTE i = 0; i < candidateCount; i++){
             UWORD idx = candidateIndexes[i];
             cumulativeWeight += ((BookEntry*)(&openingBook[idx]))->best_next_move.score; //again, using the score field to store the weight of the move in the opening book
@@ -507,7 +509,8 @@ AIMove findBookMove(AIMove history[], UBYTE currentDepth){
             }
         }
     }
-    
+    logWrite("No Book Move Found\n");
+    stopbookmoves = 1;
     return (AIMove){0}; //if we don't find a match, return a blank move.
 }
 
@@ -516,6 +519,7 @@ AIMove findBookMove(AIMove history[], UBYTE currentDepth){
 WORD minimax(GameState *s, UBYTE depth, WORD alpha, WORD beta, UBYTE maximizingPlayer){
     if(depth == 0 || s->kingState != KING_ALIVE){
         return evaluateBoard(s);
+        logWrite("Minmax: reached leaf node or terminal state, evaluation score: %d\n", evaluateBoard(s));
     }
 
     AIMove *moveList = moveBuffer[depth];
@@ -560,8 +564,9 @@ AIMove getBestMove(GameState *s){
     
     AIMove *moveList = moveBuffer[0];
     
+    //find a book move, if there are none then default back to minmax to find a move
     AIMove bookMove = findBookMove(moveHistory, gamePlyCounter);
-    if(bookMove.score == AI_INF){
+    if(bookMove.score == AI_INF && stopbookmoves < 1){
         logWrite("Book move found: from %d to %d\n", bookMove.fromIndex, bookMove.toIndex);
         return bookMove; //if we found a book move, return it immediately without doing any further calculations, since book moves are pre-evaluated to be the best move for that position.
     } 
@@ -574,7 +579,6 @@ AIMove getBestMove(GameState *s){
     WORD bestEval = maximisingPlayer ? -AI_INF : AI_INF;
     WORD alpha = -AI_INF;
     WORD beta = AI_INF;
-
 
     getAllMoves(s, s->currentPlayer, moveList, &moveCount);
     
@@ -593,7 +597,7 @@ AIMove getBestMove(GameState *s){
         undoMove(s, &undo);//undo
         
         moveList[i].score = eval;
-
+    
         if(maximisingPlayer){
             if(eval > bestEval){
                 bestEval = eval;
@@ -610,28 +614,7 @@ AIMove getBestMove(GameState *s){
             //attacker tie breaker jitter (needs random number generator)
         }
     }
-    //count moves in moveList witht he same score as bestEval.
-    UBYTE sameMoveCount = 0;
-    for(UBYTE i = 0; i < moveCount; i++){
-        if(moveList[i].score == bestEval) sameMoveCount++;
-    }
-    //if there are more than 3 moves with the same evaluation, we will randomly select one of them to add some variability to the AI's playstyle and make it less predictable.
-    //this is only looking at positive values, the attacker needs neg values
-    //Also this might not be ordering the list correctly, some moves scores it picks don't always line up with the previous playthroughs
-    // if(sameMoveCount > 3){ 
-    //     UBYTE r = randUwMax(s_pRandManager, sameMoveCount); //get a random number between 0 and sameMoveCount-1
-    //     UBYTE idx = 0;
-    //     for(UBYTE i = 0; i < moveCount; i++){
-    //         if(moveList[i].score == bestEval){
-    //             if(idx == r){
-    //                 bestMove = moveList[i];
-    //                 break;
-    //             }
-    //             idx++;
-    //         }
-    //     }
-    // }
-     
+
     for(UBYTE a = 0; a < moveCount - 1; a++){
         for(UBYTE b = a + 1; b < moveCount; b++){
             if(moveList[b].score > moveList[a].score){
@@ -640,6 +623,21 @@ AIMove getBestMove(GameState *s){
                 moveList[b] = tmp;
             }
         }
+    }
+    
+    //count moves in moveList witht he same score as bestEval.
+    UBYTE sameMoveCount = 0;
+    for(UBYTE i = 0; i < moveCount; i++){
+        if(moveList[i].score == bestEval) sameMoveCount++;
+        else break;
+    }
+
+    //if there are more than 2 moves with the same evaluation, we will randomly select one of them to add some variability to the AI's playstyle and make it less predictable.
+    //this is only looking at positive values, the attacker needs neg values
+    //Also this might not be ordering the list correctly, some moves scores it picks don't always line up with the previous playthroughs
+    if(sameMoveCount > 2){ 
+        UBYTE r = randUwMax(s_pRandManager, sameMoveCount); // [0, sameMoveCount-1]
+        bestMove = moveList[r]; // direct index since they're at the front
     }
 
     //mnaybe seperate the valid moves of AI and player, so we don't have to clear them here, but for now this works.
@@ -656,5 +654,6 @@ AIMove getBestMove(GameState *s){
     for(UBYTE i = 0; i < 10; i++){
         logWrite("Move from %d to %d has a score of %d",moveList[i].fromIndex, moveList[i].toIndex,moveList[i].score);
     }
+    
     return bestMove;
 }
