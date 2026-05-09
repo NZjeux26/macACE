@@ -90,8 +90,8 @@ UBYTE gameWinner = 0; //0 no one, 1 attackers, 2 defenders
 ScreenPos draw_pos[BOARD_SIZE];
 AIMove moveHistory[255]; //Record the move history so we can track for repetitions
 
-UBYTE cpuPlayerTeam = TEAM_DEFENDER;//manually assigned for now, this will be set via the main menu in the future.
-UBYTE humanPlayerTeam = TEAM_ATTACKER;
+UBYTE cpuPlayerTeam = TEAM_ATTACKER;//manually assigned for now, this will be set via the main menu in the future.
+UBYTE humanPlayerTeam = TEAM_DEFENDER;
 UBYTE waitFrame = 0;
 UBYTE gameTurnCounter = 0;
 WORD gamePlyCounter = 0;

@@ -239,9 +239,9 @@ WORD evaluateLanes(GameState *s){
         //if there are no enemy blockers in the lane, it's a potential escape route for the king, increasing the score for the defender
         if(enemyBlockers == 0) laneScore += 504;
         //if there are enemy blockers but also friend blockers, it's a contested lane, slightly increasing the score for the defender since they have some presence there
-        else if(friendBlockers > 0 && friendBlockers < 3) laneScore += 286; //This should be less than two. **Might this accidently encourage blocking lanes?
+        else if(friendBlockers > 0 && friendBlockers < 2) laneScore += 286; //This should be less than two. **Might this accidently encourage blocking lanes?
         //if there are enemy blockers and no friend blockers, it's a dangerous lane for the king, decreasing the score for the defender
-        else laneScore -= 131; //IDK about this, I want to encourage the attack to block, but the AI not to avoid but to attack those pieces.
+        else laneScore -= 231; //IDK about this, I want to encourage the attack to block, but the AI not to avoid but to attack those pieces.
     }   
     return laneScore;
 }
@@ -614,7 +614,7 @@ AIMove getBestMove(GameState *s){
             //attacker tie breaker jitter (needs random number generator)
         }
     }
-
+    //sort the list of moves first
     for(UBYTE a = 0; a < moveCount - 1; a++){
         for(UBYTE b = a + 1; b < moveCount; b++){
             if(moveList[b].score > moveList[a].score){
@@ -625,7 +625,7 @@ AIMove getBestMove(GameState *s){
         }
     }
     
-    //count moves in moveList witht he same score as bestEval.
+    //then count moves in moveList witht he same score as bestEval.
     UBYTE sameMoveCount = 0;
     for(UBYTE i = 0; i < moveCount; i++){
         if(moveList[i].score == bestEval) sameMoveCount++;
@@ -651,9 +651,9 @@ AIMove getBestMove(GameState *s){
     logWrite("moveCount: %d\n", moveCount);
     logWrite("Game Turn: %d\n", gameTurnCounter);
     
-    for(UBYTE i = 0; i < 10; i++){
-        logWrite("Move from %d to %d has a score of %d",moveList[i].fromIndex, moveList[i].toIndex,moveList[i].score);
-    }
+    // for(UBYTE i = 0; i < 10; i++){
+    //     logWrite("Move from %d to %d has a score of %d",moveList[i].fromIndex, moveList[i].toIndex,moveList[i].score);
+    // }
     
     return bestMove;
 }

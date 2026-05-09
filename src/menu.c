@@ -26,8 +26,9 @@ static tSimpleBufferManager *s_pMainBuffer;
 /*-----GFX Setup-----*/
 tFont *menufont;    //font
 tTextBitMap *menutextbitmap; //bitmap for the font
-static tBitMap *pBDefwin;
+tBitMap *pBDefwin;
 tBitMap *pBmAckwin;
+tBitMap *menuBG;
 
 void menuGsCreate(void){
     // //create view port and the display buffer for the main viewport
@@ -37,62 +38,21 @@ void menuGsCreate(void){
     s_pMainBuffer = simpleBufferCreate(0,TAG_SIMPLEBUFFER_VPORT, s_pVpMain, TAG_SIMPLEBUFFER_BITMAP_FLAGS, BMF_INTERLEAVED, BMF_CLEAR, TAG_END);
     
     //colour palette for the menu
-    paletteLoadFromPath("data/palette/menuPalette.plt", s_pVpMain->pPalette, 32);
+    paletteLoadFromPath("data/palette/mainmenuPalette2.plt", s_pVpMain->pPalette, 32);
     
-    pBDefwin = bitmapCreateFromPath("data/GFX/defwin.bm",0);
-    pBmAckwin = bitmapCreateFromPath("data/GFX/ackwin.bm",0);
+    //pBDefwin = bitmapCreateFromPath("data/GFX/defwin.bm",0);
+    //pBmAckwin = bitmapCreateFromPath("data/GFX/ackwin.bm",0);
+    menuBG = bitmapCreateFromPath("data/GFX/menubg.bm", 0);
     
-    menufont = fontCreateFromPath("data/font/myacefont.fnt");
+    menufont = fontCreateFromPath("data/font/menufont8.fnt");
     menutextbitmap = fontCreateTextBitMapFromStr(menufont, "XXXXXXXXXXXXXXXXXXX");
     
-    if(gameWinner == 1){
-        //draw attackers win background
-        for(UWORD x = 0; x < s_pMainBuffer->uBfrBounds.uwX; x+=16){
-        for(UWORD y = 0; y < s_pMainBuffer->uBfrBounds.uwY; y+=16){
-        blitCopyAligned(pBmAckwin,x,y,s_pMainBuffer->pBack,x,y,16,16);
-            blitCopyAligned(pBmAckwin,x,y,s_pMainBuffer->pFront,x,y,16,16);
-            }
-        }
-        fontDrawStr(menufont, s_pMainBuffer->pBack, MENU_WIDTH / 2 - 36, MENU_HEIGHT / 2 + 95, "ATTACKERS WIN", 8, FONT_COOKIE, menutextbitmap);
-    }
-    else if(gameWinner == 2){
-
-        for(UWORD x = 0; x < s_pMainBuffer->uBfrBounds.uwX; x+=16){//fills out the background
-        for(UWORD y = 0; y < s_pMainBuffer->uBfrBounds.uwY; y+=16){
-        blitCopyAligned(pBDefwin,x,y,s_pMainBuffer->pBack,x,y,16,16);
-            blitCopyAligned(pBDefwin,x,y,s_pMainBuffer->pFront,x,y,16,16);
-            }
-        }
-
-        fontDrawStr(menufont, s_pMainBuffer->pBack, MENU_WIDTH / 2 - 36, MENU_HEIGHT / 2 + 95, "DEFENDERS WIN", 8, FONT_COOKIE, menutextbitmap);
-    }
-    menutextbitmap = fontCreateTextBitMapFromStr(menufont, "Play Again Y N");
-    fontDrawTextBitMap(s_pMainBuffer->pBack, menutextbitmap, MENU_WIDTH / 2 - 36, MENU_HEIGHT / 2 + 84, 8, FONT_COOKIE);
-    
-
     systemUnuse();
     viewLoad(s_pMenuView);
 }
 
 void menuGsLoop(void){
-    if(keyCheck(KEY_N)){
-        logWrite("getting outta here!\n");
-        gameExit();
-    }
-    
-    //logWrite("Looking at that else!\n");
-    if(keyCheck(KEY_Y)){
-        logWrite("Going back to the Game!\n");
-       // gameWinner = 3; //set the reset signal for the game loop to reset the game.
-        stateChange(g_pStateManager, g_pGameState);
-        logWrite("Switching!\n");
-        return;
-    }
 
-    // //may induce lag having to destroy the text every frame?
-    // menutextbitmap = fontCreateTextBitMapFromStr(menufont, "GAME OVER");
-    // fontDrawTextBitMap(s_pMainBuffer->pBack, menutextbitmap, MENU_WIDTH / 2 - 36, MENU_HEIGHT / 2 + 105, 8, FONT_COOKIE);
-    // //fontDestroyTextBitMap(menutextbitmap);
 
     copProcessBlocks();
     systemIdleBegin();

@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Candle Flicker Engine</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0f1117;color:#cdd3de;font-family:system-ui,sans-serif;font-size:13px;min-height:100vh;display:flex;flex-direction:column}
+
+.app{display:grid;grid-template-columns:260px 1fr;flex:1;min-height:0}
+
+.sidebar{background:#161b27;border-right:1px solid #2a2f3d;padding:1rem;overflow-y:auto;display:flex;flex-direction:column;gap:.85rem}
+
+.main{padding:1rem;overflow:auto;display:flex;flex-direction:column;gap:1rem}
+
+h1{font-size:14px;font-weight:600;color:#f5b942;letter-spacing:.02em}
+.subtitle{font-size:11px;color:#4b5563;margin-top:2px}
+
+.section{border-top:1px solid #2a2f3d;padding-top:.75rem}
+.section-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#6b7280;margin-bottom:.55rem}
+
+.field{margin-bottom:.55rem}
+.field>label{display:block;color:#9ca3af;margin-bottom:3px;font-size:11px}
+.field-row{display:flex;align-items:center;gap:6px}
+.field-row input[type=range]{flex:1;accent-color:#f5b942;height:4px}
+.val{font-size:11px;color:#e5e7eb;min-width:36px;text-align:right;font-variant-numeric:tabular-nums}
+
+button{display:inline-flex;align-items:center;justify-content:center;gap:4px;padding:6px 10px;border-radius:6px;border:1px solid #374151;background:transparent;color:#cdd3de;font-size:12px;cursor:pointer;transition:background .1s,border-color .1s}
+button:hover{background:#1e2535}
+button.active{border-color:#f5b942;color:#f5b942;background:rgba(245,185,66,.09)}
+button.primary{background:#f5b942;color:#1a1000;border-color:#f5b942;font-weight:600}
+button.primary:hover{background:#e0a830}
+button.danger{border-color:#ef4444;color:#ef4444;padding:2px 7px;font-size:10px}
+button.danger:hover{background:rgba(239,68,68,.1)}
+.btn-row{display:flex;gap:6px;flex-wrap:wrap}
+
+textarea{width:100%;height:88px;background:#0d1117;border:1px solid #2a2f3d;border-radius:5px;color:#9ca3af;font-family:monospace;font-size:9px;padding:5px;resize:vertical;outline:none}
+textarea:focus{border-color:#f5b942}
+
+input[type=checkbox]{accent-color:#f5b942;cursor:pointer;width:13px;height:13px}
+.toggle-row{display:flex;align-items:center;gap:7px;margin-bottom:.4rem;cursor:pointer}
+.toggle-row label{cursor:pointer;color:#9ca3af;font-size:11px;user-select:none}
+
+.swatch-grid{display:flex;flex-wrap:wrap;gap:2px;margin-top:5px;max-height:44px;overflow:hidden}
+.swatch{width:10px;height:10px;border-radius:2px;border:1px solid rgba(255,255,255,.1)}
+
+.cup-item{background:#1a2030;border:1px solid #2a2f3d;border-radius:6px;padding:6px 8px;margin-bottom:4px}
+.cup-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.cup-num{font-size:11px;color:#7dd3fc;font-weight:600}
+.cup-pos{font-size:10px;color:#6b7280;font-variant-numeric:tabular-nums}
+
+.hint{font-size:11px;color:#9ca3af;background:#1a2030;border:1px solid #2a2f3d;border-radius:5px;padding:5px 8px;margin-top:.35rem;line-height:1.4}
+
+.canvas-wrap{position:relative;display:inline-block;border:1px solid #2a2f3d;border-radius:8px;overflow:hidden;background:#000;max-width:100%}
+.canvas-wrap canvas{display:block;max-width:100%;height:auto;vertical-align:top}
+#overlay{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none}
+.canvas-wrap.placing #overlay{pointer-events:all;cursor:crosshair}
+
+.badge{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.8);border-radius:4px;padding:2px 8px;font-size:11px;font-family:monospace;color:#f5b942;pointer-events:none;user-select:none}
+.mode-badge{position:absolute;top:8px;right:8px;background:#f5b942;border-radius:4px;padding:2px 8px;font-size:11px;color:#1a1000;font-weight:600;pointer-events:none;display:none;user-select:none}
+
+.upload-zone{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.65rem;padding:3rem 1rem;border:2px dashed #2a2f3d;border-radius:8px;cursor:pointer;color:#6b7280;transition:border-color .2s,color .2s;text-align:center}
+.upload-zone:hover,.upload-zone.dragover{border-color:#f5b942;color:#f5b942}
+.upload-zone input{display:none}
+
+.info-strip{font-size:10px;color:#4b5563;margin-top:.25rem}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- ========== SIDEBAR ========== -->
+<div class="sidebar">
+  <div>
+    <h1>Candle Flicker Engine</h1>
+    <div class="subtitle">OCS palette · click-to-place · standalone HTML</div>
+  </div>
+
+  <!-- Placement -->
+  <div class="section">
+    <div class="section-label">Placement</div>
+    <div class="btn-row">
+      <button id="btn-candle" onclick="enterMode('candle')">🕯 Set candle</button>
+      <button id="btn-cup" onclick="enterMode('cup')">+ Add cup</button>
+    </div>
+    <div id="place-hint" class="hint" style="display:none"></div>
+    <div id="candle-info" class="info-strip" style="margin-top:.4rem"></div>
+    <div id="cup-list" style="margin-top:.4rem"></div>
+  </div>
+
+  <!-- Lighting -->
+  <div class="section">
+    <div class="section-label">Lighting</div>
+    <div class="field"><label>Ambient intensity</label>
+      <div class="field-row">
+        <input type="range" id="sl-ambient" min="1" max="2.5" step="0.01" value="1.4">
+        <span class="val" id="lb-ambient">1.40</span>
+      </div>
+    </div>
+    <div class="field"><label>Wall specular</label>
+      <div class="field-row">
+        <input type="range" id="sl-specular" min="0" max="1.5" step="0.01" value="0.5">
+        <span class="val" id="lb-specular">0.50</span>
+      </div>
+    </div>
+    <div class="field"><label>Cup reflection</label>
+      <div class="field-row">
+        <input type="range" id="sl-cup" min="0" max="1.5" step="0.01" value="0.5">
+        <span class="val" id="lb-cup">0.50</span>
+      </div>
+    </div>
+    <div class="field"><label>Glint intensity</label>
+      <div class="field-row">
+        <input type="range" id="sl-glint" min="0" max="1" step="0.01" value="0.35">
+        <span class="val" id="lb-glint">0.35</span>
+      </div>
+    </div>
+    <div class="field"><label>Candle protect radius</label>
+      <div class="field-row">
+        <input type="range" id="sl-protect" min="0" max="0.2" step="0.005" value="0.07">
+        <span class="val" id="lb-protect">7%</span>
+      </div>
+    </div>
+    <div class="field"><label>Frame interval (ms)</label>
+      <div class="field-row">
+        <input type="range" id="sl-speed" min="30" max="250" step="5" value="70">
+        <span class="val" id="lb-speed">70ms</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Palette -->
+  <div class="section">
+    <div class="section-label">GPL Palette</div>
+    <textarea id="gpl-input" placeholder="Paste .gpl file content here&#10;&#10;Lines like:&#10;  255 128 0   Orange&#10;  17 34 51    Dark blue&#10;&#10;Works with GIMP / Aseprite exports"></textarea>
+    <div class="btn-row" style="margin-top:.4rem">
+      <button onclick="parseGPL()" style="flex:1">Apply palette</button>
+    </div>
+    <div style="margin-top:.5rem">
+      <div class="toggle-row">
+        <input type="checkbox" id="use-palette">
+        <label for="use-palette">Strict palette snap</label>
+      </div>
+      <div class="toggle-row">
+        <input type="checkbox" id="use-dither" checked>
+        <label for="use-dither">Floyd-Steinberg dither</label>
+      </div>
+    </div>
+    <div id="swatch-grid" class="swatch-grid"></div>
+  </div>
+
+  <!-- Playback -->
+  <div class="section">
+    <div class="section-label">Playback</div>
+    <div class="btn-row">
+      <button class="primary" id="btn-play" onclick="togglePlay()" style="flex:2">▶ Preview</button>
+      <button onclick="resetAnim()" style="flex:1">↺ Reset</button>
+    </div>
+    <div class="btn-row" style="margin-top:.4rem">
+      <button onclick="exportClean()" style="flex:1">↓ Export frame (clean)</button>
+    </div>
+    <div class="info-strip" style="margin-top:.35rem">Export saves current frame without placement markers.</div>
+  </div>
+</div>
+
+<!-- ========== MAIN ========== -->
+<div class="main">
+
+  <!-- Upload -->
+  <label class="upload-zone" id="upload-zone">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+      <polyline points="17 8 12 3 7 8"/>
+      <line x1="12" y1="3" x2="12" y2="15"/>
+    </svg>
+    <span style="font-size:14px;color:inherit">Click or drag image here</span>
+    <span style="font-size:11px">PNG, JPG — use your OCS-quantised image for best results</span>
+    <input type="file" id="file-input" accept="image/*">
+  </label>
+
+  <!-- Canvas -->
+  <div id="canvas-wrap" class="canvas-wrap" style="display:none">
+    <canvas id="main"></canvas>
+    <canvas id="overlay"></canvas>
+    <div class="badge" id="frame-badge">FRAME 01</div>
+    <div class="mode-badge" id="mode-badge"></div>
+  </div>
+
+</div><!-- /main -->
+</div><!-- /app -->
+
+<script>
+/* ====================================================
+   STATE
+   ==================================================== */
+const FRAMES = 48;
+let imgEl    = null;
+let palette  = [];
+let playing  = false;
+let frame    = 0;
+let mode     = null;   // 'candle' | 'cup' | null
+let animTmr  = null;
+
+// Positions stored as fractions of image dimensions (0–1)
+let candle = { x: 0.5, y: 0.6 };
+let cups   = [];   // [ { x, y, radius } … ]
+
+/* ====================================================
+   CANVAS SETUP
+   ==================================================== */
+const mainC   = document.getElementById('main');
+const overlC  = document.getElementById('overlay');
+const offC    = document.createElement('canvas');
+const ctx     = mainC.getContext('2d');
+const oclx    = overlC.getContext('2d');
+const octx    = offC.getContext('2d', { willReadFrequently: true });
+
+/* ====================================================
+   IMAGE LOADING
+   ==================================================== */
+function loadImage(file) {
+  if (!file || !file.type.startsWith('image/')) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const img = new Image();
+    img.onload = () => {
+      imgEl = img;
+      [mainC, offC, overlC].forEach(c => { c.width = img.width; c.height = img.height; });
+      document.getElementById('upload-zone').style.display = 'none';
+      document.getElementById('canvas-wrap').style.display = 'inline-block';
+      renderFrame(frame);
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+document.getElementById('file-input').addEventListener('change', e => loadImage(e.target.files[0]));
+
+const uz = document.getElementById('upload-zone');
+uz.addEventListener('dragover',  e => { e.preventDefault(); uz.classList.add('dragover'); });
+uz.addEventListener('dragleave', () => uz.classList.remove('dragover'));
+uz.addEventListener('drop', e => {
+  e.preventDefault();
+  uz.classList.remove('dragover');
+  loadImage(e.dataTransfer.files[0]);
+});
+
+/* ====================================================
+   SLIDERS
+   ==================================================== */
+const sliderDefs = [
+  ['ambient',  v => v.toFixed(2)],
+  ['specular', v => v.toFixed(2)],
+  ['cup',      v => v.toFixed(2)],
+  ['glint',    v => v.toFixed(2)],
+  ['protect',  v => Math.round(v * 100) + '%'],
+  ['speed',    v => Math.round(v) + 'ms'],
+];
+
+sliderDefs.forEach(([id, fmt]) => {
+  const sl = document.getElementById('sl-' + id);
+  const lb = document.getElementById('lb-' + id);
+  sl.addEventListener('input', function () {
+    lb.textContent = fmt(parseFloat(this.value));
+    if (imgEl && !playing) renderFrame(frame);
+  });
+});
+
+document.getElementById('use-palette').addEventListener('change', () => imgEl && renderFrame(frame));
+document.getElementById('use-dither' ).addEventListener('change', () => imgEl && renderFrame(frame));
+
+/* ====================================================
+   PLACEMENT MODE
+   ==================================================== */
+function enterMode(m) {
+  mode = m;
+  document.getElementById('canvas-wrap').classList.add('placing');
+  const hint  = document.getElementById('place-hint');
+  const badge = document.getElementById('mode-badge');
+  if (m === 'candle') {
+    hint.textContent  = '🕯 Click anywhere on the image to set the candle position.';
+    badge.textContent = 'PLACING CANDLE';
+  } else {
+    hint.textContent  = '+ Click to place a cup centre. Adjust its radius with the slider after placing.';
+    badge.textContent = 'PLACING CUP';
+  }
+  hint.style.display  = 'block';
+  badge.style.display = 'block';
+  document.getElementById('btn-candle').classList.toggle('active', m === 'candle');
+  document.getElementById('btn-cup'   ).classList.toggle('active', m === 'cup');
+}
+
+function exitMode() {
+  mode = null;
+  document.getElementById('canvas-wrap').classList.remove('placing');
+  document.getElementById('place-hint' ).style.display = 'none';
+  document.getElementById('mode-badge' ).style.display = 'none';
+  document.getElementById('btn-candle' ).classList.remove('active');
+  document.getElementById('btn-cup'    ).classList.remove('active');
+}
+
+/* Map a click on the overlay canvas to normalised image coordinates */
+overlC.addEventListener('click', function (e) {
+  if (!mode) return;
+  const rect = this.getBoundingClientRect();
+  const nx = (e.clientX - rect.left)  / rect.width;
+  const ny = (e.clientY - rect.top)   / rect.height;
+
+  if (mode === 'candle') {
+    candle = { x: nx, y: ny };
+    updateCandleInfo();
+  } else {
+    cups.push({ x: nx, y: ny, radius: 0.08 });
+    renderCupList();
+  }
+  exitMode();
+  if (imgEl) renderFrame(frame);
+});
+
+function updateCandleInfo() {
+  document.getElementById('candle-info').textContent =
+    `Candle: ${(candle.x * 100).toFixed(1)}%  ${(candle.y * 100).toFixed(1)}%`;
+}
+
+function renderCupList() {
+  const list = document.getElementById('cup-list');
+  list.innerHTML = '';
+  cups.forEach((cup, i) => {
+    const div = document.createElement('div');
+    div.className = 'cup-item';
+    div.innerHTML = `
+      <div class="cup-header">
+        <span class="cup-num">Cup ${i + 1}</span>
+        <span class="cup-pos">${(cup.x * 100).toFixed(1)}%  ${(cup.y * 100).toFixed(1)}%</span>
+        <button class="danger" onclick="removeCup(${i})">✕</button>
+      </div>
+      <div class="field"><label>Radius (% of image width)</label>
+        <div class="field-row">
+          <input type="range" min="0.01" max="0.3" step="0.005" value="${cup.radius}"
+            oninput="setCupRadius(${i}, parseFloat(this.value)); this.nextElementSibling.textContent = Math.round(parseFloat(this.value)*100)+'%'">
+          <span class="val">${Math.round(cup.radius * 100)}%</span>
+        </div>
+      </div>`;
+    list.appendChild(div);
+  });
+}
+
+function removeCup(i) {
+  cups.splice(i, 1);
+  renderCupList();
+  if (imgEl) renderFrame(frame);
+}
+
+function setCupRadius(i, r) {
+  cups[i].radius = r;
+  if (imgEl) renderFrame(frame);
+}
+
+/* ====================================================
+   OVERLAY DRAWING  (markers on top of rendered frame)
+   ==================================================== */
+function drawOverlay() {
+  const W = overlC.width, H = overlC.height;
+  oclx.clearRect(0, 0, W, H);
+  if (!imgEl) return;
+
+  const lw = Math.max(1, W * 0.003);
+  const cs = Math.max(5, W * 0.014);
+
+  /* Candle cross */
+  const cx = candle.x * W, cy = candle.y * H;
+  oclx.strokeStyle = '#f5b942';
+  oclx.lineWidth   = lw;
+  oclx.beginPath();
+  oclx.moveTo(cx - cs, cy); oclx.lineTo(cx + cs, cy);
+  oclx.moveTo(cx, cy - cs); oclx.lineTo(cx, cy + cs);
+  oclx.stroke();
+  oclx.beginPath();
+  oclx.arc(cx, cy, cs * 0.45, 0, Math.PI * 2);
+  oclx.strokeStyle = 'rgba(245,185,66,.45)';
+  oclx.stroke();
+
+  /* Cup circles */
+  cups.forEach((cup, i) => {
+    const px = cup.x * W, py = cup.y * H, r = cup.radius * W;
+    oclx.strokeStyle = 'rgba(100,200,255,.75)';
+    oclx.lineWidth   = lw;
+    oclx.setLineDash([Math.max(2, W * 0.005), Math.max(2, W * 0.005)]);
+    oclx.beginPath();
+    oclx.arc(px, py, r, 0, Math.PI * 2);
+    oclx.stroke();
+    oclx.setLineDash([]);
+
+    oclx.fillStyle = 'rgba(100,200,255,.9)';
+    oclx.beginPath();
+    oclx.arc(px, py, Math.max(2, W * 0.004), 0, Math.PI * 2);
+    oclx.fill();
+
+    oclx.fillStyle = 'rgba(100,200,255,.9)';
+    oclx.font      = `bold ${Math.max(9, Math.round(W * 0.024))}px monospace`;
+    oclx.fillText(`C${i + 1}`, px + r + 3, py - 3);
+  });
+}
+
+/* ====================================================
+   PALETTE
+   ==================================================== */
+function parseGPL() {
+  const text = document.getElementById('gpl-input').value;
+  palette = [];
+  text.split('\n').forEach(line => {
+    const t = line.trim();
+    if (!t || /^(GIMP Palette|Name:|Columns:|#)/.test(t)) return;
+    const parts = t.split(/\s+/).filter(Boolean);
+    if (parts.length >= 3 && !isNaN(+parts[0])) {
+      palette.push({ r: +parts[0], g: +parts[1], b: +parts[2] });
+    }
+  });
+
+  const grid = document.getElementById('swatch-grid');
+  grid.innerHTML = '';
+  palette.slice(0, 64).forEach(c => {
+    const d = document.createElement('div');
+    d.className = 'swatch';
+    d.style.background = `rgb(${c.r},${c.g},${c.b})`;
+    grid.appendChild(d);
+  });
+  if (palette.length) document.getElementById('use-palette').checked = true;
+  if (imgEl) renderFrame(frame);
+}
+
+function nearestColor(r, g, b) {
+  let min = Infinity, best = palette[0];
+  for (const c of palette) {
+    const d = (r - c.r) ** 2 + (g - c.g) ** 2 + (b - c.b) ** 2;
+    if (d < min) { min = d; best = c; }
+  }
+  return best;
+}
+
+/* Palette snap with optional Floyd-Steinberg dither
+   and a circular protection zone around the candle */
+function applyPalette(context, W, H, cx, cy) {
+  if (!palette.length) return;
+  const pr  = parseFloat(document.getElementById('sl-protect').value) * W;
+  const pr2 = pr * pr;
+  const dither = document.getElementById('use-dither').checked;
+  const id = context.getImageData(0, 0, W, H);
+  const d  = id.data;
+
+  for (let y = 0; y < H; y++) {
+    for (let x = 0; x < W; x++) {
+      /* Skip pixels inside the candle protection zone */
+      const dx = x - cx, dy = y - cy;
+      if (dx * dx + dy * dy < pr2) continue;
+
+      const i  = (y * W + x) * 4;
+      const or = d[i], og = d[i + 1], ob = d[i + 2];
+      const n  = nearestColor(or, og, ob);
+      d[i] = n.r; d[i + 1] = n.g; d[i + 2] = n.b;
+
+      if (dither) {
+        const er = or - n.r, eg = og - n.g, eb = ob - n.b;
+        const sp = (nx, ny, f) => {
+          if (nx < 0 || nx >= W || ny >= H) return;
+          const ni = (ny * W + nx) * 4;
+          d[ni]     = Math.max(0, Math.min(255, d[ni]     + er * f));
+          d[ni + 1] = Math.max(0, Math.min(255, d[ni + 1] + eg * f));
+          d[ni + 2] = Math.max(0, Math.min(255, d[ni + 2] + eb * f));
+        };
+        sp(x + 1, y,     7 / 16);
+        sp(x - 1, y + 1, 3 / 16);
+        sp(x,     y + 1, 5 / 16);
+        sp(x + 1, y + 1, 1 / 16);
+      }
+    }
+  }
+  context.putImageData(id, 0, 0);
+}
+
+/* ====================================================
+   RENDER FRAME
+   ==================================================== */
+function renderFrame(fi) {
+  if (!imgEl) return;
+  const W = offC.width, H = offC.height;
+
+  octx.clearRect(0, 0, W, H);
+  octx.drawImage(imgEl, 0, 0);
+
+  /* Candle flicker: sum of harmonics for organic feel */
+  const t       = (fi / FRAMES) * Math.PI * 2;
+  const flicker = Math.sin(t * 3.7) * 0.12
+                + Math.sin(t * 7.1 + 1.3) * 0.06
+                + Math.cos(t * 2.3 + 0.8) * 0.08;
+  const base      = parseFloat(document.getElementById('sl-ambient').value);
+  const intensity = Math.max(0.95, base + flicker);
+
+  const cx = candle.x * W;
+  const cy = candle.y * H;
+
+  /* --- Pass 1: ambient warm glow (overlay) --- */
+  octx.globalCompositeOperation = 'overlay';
+  let g = octx.createRadialGradient(cx, cy, 2, cx, cy, W * 0.52);
+  g.addColorStop(0, `rgba(255,160,40,${(intensity * 0.6).toFixed(3)})`);
+  g.addColorStop(1, 'rgba(0,0,0,0)');
+  octx.fillStyle = g;
+  octx.fillRect(0, 0, W, H);
+
+  /* --- Pass 2: wall specular (color-dodge) --- */
+  const spec = parseFloat(document.getElementById('sl-specular').value);
+  octx.globalCompositeOperation = 'color-dodge';
+  g = octx.createRadialGradient(cx, cy, 10, cx, cy, W * 0.62);
+  const ra = Math.max(0, (intensity - 1 + spec) * 0.32);
+  g.addColorStop(0, `rgba(255,200,100,${ra.toFixed(3)})`);
+  g.addColorStop(1, 'rgba(0,0,0,0)');
+  octx.fillStyle = g;
+  octx.fillRect(0, 0, W, H);
+
+  /* --- Pass 3: cup reflections --- */
+  const cupStr  = parseFloat(document.getElementById('sl-cup').value);
+  const glintSt = parseFloat(document.getElementById('sl-glint').value);
+  const shimmer = Math.sin(t * 2.3) * 0.08 + Math.cos(t * 5.1) * 0.04;
+
+  cups.forEach(cup => {
+    const px = cup.x * W;
+    const py = cup.y * H;
+    const r  = cup.radius * W;
+
+    /* Body reflection — screen blend for additive warm light on metal */
+    octx.globalCompositeOperation = 'screen';
+    g = octx.createRadialGradient(px, py, 0, px, py, r);
+    const ba = Math.max(0, (intensity - 0.95 + cupStr * 0.5 + shimmer) * 0.42);
+    g.addColorStop(0,    `rgba(255,195,90,${ba.toFixed(3)})`);
+    g.addColorStop(0.45, `rgba(200,110,35,${(ba * 0.5).toFixed(3)})`);
+    g.addColorStop(1,    'rgba(0,0,0,0)');
+    octx.fillStyle = g;
+    octx.fillRect(0, 0, W, H);
+
+    /* Specular glint — small oscillating hotspot near the rim */
+    const gx = px + Math.sin(t * 0.9) * W * 0.007;
+    const gy = py - H * 0.04 + Math.cos(t * 1.1) * H * 0.007;
+    octx.globalCompositeOperation = 'hard-light';
+    g = octx.createRadialGradient(gx, gy, 0, gx, gy, r * 0.32);
+    const ga = Math.max(0, (intensity + shimmer) * glintSt);
+    g.addColorStop(0, `rgba(255,245,190,${ga.toFixed(3)})`);
+    g.addColorStop(1, 'rgba(0,0,0,0)');
+    octx.fillStyle = g;
+    octx.fillRect(0, 0, W, H);
+  });
+
+  octx.globalCompositeOperation = 'source-over';
+
+  /* --- Pass 4: palette snap (with candle protection zone) --- */
+  if (document.getElementById('use-palette').checked) {
+    applyPalette(octx, W, H, cx, cy);
+  }
+
+  /* Copy to visible canvas and redraw overlay markers */
+  ctx.clearRect(0, 0, W, H);
+  ctx.drawImage(offC, 0, 0);
+  document.getElementById('frame-badge').textContent = 'FRAME ' + String(fi + 1).padStart(2, '0');
+  drawOverlay();
+}
+
+/* ====================================================
+   PLAYBACK
+   ==================================================== */
+function togglePlay() {
+  playing = !playing;
+  document.getElementById('btn-play').textContent = playing ? '⏸ Stop' : '▶ Preview';
+  if (playing) tick();
+  else clearTimeout(animTmr);
+}
+
+function tick() {
+  if (!playing) return;
+  frame = (frame + 1) % FRAMES;
+  renderFrame(frame);
+  const ms = parseInt(document.getElementById('sl-speed').value);
+  animTmr = setTimeout(tick, ms);
+}
+
+function resetAnim() {
+  playing = false;
+  clearTimeout(animTmr);
+  document.getElementById('btn-play').textContent = '▶ Preview';
+  frame = 0;
+  if (imgEl) renderFrame(0);
+}
+
+/* Export: copy offC (already rendered, no overlay) to a clean canvas and save */
+function exportClean() {
+  if (!imgEl) return;
+  const a = document.createElement('a');
+  a.download = `flicker_frame_${String(frame + 1).padStart(2, '0')}.png`;
+  /* offC holds the last rendered frame without any overlay markers */
+  a.href = offC.toDataURL('image/png');
+  a.click();
+}
+
+/* ====================================================
+   INIT
+   ==================================================== */
+updateCandleInfo();
+</script>
+</body>
+</html>
