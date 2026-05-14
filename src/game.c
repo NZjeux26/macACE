@@ -148,8 +148,6 @@ void gameGsCreate(void) {
     drawPieces(); //draws the board and pieces to the screen, will need to be called again every time a piece moves or is captured
     g_state.currentPlayer = TEAM_ATTACKER;
     
-    findCPUType();
-    
     systemUnuse();
 
     // Load the view
@@ -278,18 +276,6 @@ void gameGsLoop(void) {
     systemIdleBegin();
     vPortWaitForEnd(s_pVpMain);
     systemIdleEnd();
-}
-
-void findCPUType(void){
-    struct ExecBase *SysBase = *((struct ExecBase **)4); // ExecBase is always at address 4
-    
-    UWORD attnFlags = SysBase->AttnFlags;
-    
-    if(attnFlags & AFF_68060) logWrite("CPU: 68060\n");
-    else if(attnFlags & AFF_68040) logWrite("CPU: 68040\n");
-    else if(attnFlags & AFF_68030) logWrite("CPU: 68030\n");
-    else if(attnFlags & AFF_68020) logWrite("CPU: 68020\n");
-    else logWrite("CPU: 68000\n");
 }
 
   /* On click

@@ -104,6 +104,7 @@ CMakeFiles/macACE.elf.dir/src/menu.c.obj: /Users/phillipb/Documents/macACE/src/m
   /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/key.h \
   /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/log.h \
   /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/memory.h \
+  /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/mouse.h \
   /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/sprite.h \
   /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/state.h \
   /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/system.h \

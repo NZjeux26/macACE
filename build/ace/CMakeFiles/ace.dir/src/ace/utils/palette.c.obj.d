@@ -17,7 +17,8 @@ ace/CMakeFiles/ace.dir/src/ace/utils/palette.c.obj: \
  /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/blit.h \
  /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/bitmap.h \
  /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/disk_file.h \
- /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/file.h
+ /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/file.h \
+ /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/endian.h
 /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/palette.h:
 /Users/phillipb/Documents/macACE/deps/ace/include/ace/types.h:
 /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/extview.h:
@@ -36,3 +37,4 @@ ace/CMakeFiles/ace.dir/src/ace/utils/palette.c.obj: \
 /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/bitmap.h:
 /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/disk_file.h:
 /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/file.h:
+/Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/endian.h:

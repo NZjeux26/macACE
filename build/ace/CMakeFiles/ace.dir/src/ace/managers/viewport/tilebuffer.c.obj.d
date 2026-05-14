@@ -18,7 +18,8 @@ ace/CMakeFiles/ace.dir/src/ace/managers/viewport/tilebuffer.c.obj: \
  /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/viewport/scrollbuffer.h \
  /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/bitmap.h \
  /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/blit.h \
- /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/system.h
+ /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/system.h \
+ /Users/phillipb/Documents/macACE/deps/ace/include/ace/generic/screen.h
 /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/viewport/tilebuffer.h:
 /Users/phillipb/Documents/macACE/deps/ace/include/ace/types.h:
 /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/extview.h:
@@ -38,3 +39,4 @@ ace/CMakeFiles/ace.dir/src/ace/managers/viewport/tilebuffer.c.obj: \
 /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/bitmap.h:
 /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/blit.h:
 /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/system.h:
+/Users/phillipb/Documents/macACE/deps/ace/include/ace/generic/screen.h:

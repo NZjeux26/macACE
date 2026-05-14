@@ -6,75 +6,91 @@
 <title>Candle Flicker Engine</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#0f1117;color:#cdd3de;font-family:system-ui,sans-serif;font-size:13px;min-height:100vh;display:flex;flex-direction:column}
-
-.app{display:grid;grid-template-columns:260px 1fr;flex:1;min-height:0}
-
-.sidebar{background:#161b27;border-right:1px solid #2a2f3d;padding:1rem;overflow-y:auto;display:flex;flex-direction:column;gap:.85rem}
-
-.main{padding:1rem;overflow:auto;display:flex;flex-direction:column;gap:1rem}
+body{background:#0f1117;color:#cdd3de;font-family:system-ui,sans-serif;font-size:13px;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+.app{display:grid;grid-template-columns:268px 1fr;flex:1;min-height:0}
+.sidebar{background:#161b27;border-right:1px solid #2a2f3d;padding:1rem;overflow-y:auto;display:flex;flex-direction:column;gap:.8rem}
+.main{padding:1rem;overflow:auto;display:flex;flex-direction:column;gap:1rem;align-items:flex-start}
 
 h1{font-size:14px;font-weight:600;color:#f5b942;letter-spacing:.02em}
 .subtitle{font-size:11px;color:#4b5563;margin-top:2px}
 
-.section{border-top:1px solid #2a2f3d;padding-top:.75rem}
-.section-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#6b7280;margin-bottom:.55rem}
+.section{border-top:1px solid #2a2f3d;padding-top:.7rem}
+.section-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#6b7280;margin-bottom:.5rem}
 
-.field{margin-bottom:.55rem}
-.field>label{display:block;color:#9ca3af;margin-bottom:3px;font-size:11px}
+.field{margin-bottom:.45rem}
+.field>label{display:block;color:#9ca3af;margin-bottom:2px;font-size:11px}
 .field-row{display:flex;align-items:center;gap:6px}
-.field-row input[type=range]{flex:1;accent-color:#f5b942;height:4px}
+.field-row input[type=range]{flex:1;accent-color:#f5b942}
 .val{font-size:11px;color:#e5e7eb;min-width:36px;text-align:right;font-variant-numeric:tabular-nums}
 
-button{display:inline-flex;align-items:center;justify-content:center;gap:4px;padding:6px 10px;border-radius:6px;border:1px solid #374151;background:transparent;color:#cdd3de;font-size:12px;cursor:pointer;transition:background .1s,border-color .1s}
+select{width:100%;background:#0d1117;border:1px solid #2a2f3d;border-radius:5px;color:#cdd3de;font-size:12px;padding:5px 7px;outline:none;cursor:pointer}
+select:focus{border-color:#f5b942}
+option{background:#0d1117}
+
+button{display:inline-flex;align-items:center;justify-content:center;gap:4px;padding:6px 10px;border-radius:6px;border:1px solid #374151;background:transparent;color:#cdd3de;font-size:12px;cursor:pointer;transition:background .1s,border-color .1s;white-space:nowrap}
 button:hover{background:#1e2535}
+button:disabled{opacity:.4;cursor:not-allowed}
 button.active{border-color:#f5b942;color:#f5b942;background:rgba(245,185,66,.09)}
 button.primary{background:#f5b942;color:#1a1000;border-color:#f5b942;font-weight:600}
 button.primary:hover{background:#e0a830}
+button.sm{padding:3px 8px;font-size:11px}
 button.danger{border-color:#ef4444;color:#ef4444;padding:2px 7px;font-size:10px}
 button.danger:hover{background:rgba(239,68,68,.1)}
 .btn-row{display:flex;gap:6px;flex-wrap:wrap}
 
-textarea{width:100%;height:88px;background:#0d1117;border:1px solid #2a2f3d;border-radius:5px;color:#9ca3af;font-family:monospace;font-size:9px;padding:5px;resize:vertical;outline:none}
+/* Sprite sheet export highlight */
+.sheet-box{background:#1a2030;border:1px solid #f5b942;border-radius:8px;padding:10px 10px 8px;margin-bottom:.1rem}
+.sheet-box .section-label{color:#f5b942;border:none;margin-bottom:.4rem}
+.sheet-hint{font-size:10px;color:#6b7280;margin-top:.5rem;line-height:1.5}
+.sheet-hint strong{color:#9ca3af}
+
+textarea{width:100%;height:82px;background:#0d1117;border:1px solid #2a2f3d;border-radius:5px;color:#9ca3af;font-family:monospace;font-size:9px;padding:5px;resize:vertical;outline:none}
 textarea:focus{border-color:#f5b942}
 
 input[type=checkbox]{accent-color:#f5b942;cursor:pointer;width:13px;height:13px}
-.toggle-row{display:flex;align-items:center;gap:7px;margin-bottom:.4rem;cursor:pointer}
+.toggle-row{display:flex;align-items:center;gap:7px;margin-bottom:.35rem;cursor:pointer}
 .toggle-row label{cursor:pointer;color:#9ca3af;font-size:11px;user-select:none}
 
-.swatch-grid{display:flex;flex-wrap:wrap;gap:2px;margin-top:5px;max-height:44px;overflow:hidden}
+.swatch-grid{display:flex;flex-wrap:wrap;gap:2px;margin-top:5px;max-height:40px;overflow:hidden}
 .swatch{width:10px;height:10px;border-radius:2px;border:1px solid rgba(255,255,255,.1)}
 
 .cup-item{background:#1a2030;border:1px solid #2a2f3d;border-radius:6px;padding:6px 8px;margin-bottom:4px}
-.cup-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.cup-header{display:flex;justify-content:space-between;align-items:center;gap:4px;margin-bottom:4px}
 .cup-num{font-size:11px;color:#7dd3fc;font-weight:600}
-.cup-pos{font-size:10px;color:#6b7280;font-variant-numeric:tabular-nums}
+.cup-pos{font-size:10px;color:#6b7280;flex:1;margin-left:4px;font-variant-numeric:tabular-nums}
 
 .hint{font-size:11px;color:#9ca3af;background:#1a2030;border:1px solid #2a2f3d;border-radius:5px;padding:5px 8px;margin-top:.35rem;line-height:1.4}
+.dither-note{font-size:10px;color:#4b5563;margin-top:.35rem;line-height:1.5;padding:4px 6px;background:#0d1117;border-radius:4px;border:1px solid #1e2535}
 
-.canvas-wrap{position:relative;display:inline-block;border:1px solid #2a2f3d;border-radius:8px;overflow:hidden;background:#000;max-width:100%}
-.canvas-wrap canvas{display:block;max-width:100%;height:auto;vertical-align:top}
-#overlay{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none}
-.canvas-wrap.placing #overlay{pointer-events:all;cursor:crosshair}
+.canvas-wrap{position:relative;display:inline-block;border:1px solid #2a2f3d;border-radius:4px;overflow:hidden;background:#000;flex-shrink:0;line-height:0}
+#main-canvas{display:block;image-rendering:pixelated;image-rendering:crisp-edges}
+#overlay-canvas{position:absolute;top:0;left:0;pointer-events:none}
+.canvas-wrap.placing #overlay-canvas{pointer-events:all;cursor:crosshair}
 
-.badge{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.8);border-radius:4px;padding:2px 8px;font-size:11px;font-family:monospace;color:#f5b942;pointer-events:none;user-select:none}
-.mode-badge{position:absolute;top:8px;right:8px;background:#f5b942;border-radius:4px;padding:2px 8px;font-size:11px;color:#1a1000;font-weight:600;pointer-events:none;display:none;user-select:none}
+.badge{position:absolute;top:6px;left:6px;background:rgba(0,0,0,.85);border-radius:3px;padding:2px 7px;font-size:10px;font-family:monospace;color:#f5b942;pointer-events:none;user-select:none}
+.mode-badge{position:absolute;top:6px;right:6px;background:#f5b942;border-radius:3px;padding:2px 7px;font-size:10px;color:#1a1000;font-weight:700;pointer-events:none;display:none;user-select:none}
 
-.upload-zone{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.65rem;padding:3rem 1rem;border:2px dashed #2a2f3d;border-radius:8px;cursor:pointer;color:#6b7280;transition:border-color .2s,color .2s;text-align:center}
+.upload-zone{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.65rem;padding:2rem 1.5rem;min-width:300px;border:2px dashed #2a2f3d;border-radius:8px;cursor:pointer;color:#6b7280;transition:border-color .2s,color .2s;text-align:center}
 .upload-zone:hover,.upload-zone.dragover{border-color:#f5b942;color:#f5b942}
 .upload-zone input{display:none}
 
+.zoom-strip{display:flex;align-items:center;gap:6px}
+.zoom-label{font-size:11px;color:#6b7280}
 .info-strip{font-size:10px;color:#4b5563;margin-top:.25rem}
+
+.progress-bar-wrap{display:none;margin-top:.5rem;background:#0d1117;border:1px solid #2a2f3d;border-radius:4px;overflow:hidden;height:6px}
+.progress-bar{height:100%;background:#f5b942;width:0%;transition:width .1s}
+.export-status{font-size:11px;color:#9ca3af;margin-top:.35rem;min-height:1em}
 </style>
 </head>
 <body>
 <div class="app">
 
-<!-- ========== SIDEBAR ========== -->
+<!-- ===== SIDEBAR ===== -->
 <div class="sidebar">
   <div>
     <h1>Candle Flicker Engine</h1>
-    <div class="subtitle">OCS palette · click-to-place · standalone HTML</div>
+    <div class="subtitle">OCS palette · click-to-place · standalone</div>
   </div>
 
   <!-- Placement -->
@@ -82,50 +98,107 @@ input[type=checkbox]{accent-color:#f5b942;cursor:pointer;width:13px;height:13px}
     <div class="section-label">Placement</div>
     <div class="btn-row">
       <button id="btn-candle" onclick="enterMode('candle')">🕯 Set candle</button>
-      <button id="btn-cup" onclick="enterMode('cup')">+ Add cup</button>
+      <button id="btn-cup"    onclick="enterMode('cup')">+ Add cup</button>
     </div>
-    <div id="place-hint" class="hint" style="display:none"></div>
+    <div id="place-hint"  class="hint" style="display:none"></div>
     <div id="candle-info" class="info-strip" style="margin-top:.4rem"></div>
-    <div id="cup-list" style="margin-top:.4rem"></div>
+    <div id="cup-list"    style="margin-top:.4rem"></div>
   </div>
 
-  <!-- Lighting -->
+  <!-- Flicker -->
   <div class="section">
-    <div class="section-label">Lighting</div>
-    <div class="field"><label>Ambient intensity</label>
+    <div class="section-label">Flicker</div>
+    <div class="field"><label>Frame count</label>
+      <div class="field-row">
+        <input type="range" id="sl-frames" min="4" max="48" step="2" value="24">
+        <span class="val" id="lb-frames">24</span>
+      </div>
+    </div>
+    <div class="field"><label>Frame interval (ms)</label>
+      <div class="field-row">
+        <input type="range" id="sl-speed" min="30" max="300" step="5" value="70">
+        <span class="val" id="lb-speed">70ms</span>
+      </div>
+    </div>
+    <div class="field"><label>Flicker amount</label>
+      <div class="field-row">
+        <input type="range" id="sl-flicker-amt" min="0" max="0.4" step="0.005" value="0.12">
+        <span class="val" id="lb-flicker-amt">0.12</span>
+      </div>
+    </div>
+    <div class="field"><label>Flicker speed</label>
+      <div class="field-row">
+        <input type="range" id="sl-flicker-spd" min="0.2" max="4" step="0.1" value="1.0">
+        <span class="val" id="lb-flicker-spd">1.0×</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ambient -->
+  <div class="section">
+    <div class="section-label">Ambient light</div>
+    <div class="field"><label>Base intensity</label>
       <div class="field-row">
         <input type="range" id="sl-ambient" min="1" max="2.5" step="0.01" value="1.4">
         <span class="val" id="lb-ambient">1.40</span>
       </div>
     </div>
-    <div class="field"><label>Wall specular</label>
+    <div class="field"><label>Glow radius</label>
+      <div class="field-row">
+        <input type="range" id="sl-glow-r" min="0.1" max="1.0" step="0.01" value="0.52">
+        <span class="val" id="lb-glow-r">0.52</span>
+      </div>
+    </div>
+    <div class="field"><label>Glow opacity</label>
+      <div class="field-row">
+        <input type="range" id="sl-glow-op" min="0.1" max="1.2" step="0.01" value="0.6">
+        <span class="val" id="lb-glow-op">0.60</span>
+      </div>
+    </div>
+    <div class="field"><label>Color temperature</label>
+      <div class="field-row">
+        <input type="range" id="sl-temp" min="0" max="1" step="0.01" value="0">
+        <span class="val" id="lb-temp">warm</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Specular -->
+  <div class="section">
+    <div class="section-label">Wall specular</div>
+    <div class="field"><label>Specular strength</label>
       <div class="field-row">
         <input type="range" id="sl-specular" min="0" max="1.5" step="0.01" value="0.5">
         <span class="val" id="lb-specular">0.50</span>
       </div>
     </div>
-    <div class="field"><label>Cup reflection</label>
+    <div class="field"><label>Specular radius</label>
       <div class="field-row">
-        <input type="range" id="sl-cup" min="0" max="1.5" step="0.01" value="0.5">
-        <span class="val" id="lb-cup">0.50</span>
+        <input type="range" id="sl-spec-r" min="0.1" max="1.2" step="0.01" value="0.62">
+        <span class="val" id="lb-spec-r">0.62</span>
       </div>
     </div>
-    <div class="field"><label>Glint intensity</label>
+  </div>
+
+  <!-- Cup -->
+  <div class="section">
+    <div class="section-label">Cup reflections</div>
+    <div class="field"><label>Glint strength</label>
       <div class="field-row">
-        <input type="range" id="sl-glint" min="0" max="1" step="0.01" value="0.35">
-        <span class="val" id="lb-glint">0.35</span>
+        <input type="range" id="sl-glint" min="0" max="1.5" step="0.01" value="0.6">
+        <span class="val" id="lb-glint">0.60</span>
       </div>
     </div>
-    <div class="field"><label>Candle protect radius</label>
+    <div class="field"><label>Glint size</label>
       <div class="field-row">
-        <input type="range" id="sl-protect" min="0" max="0.2" step="0.005" value="0.07">
-        <span class="val" id="lb-protect">7%</span>
+        <input type="range" id="sl-glint-sz" min="0.05" max="0.5" step="0.01" value="0.25">
+        <span class="val" id="lb-glint-sz">0.25</span>
       </div>
     </div>
-    <div class="field"><label>Frame interval (ms)</label>
+    <div class="field"><label>Glint offset (toward flame)</label>
       <div class="field-row">
-        <input type="range" id="sl-speed" min="30" max="250" step="5" value="70">
-        <span class="val" id="lb-speed">70ms</span>
+        <input type="range" id="sl-glint-off" min="0" max="1" step="0.01" value="0.4">
+        <span class="val" id="lb-glint-off">0.40</span>
       </div>
     </div>
   </div>
@@ -133,24 +206,43 @@ input[type=checkbox]{accent-color:#f5b942;cursor:pointer;width:13px;height:13px}
   <!-- Palette -->
   <div class="section">
     <div class="section-label">GPL Palette</div>
-    <textarea id="gpl-input" placeholder="Paste .gpl file content here&#10;&#10;Lines like:&#10;  255 128 0   Orange&#10;  17 34 51    Dark blue&#10;&#10;Works with GIMP / Aseprite exports"></textarea>
+    <div class="field"><label>Candle protect radius</label>
+      <div class="field-row">
+        <input type="range" id="sl-protect" min="0" max="0.2" step="0.005" value="0.07">
+        <span class="val" id="lb-protect">7%</span>
+      </div>
+    </div>
+    <div class="toggle-row" style="margin-top:.1rem">
+      <input type="checkbox" id="use-palette">
+      <label for="use-palette">Strict palette snap</label>
+    </div>
+    <div class="field" style="margin-top:.3rem">
+      <label>Dithering mode</label>
+      <select id="dither-mode" onchange="onDitherModeChange()">
+        <option value="none">None — hard snap</option>
+        <option value="atkinson" selected>Atkinson — clean edges ★</option>
+        <option value="floyd-steinberg">Floyd-Steinberg — full diffusion</option>
+        <option value="bayer4">Bayer 4×4 — ordered pattern</option>
+        <option value="bayer8">Bayer 8×8 — fine ordered pattern</option>
+        <option value="void-cluster">Void &amp; Cluster — organic ordered</option>
+      </select>
+    </div>
+    <div class="field" id="dither-str-field">
+      <label id="dither-str-label">Dither strength</label>
+      <div class="field-row">
+        <input type="range" id="sl-dither-str" min="0" max="1" step="0.01" value="0.8">
+        <span class="val" id="lb-dither-str">0.80</span>
+      </div>
+    </div>
+    <div class="dither-note" id="dither-note"></div>
+    <textarea id="gpl-input" placeholder="Paste .gpl content here&#10;255 128 0  Orange&#10; 17  34 51  Dark blue" style="margin-top:.5rem"></textarea>
     <div class="btn-row" style="margin-top:.4rem">
       <button onclick="parseGPL()" style="flex:1">Apply palette</button>
-    </div>
-    <div style="margin-top:.5rem">
-      <div class="toggle-row">
-        <input type="checkbox" id="use-palette">
-        <label for="use-palette">Strict palette snap</label>
-      </div>
-      <div class="toggle-row">
-        <input type="checkbox" id="use-dither" checked>
-        <label for="use-dither">Floyd-Steinberg dither</label>
-      </div>
     </div>
     <div id="swatch-grid" class="swatch-grid"></div>
   </div>
 
-  <!-- Playback -->
+  <!-- Playback & Export -->
   <div class="section">
     <div class="section-label">Playback</div>
     <div class="btn-row">
@@ -158,453 +250,587 @@ input[type=checkbox]{accent-color:#f5b942;cursor:pointer;width:13px;height:13px}
       <button onclick="resetAnim()" style="flex:1">↺ Reset</button>
     </div>
     <div class="btn-row" style="margin-top:.4rem">
-      <button onclick="exportClean()" style="flex:1">↓ Export frame (clean)</button>
+      <button onclick="exportCurrentFrame()" style="flex:1">↓ This frame</button>
+      <button id="btn-export-all" onclick="exportAllFrames()" style="flex:1">↓ All frames</button>
     </div>
-    <div class="info-strip" style="margin-top:.35rem">Export saves current frame without placement markers.</div>
+    <div class="progress-bar-wrap" id="progress-wrap">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+    <div class="export-status" id="export-status"></div>
   </div>
+
+  <!-- Sprite sheet export — highlighted -->
+  <div class="section">
+    <div class="sheet-box">
+      <div class="section-label">★ Sprite sheet export</div>
+      <div class="field"><label>Layout</label>
+        <select id="sheet-layout">
+          <option value="horizontal">Horizontal strip (1 row)</option>
+          <option value="vertical">Vertical strip (1 column)</option>
+          <option value="grid">Grid (auto columns)</option>
+        </select>
+      </div>
+      <div class="field" id="grid-cols-field" style="display:none"><label>Columns</label>
+        <div class="field-row">
+          <input type="range" id="sl-grid-cols" min="2" max="12" step="1" value="6">
+          <span class="val" id="lb-grid-cols">6</span>
+        </div>
+      </div>
+      <button class="primary" id="btn-sheet" onclick="exportSpriteSheet()" style="width:100%;margin-top:.2rem">↓ Export sprite sheet</button>
+      <div class="sheet-hint">
+        <strong>Import in Aseprite:</strong><br>
+        File → Import Sprite Sheet<br>
+        Set "Frame width" = image width (e.g. 320)<br>
+        Set "Frame height" = image height (e.g. 256)<br>
+        All frames load as one animation — no sequencing issues.
+      </div>
+    </div>
+  </div>
+
 </div>
 
-<!-- ========== MAIN ========== -->
+<!-- ===== MAIN ===== -->
 <div class="main">
 
-  <!-- Upload -->
   <label class="upload-zone" id="upload-zone">
     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
       <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-      <polyline points="17 8 12 3 7 8"/>
-      <line x1="12" y1="3" x2="12" y2="15"/>
+      <polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
     </svg>
     <span style="font-size:14px;color:inherit">Click or drag image here</span>
-    <span style="font-size:11px">PNG, JPG — use your OCS-quantised image for best results</span>
+    <span style="font-size:11px">320×256 Amiga OCS images scale correctly</span>
     <input type="file" id="file-input" accept="image/*">
   </label>
 
-  <!-- Canvas -->
-  <div id="canvas-wrap" class="canvas-wrap" style="display:none">
-    <canvas id="main"></canvas>
-    <canvas id="overlay"></canvas>
-    <div class="badge" id="frame-badge">FRAME 01</div>
+  <div id="zoom-bar" style="display:none">
+    <div class="zoom-strip">
+      <span class="zoom-label">Zoom:</span>
+      <button class="sm" id="z1" onclick="setZoom(1)">1×</button>
+      <button class="sm active" id="z2" onclick="setZoom(2)">2×</button>
+      <button class="sm" id="z3" onclick="setZoom(3)">3×</button>
+      <button class="sm" id="z4" onclick="setZoom(4)">4×</button>
+    </div>
+  </div>
+
+  <div class="canvas-wrap" id="canvas-wrap" style="display:none">
+    <canvas id="main-canvas"></canvas>
+    <canvas id="overlay-canvas"></canvas>
+    <div class="badge"      id="frame-badge">FRAME 01</div>
     <div class="mode-badge" id="mode-badge"></div>
   </div>
 
-</div><!-- /main -->
-</div><!-- /app -->
+</div>
+</div>
 
 <script>
 /* ====================================================
-   STATE
+   BAYER / ORDERED DITHER MATRICES
    ==================================================== */
-const FRAMES = 48;
-let imgEl    = null;
-let palette  = [];
-let playing  = false;
-let frame    = 0;
-let mode     = null;   // 'candle' | 'cup' | null
-let animTmr  = null;
-
-// Positions stored as fractions of image dimensions (0–1)
-let candle = { x: 0.5, y: 0.6 };
-let cups   = [];   // [ { x, y, radius } … ]
+const BAYER4 = [
+  [ 0, 8, 2,10],
+  [12, 4,14, 6],
+  [ 3,11, 1, 9],
+  [15, 7,13, 5]
+];
+const BAYER8 = [
+  [ 0,32, 8,40, 2,34,10,42],
+  [48,16,56,24,50,18,58,26],
+  [12,44, 4,36,14,46, 6,38],
+  [60,28,52,20,62,30,54,22],
+  [ 3,35,11,43, 1,33, 9,41],
+  [51,19,59,27,49,17,57,25],
+  [15,47, 7,39,13,45, 5,37],
+  [63,31,55,23,61,29,53,21]
+];
+const VC16_RAW = [
+   0,130, 46,182, 22,150, 66,198, 12,142, 54,186, 32,162, 72,210,
+ 218, 82,162, 28,202, 92,174, 38,230, 96,158, 44,220, 86,144, 56,
+  68,244,106, 14,238,118, 10,254, 60,226,122,  6,242,110, 18,196,
+ 170, 32,194, 78,154, 50,138, 84,178, 24,210, 74,160, 40,252,128,
+  16,234, 58,222, 90,206, 28,214, 46,202,102,  8,232, 66,116,  4,
+ 190,104,140,  2,170,114,152, 62,240, 88,166, 38,188, 98,152,224,
+  52,176, 30,246, 22,198, 76,186, 14,228,124, 54,218, 80, 20,176,
+ 238,126,212, 86,134, 44,230, 96,158, 72,200, 16,134,248,144, 62,
+  10,158, 74,162, 42,190,108, 32,240, 50,176, 92,  2,212,106, 34,
+ 226, 36,202, 18,252, 64,148, 68,204, 16,228,116,166, 58,168,250,
+  90,180, 50,118,136, 24,220, 82,186, 36,142, 72,242, 38,230, 80,
+ 140,  8,240,174, 88,194, 44,154, 98,254, 56,196,  8,188,116,198,
+  28,218, 62,100,210, 76,162,  4,222, 82,214,130, 46,232, 20,150,
+ 174,102,152, 12,246, 32,112,238, 38,178, 26,160, 66,254,100,  4,
+  48,186, 30,234, 68,194, 58,130,200, 60,236,108, 14,142,206, 74,
+ 222, 86,140,106, 16,174, 22,252, 90,146, 10,190, 76,172, 40,118
+];
+const VC16 = [];
+for (let r=0;r<16;r++){VC16.push([]);for(let c=0;c<16;c++)VC16[r].push(VC16_RAW[r*16+c]/256);}
 
 /* ====================================================
-   CANVAS SETUP
+   DITHER MODE UI
    ==================================================== */
-const mainC   = document.getElementById('main');
-const overlC  = document.getElementById('overlay');
-const offC    = document.createElement('canvas');
-const ctx     = mainC.getContext('2d');
-const oclx    = overlC.getContext('2d');
-const octx    = offC.getContext('2d', { willReadFrequently: true });
-
-/* ====================================================
-   IMAGE LOADING
-   ==================================================== */
-function loadImage(file) {
-  if (!file || !file.type.startsWith('image/')) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    const img = new Image();
-    img.onload = () => {
-      imgEl = img;
-      [mainC, offC, overlC].forEach(c => { c.width = img.width; c.height = img.height; });
-      document.getElementById('upload-zone').style.display = 'none';
-      document.getElementById('canvas-wrap').style.display = 'inline-block';
-      renderFrame(frame);
-    };
-    img.src = ev.target.result;
-  };
-  reader.readAsDataURL(file);
+const DITHER_NOTES = {
+  'none':           'Hard snap to nearest palette colour. Clean flat areas, visible banding near gradients.',
+  'atkinson':       'Propagates 6/8 of error — discards the rest. Keeps flat areas solid, gradients smooth. Best choice for pixel art. ★',
+  'floyd-steinberg':'Propagates 100% of error. Maximum smoothness but can fuzz solid areas near the glow.',
+  'bayer4':         'Ordered 4×4 matrix. No diffusion — regular crosshatch pattern. Zero background contamination.',
+  'bayer8':         'Ordered 8×8 Bayer matrix. Finer crosshatch, still zero diffusion.',
+  'void-cluster':   'Ordered 16×16 blue-noise matrix. Organic pattern, zero diffusion, no regular crosshatch.',
+};
+const DITHER_STR_LABEL = {
+  'none':null,
+  'atkinson':'Error strength',
+  'floyd-steinberg':'Error strength',
+  'bayer4':'Spread (threshold scale)',
+  'bayer8':'Spread (threshold scale)',
+  'void-cluster':'Spread (threshold scale)',
+};
+function onDitherModeChange(){
+  const m=document.getElementById('dither-mode').value;
+  document.getElementById('dither-note').textContent=DITHER_NOTES[m]||'';
+  const field=document.getElementById('dither-str-field');
+  const lbl  =document.getElementById('dither-str-label');
+  if(DITHER_STR_LABEL[m]){field.style.display='block';lbl.textContent=DITHER_STR_LABEL[m];}
+  else field.style.display='none';
+  if(imgEl)renderFrame(frame);
 }
 
-document.getElementById('file-input').addEventListener('change', e => loadImage(e.target.files[0]));
-
-const uz = document.getElementById('upload-zone');
-uz.addEventListener('dragover',  e => { e.preventDefault(); uz.classList.add('dragover'); });
-uz.addEventListener('dragleave', () => uz.classList.remove('dragover'));
-uz.addEventListener('drop', e => {
-  e.preventDefault();
-  uz.classList.remove('dragover');
-  loadImage(e.dataTransfer.files[0]);
+/* Grid cols slider */
+document.getElementById('sheet-layout').addEventListener('change',function(){
+  document.getElementById('grid-cols-field').style.display=this.value==='grid'?'block':'none';
 });
+document.getElementById('sl-grid-cols').addEventListener('input',function(){
+  document.getElementById('lb-grid-cols').textContent=this.value;
+});
+
+/* ====================================================
+   STATE
+   ==================================================== */
+let imgEl=null, palette=[], playing=false, frame=0, mode=null, animTmr=null, zoom=2;
+let candle={x:.5,y:.6}, cups=[];
+
+/* ====================================================
+   CANVAS
+   ==================================================== */
+const mainC=document.getElementById('main-canvas');
+const overlC=document.getElementById('overlay-canvas');
+const offC=document.createElement('canvas');
+const ctx=mainC.getContext('2d');
+const oclx=overlC.getContext('2d');
+const octx=offC.getContext('2d',{willReadFrequently:true});
+
+/* ====================================================
+   ZOOM
+   ==================================================== */
+function applyZoomCSS(){
+  if(!imgEl)return;
+  const dw=imgEl.width*zoom+'px', dh=imgEl.height*zoom+'px';
+  mainC.style.width=overlC.style.width=dw;
+  mainC.style.height=overlC.style.height=dh;
+  drawOverlay();
+}
+function setZoom(z){
+  zoom=z;
+  ['z1','z2','z3','z4'].forEach((id,i)=>document.getElementById(id).classList.toggle('active',i+1===z));
+  applyZoomCSS();
+}
+
+/* ====================================================
+   IMAGE LOAD
+   ==================================================== */
+function initImage(img){
+  imgEl=img;
+  [mainC,offC,overlC].forEach(c=>{c.width=img.width;c.height=img.height;});
+  document.getElementById('upload-zone').style.display='none';
+  document.getElementById('zoom-bar'   ).style.display='block';
+  document.getElementById('canvas-wrap').style.display='inline-block';
+  applyZoomCSS(); renderFrame(frame);
+}
+function loadFile(file){
+  if(!file||!file.type.startsWith('image/'))return;
+  const r=new FileReader();
+  r.onload=ev=>{const img=new Image();img.onload=()=>initImage(img);img.src=ev.target.result;};
+  r.readAsDataURL(file);
+}
+document.getElementById('file-input').addEventListener('change',e=>loadFile(e.target.files[0]));
+const uz=document.getElementById('upload-zone');
+uz.addEventListener('dragover',e=>{e.preventDefault();uz.classList.add('dragover');});
+uz.addEventListener('dragleave',()=>uz.classList.remove('dragover'));
+uz.addEventListener('drop',e=>{e.preventDefault();uz.classList.remove('dragover');loadFile(e.dataTransfer.files[0]);});
 
 /* ====================================================
    SLIDERS
    ==================================================== */
-const sliderDefs = [
-  ['ambient',  v => v.toFixed(2)],
-  ['specular', v => v.toFixed(2)],
-  ['cup',      v => v.toFixed(2)],
-  ['glint',    v => v.toFixed(2)],
-  ['protect',  v => Math.round(v * 100) + '%'],
-  ['speed',    v => Math.round(v) + 'ms'],
-];
-
-sliderDefs.forEach(([id, fmt]) => {
-  const sl = document.getElementById('sl-' + id);
-  const lb = document.getElementById('lb-' + id);
-  sl.addEventListener('input', function () {
-    lb.textContent = fmt(parseFloat(this.value));
-    if (imgEl && !playing) renderFrame(frame);
+[
+  ['frames',      v=>Math.round(v)],
+  ['speed',       v=>Math.round(v)+'ms'],
+  ['flicker-amt', v=>v.toFixed(2)],
+  ['flicker-spd', v=>v.toFixed(1)+'×'],
+  ['ambient',     v=>v.toFixed(2)],
+  ['glow-r',      v=>v.toFixed(2)],
+  ['glow-op',     v=>v.toFixed(2)],
+  ['temp',        v=>v<.33?'warm':v<.67?'neutral':'cool'],
+  ['specular',    v=>v.toFixed(2)],
+  ['spec-r',      v=>v.toFixed(2)],
+  ['cup',         v=>v.toFixed(2)],
+  ['glint',       v=>v.toFixed(2)],
+  ['glint-sz',    v=>v.toFixed(2)],
+  ['glint-off',   v=>v.toFixed(2)],
+  ['protect',     v=>Math.round(v*100)+'%'],
+  ['dither-str',  v=>v.toFixed(2)],
+].forEach(([id,fmt])=>{
+  const sl=document.getElementById('sl-'+id);
+  const lb=document.getElementById('lb-'+id);
+  if(!sl||!lb)return;
+  sl.addEventListener('input',function(){
+    lb.textContent=fmt(parseFloat(this.value));
+    if(imgEl&&!playing)renderFrame(frame);
   });
 });
-
-document.getElementById('use-palette').addEventListener('change', () => imgEl && renderFrame(frame));
-document.getElementById('use-dither' ).addEventListener('change', () => imgEl && renderFrame(frame));
+document.getElementById('use-palette').addEventListener('change',()=>imgEl&&renderFrame(frame));
 
 /* ====================================================
-   PLACEMENT MODE
+   PLACEMENT
    ==================================================== */
-function enterMode(m) {
-  mode = m;
+function enterMode(m){
+  mode=m;
   document.getElementById('canvas-wrap').classList.add('placing');
-  const hint  = document.getElementById('place-hint');
-  const badge = document.getElementById('mode-badge');
-  if (m === 'candle') {
-    hint.textContent  = '🕯 Click anywhere on the image to set the candle position.';
-    badge.textContent = 'PLACING CANDLE';
-  } else {
-    hint.textContent  = '+ Click to place a cup centre. Adjust its radius with the slider after placing.';
-    badge.textContent = 'PLACING CUP';
-  }
-  hint.style.display  = 'block';
-  badge.style.display = 'block';
-  document.getElementById('btn-candle').classList.toggle('active', m === 'candle');
-  document.getElementById('btn-cup'   ).classList.toggle('active', m === 'cup');
+  const hint=document.getElementById('place-hint');
+  const badge=document.getElementById('mode-badge');
+  hint.textContent=m==='candle'?'🕯 Click the flame centre.':'+ Click the cup centre.';
+  badge.textContent=m==='candle'?'PLACING CANDLE':'PLACING CUP';
+  hint.style.display=badge.style.display='block';
+  document.getElementById('btn-candle').classList.toggle('active',m==='candle');
+  document.getElementById('btn-cup'   ).classList.toggle('active',m==='cup');
 }
-
-function exitMode() {
-  mode = null;
+function exitMode(){
+  mode=null;
   document.getElementById('canvas-wrap').classList.remove('placing');
-  document.getElementById('place-hint' ).style.display = 'none';
-  document.getElementById('mode-badge' ).style.display = 'none';
-  document.getElementById('btn-candle' ).classList.remove('active');
-  document.getElementById('btn-cup'    ).classList.remove('active');
+  document.getElementById('place-hint').style.display=
+  document.getElementById('mode-badge').style.display='none';
+  document.getElementById('btn-candle').classList.remove('active');
+  document.getElementById('btn-cup'   ).classList.remove('active');
 }
-
-/* Map a click on the overlay canvas to normalised image coordinates */
-overlC.addEventListener('click', function (e) {
-  if (!mode) return;
-  const rect = this.getBoundingClientRect();
-  const nx = (e.clientX - rect.left)  / rect.width;
-  const ny = (e.clientY - rect.top)   / rect.height;
-
-  if (mode === 'candle') {
-    candle = { x: nx, y: ny };
-    updateCandleInfo();
-  } else {
-    cups.push({ x: nx, y: ny, radius: 0.08 });
-    renderCupList();
-  }
-  exitMode();
-  if (imgEl) renderFrame(frame);
+overlC.addEventListener('click',function(e){
+  if(!mode)return;
+  const rect=this.getBoundingClientRect();
+  const nx=(e.clientX-rect.left)/rect.width, ny=(e.clientY-rect.top)/rect.height;
+  if(mode==='candle'){candle={x:nx,y:ny};updateCandleInfo();}
+  else{cups.push({x:nx,y:ny,radius:.07});renderCupList();}
+  exitMode(); if(imgEl)renderFrame(frame);
 });
-
-function updateCandleInfo() {
-  document.getElementById('candle-info').textContent =
-    `Candle: ${(candle.x * 100).toFixed(1)}%  ${(candle.y * 100).toFixed(1)}%`;
+function updateCandleInfo(){
+  document.getElementById('candle-info').textContent=
+    `Candle: ${(candle.x*100).toFixed(1)}%  ${(candle.y*100).toFixed(1)}%`;
 }
-
-function renderCupList() {
-  const list = document.getElementById('cup-list');
-  list.innerHTML = '';
-  cups.forEach((cup, i) => {
-    const div = document.createElement('div');
-    div.className = 'cup-item';
-    div.innerHTML = `
+function renderCupList(){
+  const list=document.getElementById('cup-list');
+  list.innerHTML='';
+  cups.forEach((cup,i)=>{
+    const div=document.createElement('div');
+    div.className='cup-item';
+    div.innerHTML=`
       <div class="cup-header">
-        <span class="cup-num">Cup ${i + 1}</span>
-        <span class="cup-pos">${(cup.x * 100).toFixed(1)}%  ${(cup.y * 100).toFixed(1)}%</span>
+        <span class="cup-num">Cup ${i+1}</span>
+        <span class="cup-pos">${(cup.x*100).toFixed(1)}% ${(cup.y*100).toFixed(1)}%</span>
         <button class="danger" onclick="removeCup(${i})">✕</button>
       </div>
-      <div class="field"><label>Radius (% of image width)</label>
+      <div class="field"><label>Radius (% of width)</label>
         <div class="field-row">
-          <input type="range" min="0.01" max="0.3" step="0.005" value="${cup.radius}"
-            oninput="setCupRadius(${i}, parseFloat(this.value)); this.nextElementSibling.textContent = Math.round(parseFloat(this.value)*100)+'%'">
-          <span class="val">${Math.round(cup.radius * 100)}%</span>
+          <input type="range" min="0.01" max="0.35" step="0.005" value="${cup.radius}"
+            oninput="setCupRadius(${i},parseFloat(this.value));this.nextElementSibling.textContent=Math.round(parseFloat(this.value)*100)+'%'">
+          <span class="val">${Math.round(cup.radius*100)}%</span>
         </div>
       </div>`;
     list.appendChild(div);
   });
 }
-
-function removeCup(i) {
-  cups.splice(i, 1);
-  renderCupList();
-  if (imgEl) renderFrame(frame);
-}
-
-function setCupRadius(i, r) {
-  cups[i].radius = r;
-  if (imgEl) renderFrame(frame);
-}
+function removeCup(i)     {cups.splice(i,1);renderCupList();if(imgEl)renderFrame(frame);}
+function setCupRadius(i,r){cups[i].radius=r;if(imgEl)renderFrame(frame);}
 
 /* ====================================================
-   OVERLAY DRAWING  (markers on top of rendered frame)
+   OVERLAY
    ==================================================== */
-function drawOverlay() {
-  const W = overlC.width, H = overlC.height;
-  oclx.clearRect(0, 0, W, H);
-  if (!imgEl) return;
-
-  const lw = Math.max(1, W * 0.003);
-  const cs = Math.max(5, W * 0.014);
-
-  /* Candle cross */
-  const cx = candle.x * W, cy = candle.y * H;
-  oclx.strokeStyle = '#f5b942';
-  oclx.lineWidth   = lw;
-  oclx.beginPath();
-  oclx.moveTo(cx - cs, cy); oclx.lineTo(cx + cs, cy);
-  oclx.moveTo(cx, cy - cs); oclx.lineTo(cx, cy + cs);
-  oclx.stroke();
-  oclx.beginPath();
-  oclx.arc(cx, cy, cs * 0.45, 0, Math.PI * 2);
-  oclx.strokeStyle = 'rgba(245,185,66,.45)';
-  oclx.stroke();
-
-  /* Cup circles */
-  cups.forEach((cup, i) => {
-    const px = cup.x * W, py = cup.y * H, r = cup.radius * W;
-    oclx.strokeStyle = 'rgba(100,200,255,.75)';
-    oclx.lineWidth   = lw;
-    oclx.setLineDash([Math.max(2, W * 0.005), Math.max(2, W * 0.005)]);
-    oclx.beginPath();
-    oclx.arc(px, py, r, 0, Math.PI * 2);
-    oclx.stroke();
+function drawOverlay(){
+  const W=overlC.width,H=overlC.height;
+  oclx.clearRect(0,0,W,H);
+  if(!imgEl)return;
+  const lw=Math.max(.5,W*.004),cs=Math.max(3,W*.022);
+  const cx=candle.x*W,cy=candle.y*H;
+  oclx.strokeStyle='#f5b942';oclx.lineWidth=lw;
+  oclx.beginPath();oclx.moveTo(cx-cs,cy);oclx.lineTo(cx+cs,cy);
+                   oclx.moveTo(cx,cy-cs);oclx.lineTo(cx,cy+cs);oclx.stroke();
+  oclx.beginPath();oclx.arc(cx,cy,cs*.45,0,Math.PI*2);
+  oclx.strokeStyle='rgba(245,185,66,.4)';oclx.stroke();
+  cups.forEach((cup,i)=>{
+    const px=cup.x*W,py=cup.y*H,r=cup.radius*W;
+    oclx.strokeStyle='rgba(100,200,255,.8)';oclx.lineWidth=lw;
+    oclx.setLineDash([Math.max(1.5,W*.006),Math.max(1.5,W*.006)]);
+    oclx.beginPath();oclx.arc(px,py,r,0,Math.PI*2);oclx.stroke();
     oclx.setLineDash([]);
-
-    oclx.fillStyle = 'rgba(100,200,255,.9)';
-    oclx.beginPath();
-    oclx.arc(px, py, Math.max(2, W * 0.004), 0, Math.PI * 2);
-    oclx.fill();
-
-    oclx.fillStyle = 'rgba(100,200,255,.9)';
-    oclx.font      = `bold ${Math.max(9, Math.round(W * 0.024))}px monospace`;
-    oclx.fillText(`C${i + 1}`, px + r + 3, py - 3);
+    oclx.fillStyle='rgba(100,200,255,.9)';
+    oclx.beginPath();oclx.arc(px,py,Math.max(1.5,W*.005),0,Math.PI*2);oclx.fill();
+    oclx.font=`bold ${Math.max(7,Math.round(W*.04))}px monospace`;
+    oclx.fillText(`C${i+1}`,px+r+2,py-2);
   });
 }
 
 /* ====================================================
    PALETTE
    ==================================================== */
-function parseGPL() {
-  const text = document.getElementById('gpl-input').value;
-  palette = [];
-  text.split('\n').forEach(line => {
-    const t = line.trim();
-    if (!t || /^(GIMP Palette|Name:|Columns:|#)/.test(t)) return;
-    const parts = t.split(/\s+/).filter(Boolean);
-    if (parts.length >= 3 && !isNaN(+parts[0])) {
-      palette.push({ r: +parts[0], g: +parts[1], b: +parts[2] });
-    }
+function parseGPL(){
+  const text=document.getElementById('gpl-input').value;
+  palette=[];
+  text.split('\n').forEach(line=>{
+    const t=line.trim();
+    if(!t||/^(GIMP Palette|Name:|Columns:|#)/.test(t))return;
+    const p=t.split(/\s+/).filter(Boolean);
+    if(p.length>=3&&!isNaN(+p[0]))palette.push({r:+p[0],g:+p[1],b:+p[2]});
   });
-
-  const grid = document.getElementById('swatch-grid');
-  grid.innerHTML = '';
-  palette.slice(0, 64).forEach(c => {
-    const d = document.createElement('div');
-    d.className = 'swatch';
-    d.style.background = `rgb(${c.r},${c.g},${c.b})`;
+  const grid=document.getElementById('swatch-grid');
+  grid.innerHTML='';
+  palette.slice(0,64).forEach(c=>{
+    const d=document.createElement('div');
+    d.className='swatch';d.style.background=`rgb(${c.r},${c.g},${c.b})`;
     grid.appendChild(d);
   });
-  if (palette.length) document.getElementById('use-palette').checked = true;
-  if (imgEl) renderFrame(frame);
+  if(palette.length)document.getElementById('use-palette').checked=true;
+  if(imgEl)renderFrame(frame);
 }
-
-function nearestColor(r, g, b) {
-  let min = Infinity, best = palette[0];
-  for (const c of palette) {
-    const d = (r - c.r) ** 2 + (g - c.g) ** 2 + (b - c.b) ** 2;
-    if (d < min) { min = d; best = c; }
-  }
+function nearestColor(r,g,b){
+  let min=Infinity,best=palette[0];
+  for(const c of palette){const d=(r-c.r)**2+(g-c.g)**2+(b-c.b)**2;if(d<min){min=d;best=c;}}
   return best;
 }
-
-/* Palette snap with optional Floyd-Steinberg dither
-   and a circular protection zone around the candle */
-function applyPalette(context, W, H, cx, cy) {
-  if (!palette.length) return;
-  const pr  = parseFloat(document.getElementById('sl-protect').value) * W;
-  const pr2 = pr * pr;
-  const dither = document.getElementById('use-dither').checked;
-  const id = context.getImageData(0, 0, W, H);
-  const d  = id.data;
-
-  for (let y = 0; y < H; y++) {
-    for (let x = 0; x < W; x++) {
-      /* Skip pixels inside the candle protection zone */
-      const dx = x - cx, dy = y - cy;
-      if (dx * dx + dy * dy < pr2) continue;
-
-      const i  = (y * W + x) * 4;
-      const or = d[i], og = d[i + 1], ob = d[i + 2];
-      const n  = nearestColor(or, og, ob);
-      d[i] = n.r; d[i + 1] = n.g; d[i + 2] = n.b;
-
-      if (dither) {
-        const er = or - n.r, eg = og - n.g, eb = ob - n.b;
-        const sp = (nx, ny, f) => {
-          if (nx < 0 || nx >= W || ny >= H) return;
-          const ni = (ny * W + nx) * 4;
-          d[ni]     = Math.max(0, Math.min(255, d[ni]     + er * f));
-          d[ni + 1] = Math.max(0, Math.min(255, d[ni + 1] + eg * f));
-          d[ni + 2] = Math.max(0, Math.min(255, d[ni + 2] + eb * f));
-        };
-        sp(x + 1, y,     7 / 16);
-        sp(x - 1, y + 1, 3 / 16);
-        sp(x,     y + 1, 5 / 16);
-        sp(x + 1, y + 1, 1 / 16);
+function applyPalette(context,W,H,cx,cy){
+  if(!palette.length)return;
+  const pr=parseFloat(document.getElementById('sl-protect').value)*W,pr2=pr*pr;
+  const mode=document.getElementById('dither-mode').value;
+  const str=parseFloat(document.getElementById('sl-dither-str').value||'1');
+  const id=context.getImageData(0,0,W,H),d=id.data;
+  for(let y=0;y<H;y++){
+    for(let x=0;x<W;x++){
+      const dx=x-cx,dy=y-cy;
+      if(dx*dx+dy*dy<pr2)continue;
+      const i=(y*W+x)*4;
+      const or=d[i],og=d[i+1],ob=d[i+2];
+      let inR=or,inG=og,inB=ob;
+      if(mode==='bayer4'){const thr=(BAYER4[y%4][x%4]/16-.5)*str*128;inR=Math.max(0,Math.min(255,or+thr));inG=Math.max(0,Math.min(255,og+thr));inB=Math.max(0,Math.min(255,ob+thr));}
+      else if(mode==='bayer8'){const thr=(BAYER8[y%8][x%8]/64-.5)*str*128;inR=Math.max(0,Math.min(255,or+thr));inG=Math.max(0,Math.min(255,og+thr));inB=Math.max(0,Math.min(255,ob+thr));}
+      else if(mode==='void-cluster'){const thr=(VC16[y%16][x%16]-.5)*str*128;inR=Math.max(0,Math.min(255,or+thr));inG=Math.max(0,Math.min(255,og+thr));inB=Math.max(0,Math.min(255,ob+thr));}
+      const n=nearestColor(inR,inG,inB);
+      d[i]=n.r;d[i+1]=n.g;d[i+2]=n.b;
+      if(mode==='floyd-steinberg'){
+        const er=(or-n.r)*str,eg=(og-n.g)*str,eb=(ob-n.b)*str;
+        const sp=(nx,ny,f)=>{if(nx<0||nx>=W||ny>=H)return;const ni=(ny*W+nx)*4;d[ni]=Math.max(0,Math.min(255,d[ni]+er*f));d[ni+1]=Math.max(0,Math.min(255,d[ni+1]+eg*f));d[ni+2]=Math.max(0,Math.min(255,d[ni+2]+eb*f));};
+        sp(x+1,y,7/16);sp(x-1,y+1,3/16);sp(x,y+1,5/16);sp(x+1,y+1,1/16);
+      }else if(mode==='atkinson'){
+        const f=(str/8);
+        const er=(or-n.r)*f,eg=(og-n.g)*f,eb=(ob-n.b)*f;
+        const sp=(nx,ny)=>{if(nx<0||nx>=W||ny>=H)return;const ni=(ny*W+nx)*4;d[ni]=Math.max(0,Math.min(255,d[ni]+er));d[ni+1]=Math.max(0,Math.min(255,d[ni+1]+eg));d[ni+2]=Math.max(0,Math.min(255,d[ni+2]+eb));};
+        sp(x+1,y);sp(x+2,y);sp(x-1,y+1);sp(x,y+1);sp(x+1,y+1);sp(x,y+2);
       }
     }
   }
-  context.putImageData(id, 0, 0);
+  context.putImageData(id,0,0);
+}
+
+/* ====================================================
+   COLOUR TEMPERATURE
+   ==================================================== */
+function tempColor(intensity,alpha,temp){
+  const g=Math.round(130+temp*105),b=Math.round(25+temp*145);
+  return `rgba(255,${g},${b},${alpha.toFixed(3)})`;
 }
 
 /* ====================================================
    RENDER FRAME
+   toOffOnly=true → only renders offC, skips blit + overlay (for export)
    ==================================================== */
-function renderFrame(fi) {
-  if (!imgEl) return;
-  const W = offC.width, H = offC.height;
-
-  octx.clearRect(0, 0, W, H);
-  octx.drawImage(imgEl, 0, 0);
-
-  /* Candle flicker: sum of harmonics for organic feel */
-  const t       = (fi / FRAMES) * Math.PI * 2;
-  const flicker = Math.sin(t * 3.7) * 0.12
-                + Math.sin(t * 7.1 + 1.3) * 0.06
-                + Math.cos(t * 2.3 + 0.8) * 0.08;
-  const base      = parseFloat(document.getElementById('sl-ambient').value);
-  const intensity = Math.max(0.95, base + flicker);
-
-  const cx = candle.x * W;
-  const cy = candle.y * H;
-
-  /* --- Pass 1: ambient warm glow (overlay) --- */
-  octx.globalCompositeOperation = 'overlay';
-  let g = octx.createRadialGradient(cx, cy, 2, cx, cy, W * 0.52);
-  g.addColorStop(0, `rgba(255,160,40,${(intensity * 0.6).toFixed(3)})`);
-  g.addColorStop(1, 'rgba(0,0,0,0)');
-  octx.fillStyle = g;
-  octx.fillRect(0, 0, W, H);
-
-  /* --- Pass 2: wall specular (color-dodge) --- */
-  const spec = parseFloat(document.getElementById('sl-specular').value);
-  octx.globalCompositeOperation = 'color-dodge';
-  g = octx.createRadialGradient(cx, cy, 10, cx, cy, W * 0.62);
-  const ra = Math.max(0, (intensity - 1 + spec) * 0.32);
-  g.addColorStop(0, `rgba(255,200,100,${ra.toFixed(3)})`);
-  g.addColorStop(1, 'rgba(0,0,0,0)');
-  octx.fillStyle = g;
-  octx.fillRect(0, 0, W, H);
-
-  /* --- Pass 3: cup reflections --- */
-  const cupStr  = parseFloat(document.getElementById('sl-cup').value);
-  const glintSt = parseFloat(document.getElementById('sl-glint').value);
-  const shimmer = Math.sin(t * 2.3) * 0.08 + Math.cos(t * 5.1) * 0.04;
-
-  cups.forEach(cup => {
-    const px = cup.x * W;
-    const py = cup.y * H;
-    const r  = cup.radius * W;
-
-    /* Body reflection — screen blend for additive warm light on metal */
-    octx.globalCompositeOperation = 'screen';
-    g = octx.createRadialGradient(px, py, 0, px, py, r);
-    const ba = Math.max(0, (intensity - 0.95 + cupStr * 0.5 + shimmer) * 0.42);
-    g.addColorStop(0,    `rgba(255,195,90,${ba.toFixed(3)})`);
-    g.addColorStop(0.45, `rgba(200,110,35,${(ba * 0.5).toFixed(3)})`);
-    g.addColorStop(1,    'rgba(0,0,0,0)');
-    octx.fillStyle = g;
-    octx.fillRect(0, 0, W, H);
-
-    /* Specular glint — small oscillating hotspot near the rim */
-    const gx = px + Math.sin(t * 0.9) * W * 0.007;
-    const gy = py - H * 0.04 + Math.cos(t * 1.1) * H * 0.007;
-    octx.globalCompositeOperation = 'hard-light';
-    g = octx.createRadialGradient(gx, gy, 0, gx, gy, r * 0.32);
-    const ga = Math.max(0, (intensity + shimmer) * glintSt);
-    g.addColorStop(0, `rgba(255,245,190,${ga.toFixed(3)})`);
-    g.addColorStop(1, 'rgba(0,0,0,0)');
-    octx.fillStyle = g;
-    octx.fillRect(0, 0, W, H);
+function renderFrame(fi,toOffOnly){
+  if(!imgEl)return;
+  const W=offC.width,H=offC.height;
+  octx.clearRect(0,0,W,H);octx.drawImage(imgEl,0,0);
+  const totalFrames=parseInt(document.getElementById('sl-frames').value);
+  const flickAmt=parseFloat(document.getElementById('sl-flicker-amt').value);
+  const flickSpd=parseFloat(document.getElementById('sl-flicker-spd').value);
+  const baseAmbient=parseFloat(document.getElementById('sl-ambient').value);
+  const glowR=parseFloat(document.getElementById('sl-glow-r').value);
+  const glowOp=parseFloat(document.getElementById('sl-glow-op').value);
+  const temp=parseFloat(document.getElementById('sl-temp').value);
+  const spec=parseFloat(document.getElementById('sl-specular').value);
+  const specR=parseFloat(document.getElementById('sl-spec-r').value);
+  const glintStr=parseFloat(document.getElementById('sl-glint').value);
+  const glintSz=parseFloat(document.getElementById('sl-glint-sz').value);
+  const glintOff=parseFloat(document.getElementById('sl-glint-off').value);
+  const t=(fi/Math.max(1,totalFrames))*Math.PI*2;
+  const flicker=Math.sin(t*3.7*flickSpd)*flickAmt+Math.sin(t*7.1*flickSpd+1.3)*flickAmt*.5+Math.cos(t*2.3*flickSpd+.8)*flickAmt*.65;
+  const intensity=Math.max(.95,baseAmbient+flicker);
+  const shimmer=Math.sin(t*2.3*flickSpd)*.08+Math.cos(t*5.1*flickSpd)*.04;
+  const cx=candle.x*W,cy=candle.y*H;
+  octx.globalCompositeOperation='overlay';
+  let g=octx.createRadialGradient(cx,cy,2,cx,cy,W*glowR);
+  g.addColorStop(0,tempColor(intensity,intensity*glowOp,temp));g.addColorStop(1,'rgba(0,0,0,0)');
+  octx.fillStyle=g;octx.fillRect(0,0,W,H);
+  octx.globalCompositeOperation='color-dodge';
+  g=octx.createRadialGradient(cx,cy,10,cx,cy,W*specR);
+  const ra=Math.max(0,(intensity-1+spec)*.32);
+  g.addColorStop(0,tempColor(intensity,ra,temp));g.addColorStop(1,'rgba(0,0,0,0)');
+  octx.fillStyle=g;octx.fillRect(0,0,W,H);
+  cups.forEach(cup=>{
+    const px=cup.x*W,py=cup.y*H,r=cup.radius*W;
+    // Glint only — no broad body bloom
+    const angle=Math.atan2(cy-py,cx-px);
+    const gx=px+Math.cos(angle)*r*glintOff,gy=py+Math.sin(angle)*r*glintOff;
+    const ga=Math.max(0,Math.min(1,(.4+shimmer*.5)*glintStr));
+    octx.globalCompositeOperation='lighter';
+    g=octx.createRadialGradient(gx,gy,0,gx,gy,r*glintSz);
+    g.addColorStop(0,tempColor(intensity,ga,Math.min(1,temp+.3)));g.addColorStop(.4,tempColor(intensity,ga*.4,temp));g.addColorStop(1,'rgba(0,0,0,0)');
+    octx.fillStyle=g;octx.fillRect(0,0,W,H);
   });
-
-  octx.globalCompositeOperation = 'source-over';
-
-  /* --- Pass 4: palette snap (with candle protection zone) --- */
-  if (document.getElementById('use-palette').checked) {
-    applyPalette(octx, W, H, cx, cy);
+  octx.globalCompositeOperation='source-over';
+  if(document.getElementById('use-palette').checked)applyPalette(octx,W,H,cx,cy);
+  if(!toOffOnly){
+    ctx.clearRect(0,0,W,H);ctx.drawImage(offC,0,0);
+    document.getElementById('frame-badge').textContent='FRAME '+String(fi+1).padStart(2,'0')+' / '+totalFrames;
+    drawOverlay();
   }
-
-  /* Copy to visible canvas and redraw overlay markers */
-  ctx.clearRect(0, 0, W, H);
-  ctx.drawImage(offC, 0, 0);
-  document.getElementById('frame-badge').textContent = 'FRAME ' + String(fi + 1).padStart(2, '0');
-  drawOverlay();
 }
 
 /* ====================================================
    PLAYBACK
    ==================================================== */
-function togglePlay() {
-  playing = !playing;
-  document.getElementById('btn-play').textContent = playing ? '⏸ Stop' : '▶ Preview';
-  if (playing) tick();
-  else clearTimeout(animTmr);
+function togglePlay(){
+  playing=!playing;
+  document.getElementById('btn-play').textContent=playing?'⏸ Stop':'▶ Preview';
+  if(playing)tick();else clearTimeout(animTmr);
+}
+function tick(){
+  if(!playing)return;
+  const tf=parseInt(document.getElementById('sl-frames').value);
+  frame=(frame+1)%tf;renderFrame(frame);
+  animTmr=setTimeout(tick,parseInt(document.getElementById('sl-speed').value));
+}
+function resetAnim(){
+  playing=false;clearTimeout(animTmr);
+  document.getElementById('btn-play').textContent='▶ Preview';
+  frame=0;if(imgEl)renderFrame(0);
 }
 
-function tick() {
-  if (!playing) return;
-  frame = (frame + 1) % FRAMES;
-  renderFrame(frame);
-  const ms = parseInt(document.getElementById('sl-speed').value);
-  animTmr = setTimeout(tick, ms);
+/* ====================================================
+   EXPORT — SINGLE FRAME
+   ==================================================== */
+function exportCurrentFrame(){
+  if(!imgEl)return;
+  renderFrame(frame,true);
+  const a=document.createElement('a');
+  a.download=`flicker_frame_${String(frame+1).padStart(2,'0')}.png`;
+  a.href=offC.toDataURL('image/png');a.click();
+  ctx.clearRect(0,0,mainC.width,mainC.height);ctx.drawImage(offC,0,0);drawOverlay();
 }
 
-function resetAnim() {
-  playing = false;
-  clearTimeout(animTmr);
-  document.getElementById('btn-play').textContent = '▶ Preview';
-  frame = 0;
-  if (imgEl) renderFrame(0);
+/* ====================================================
+   EXPORT — ALL FRAMES (individual PNGs)
+   ==================================================== */
+async function exportAllFrames(){
+  if(!imgEl)return;
+  const totalFrames=parseInt(document.getElementById('sl-frames').value);
+  const wasPlaying=playing;
+  if(playing){playing=false;clearTimeout(animTmr);}
+  document.getElementById('btn-play').textContent='▶ Preview';
+  const btn=document.getElementById('btn-export-all');
+  const wrap=document.getElementById('progress-wrap');
+  const bar=document.getElementById('progress-bar');
+  const status=document.getElementById('export-status');
+  btn.disabled=true;wrap.style.display='block';
+  const savedFrame=frame;
+  for(let f=0;f<totalFrames;f++){
+    status.textContent=`Exporting frame ${f+1} of ${totalFrames}…`;
+    bar.style.width=((f/totalFrames)*100)+'%';
+    renderFrame(f,true);
+    await new Promise(resolve=>{
+      offC.toBlob(blob=>{
+        const url=URL.createObjectURL(blob);
+        const a=document.createElement('a');a.href=url;
+        a.download=`flicker_frame_${String(f+1).padStart(2,'0')}.png`;
+        a.click();
+        setTimeout(()=>{URL.revokeObjectURL(url);resolve();},120);
+      },'image/png');
+    });
+  }
+  bar.style.width='100%';status.textContent=`✓ ${totalFrames} frames exported.`;
+  btn.disabled=false;
+  setTimeout(()=>{wrap.style.display='none';bar.style.width='0%';status.textContent='';},3500);
+  frame=savedFrame;renderFrame(frame);
+  if(wasPlaying){playing=true;document.getElementById('btn-play').textContent='⏸ Stop';tick();}
 }
 
-/* Export: copy offC (already rendered, no overlay) to a clean canvas and save */
-function exportClean() {
-  if (!imgEl) return;
-  const a = document.createElement('a');
-  a.download = `flicker_frame_${String(frame + 1).padStart(2, '0')}.png`;
-  /* offC holds the last rendered frame without any overlay markers */
-  a.href = offC.toDataURL('image/png');
-  a.click();
+/* ====================================================
+   EXPORT — SPRITE SHEET
+   Renders all frames into a single PNG in the chosen layout.
+   In Aseprite: File → Import Sprite Sheet, set frame W & H.
+   ==================================================== */
+async function exportSpriteSheet(){
+  if(!imgEl)return;
+  const totalFrames=parseInt(document.getElementById('sl-frames').value);
+  const FW=imgEl.width, FH=imgEl.height;
+  const layout=document.getElementById('sheet-layout').value;
+
+  let cols,rows;
+  if(layout==='horizontal'){ cols=totalFrames; rows=1; }
+  else if(layout==='vertical'){ cols=1; rows=totalFrames; }
+  else{
+    cols=parseInt(document.getElementById('sl-grid-cols').value);
+    rows=Math.ceil(totalFrames/cols);
+  }
+
+  const wasPlaying=playing;
+  if(playing){playing=false;clearTimeout(animTmr);}
+  document.getElementById('btn-play').textContent='▶ Preview';
+
+  const btn=document.getElementById('btn-sheet');
+  const status=document.getElementById('export-status');
+  const wrap=document.getElementById('progress-wrap');
+  const bar=document.getElementById('progress-bar');
+  btn.disabled=true;wrap.style.display='block';status.textContent='Building sprite sheet…';
+
+  // Build the sheet canvas
+  const sheet=document.createElement('canvas');
+  sheet.width=cols*FW; sheet.height=rows*FH;
+  const sctx=sheet.getContext('2d');
+
+  const savedFrame=frame;
+  for(let f=0;f<totalFrames;f++){
+    bar.style.width=((f/totalFrames)*100)+'%';
+    status.textContent=`Rendering frame ${f+1} of ${totalFrames}…`;
+    renderFrame(f,true);   // renders clean into offC
+    // Let browser breathe between heavy frames
+    await new Promise(r=>setTimeout(r,0));
+    const col=f%cols, row=Math.floor(f/cols);
+    sctx.drawImage(offC, col*FW, row*FH);
+  }
+
+  bar.style.width='100%';
+  status.textContent='Downloading sprite sheet…';
+
+  sheet.toBlob(blob=>{
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;
+    a.download=`candle_flicker_sheet_${cols}x${rows}_${FW}x${FH}.png`;
+    a.click();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+    btn.disabled=false;
+    status.textContent=`✓ Sheet exported (${cols}×${rows} frames, ${sheet.width}×${sheet.height}px)`;
+    setTimeout(()=>{wrap.style.display='none';bar.style.width='0%';status.textContent='';},4000);
+  },'image/png');
+
+  frame=savedFrame;renderFrame(frame);
+  if(wasPlaying){playing=true;document.getElementById('btn-play').textContent='⏸ Stop';tick();}
 }
 
 /* ====================================================
    INIT
    ==================================================== */
 updateCandleInfo();
+onDitherModeChange();
 </script>
 </body>
 </html>

@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="75" height="93" shape-rendering="crispEdges">
+<path fill="#000000" d="M23.0,21.0 H30.0 V60.0 H23.0 Z" />
+<path fill="#000000" d="M42.0,21.0 H49.0 V28.0 H42.0 Z" />
+<path fill="#000000" d="M43.0,28.0 H49.0 V73.0 H43.0 Z" />
+<path fill="#000000" d="M30.0,56.0 H31.0 V67.0 H30.0 Z" />
+<path fill="#000000" d="M31.0,57.0 H32.0 V68.0 H31.0 Z" />
+<path fill="#000000" d="M32.0,58.0 H33.0 V69.0 H32.0 Z" />
+<path fill="#000000" d="M33.0,59.0 H34.0 V70.0 H33.0 Z" />
+<path fill="#000000" d="M24.0,60.0 H30.0 V61.0 H24.0 Z" />
+<path fill="#000000" d="M34.0,60.0 H35.0 V71.0 H34.0 Z" />
+<path fill="#000000" d="M25.0,61.0 H30.0 V62.0 H25.0 Z" />
+<path fill="#000000" d="M35.0,61.0 H36.0 V72.0 H35.0 Z" />
+<path fill="#000000" d="M26.0,62.0 H30.0 V63.0 H26.0 Z" />
+<path fill="#000000" d="M36.0,62.0 H37.0 V73.0 H36.0 Z" />
+<path fill="#000000" d="M27.0,63.0 H30.0 V64.0 H27.0 Z" />
+<path fill="#000000" d="M37.0,63.0 H38.0 V73.0 H37.0 Z" />
+<path fill="#000000" d="M42.0,63.0 H43.0 V73.0 H42.0 Z" />
+<path fill="#000000" d="M28.0,64.0 H30.0 V65.0 H28.0 Z" />
+<path fill="#000000" d="M38.0,64.0 H42.0 V73.0 H38.0 Z" />
+<path fill="#000000" d="M29.0,65.0 H30.0 V66.0 H29.0 Z" />
+</svg>

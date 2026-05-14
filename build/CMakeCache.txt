@@ -68,6 +68,9 @@ ACE_SOURCE_DIR:STATIC=/Users/phillipb/Documents/macACE/deps/ace
 //Tilebuffer: Specify type used for storing tile indices.
 ACE_TILEBUFFER_TILE_TYPE:STRING=UBYTE
 
+//Enable AGA feature sets, makes ACE use AGA Features.
+ACE_USE_AGA_FEATURES:BOOL=OFF
+
 //Enable ECS feature sets, makes ACE OCS-incompatible.
 ACE_USE_ECS_FEATURES:BOOL=OFF
 

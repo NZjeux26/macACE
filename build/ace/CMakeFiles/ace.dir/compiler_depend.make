@@ -296,6 +296,7 @@ ace/CMakeFiles/ace.dir/src/ace/managers/viewport/simplebuffer.c.obj: /Users/phil
   /Users/phillipb/Documents/macACE/deps/ace/include/mini_std/string.h
 
 ace/CMakeFiles/ace.dir/src/ace/managers/viewport/tilebuffer.c.obj: /Users/phillipb/Documents/macACE/deps/ace/src/ace/managers/viewport/tilebuffer.c \
+  /Users/phillipb/Documents/macACE/deps/ace/include/ace/generic/screen.h \
   /Users/phillipb/Documents/macACE/deps/ace/include/ace/macros.h \
   /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/blit.h \
   /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/copper.h \
@@ -473,6 +474,7 @@ ace/CMakeFiles/ace.dir/src/ace/utils/palette.c.obj: /Users/phillipb/Documents/ma
   /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/bitmap.h \
   /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/custom.h \
   /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/disk_file.h \
+  /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/endian.h \
   /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/extview.h \
   /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/file.h \
   /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/palette.h \

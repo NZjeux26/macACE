@@ -1,0 +1,35 @@
+# fix_svg_rects.py — run with python3, zero dependencies
+import xml.etree.ElementTree as ET
+import os
+
+SVG_DIR = "/Users/phillipb/Documents/macACE/dataSources/font/testsvg"
+
+ET.register_namespace("", "http://www.w3.org/2000/svg")
+
+for filename in os.listdir(SVG_DIR):
+    if not filename.endswith(".svg"):
+        continue
+
+    filepath = os.path.join(SVG_DIR, filename)
+    tree = ET.parse(filepath)
+    root = tree.getroot()
+    ns = {"": "http://www.w3.org/2000/svg"}
+
+    rects = root.findall("{http://www.w3.org/2000/svg}rect") or root.findall("rect")
+
+    for rect in rects:
+        x = float(rect.get("x", 0))
+        y = float(rect.get("y", 0))
+        w = float(rect.get("width", 0))
+        h = float(rect.get("height", 0))
+        fill = rect.get("fill", "black")
+
+        rect.tag = "{http://www.w3.org/2000/svg}path"
+        rect.set("d", f"M{x},{y} H{x+w} V{y+h} H{x} Z")
+        rect.set("fill", fill)
+        for attr in ["x", "y", "width", "height"]:
+            if attr in rect.attrib:
+                del rect.attrib[attr]
+
+    tree.write(filepath, xml_declaration=True, encoding="UTF-8")
+    print(f"Converted: {filename}")
