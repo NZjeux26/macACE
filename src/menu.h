@@ -12,5 +12,5 @@ void findCPUType(void);
 void drawBackground(void);
 void loadAssets(void);
 void setupMouseCursor(void);
-void setupTitleMenu(void);
+void drawMainMenu(void);
 #endif

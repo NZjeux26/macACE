@@ -17,6 +17,9 @@
 //Value Computed by CMake
 ACE_BINARY_DIR:STATIC=/Users/phillipb/Documents/macACE/build/ace
 
+//When enabled, allows for extra optimizations for bobs.
+ACE_BOB_ALWAYS_ON_SCROLL_BUFFER:BOOL=OFF
+
 //When enabled, uses pristine buffer for bob undraw instead of
 // allocating restore buffers.
 ACE_BOB_PRISTINE_BUFFER:BOOL=OFF

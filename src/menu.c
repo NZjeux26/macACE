@@ -41,9 +41,11 @@ static tBitMap *pBmMenuCursorSrc;
 static tBitMap *pBmMenuCursorData;
 static tBitMap *pBmTitleText;
 static tBitMap *pBmTitleTextMask;
-static tBitMap *pBmOptionButton;
-static tBitMap *pBmOptionButtonH;
+static tBitMap *pBmButtonOption;
+static tBitMap *pBmButtonOptionMask;
+static tBitMap *pBmButtonOptionH;
 static tBitMap *pBmButtonPlay;
+static tBitMap *pBmButtonPlayMask;
 static tBitMap *pBMButtonPlayH;
 
 static tSprite *pSMenuCursor;
@@ -85,7 +87,7 @@ void menuGsCreate(void){
 
     //Get the CPU type.
     findCPUType();
-    setupTitleMenu();
+    drawMainMenu();
 
     //fontDrawStr(menufont, s_pMainBuffer->pBack, 168, 155, "L", 10, FONT_COOKIE, menutextbitmap);
 
@@ -163,16 +165,6 @@ void findCPUType(void){
     }
 }
 
-void drawBackground(void){
-    menuBG = bitmapCreateFromPath("data/GFX/menuBG.bm",0);
-    for(UWORD x = 0; x < s_pMainBuffer->uBfrBounds.uwX; x+=16){//fills out the background
-        for(UWORD y = 0; y < s_pMainBuffer->uBfrBounds.uwY; y+=16){
-            blitCopyAligned(menuBG,x,y,s_pMainBuffer->pBack,x,y,16,16);
-            blitCopyAligned(menuBG,x,y,s_pMainBuffer->pFront,x,y,16,16);
-        }
-    }
-}
-
 void setupMouseCursor(void){
     pBmMenuCursorSrc = bitmapCreateFromPath("data/GFX/menuPointer.bm",0);
     pBmMenuCursorData = bitmapCreate(CURSOR_SPRITE_WIDTH,CURSOR_SPRITE_HEIGHT,2,BMF_INTERLEAVED | BMF_CLEAR);
@@ -184,7 +176,17 @@ void setupMouseCursor(void){
     pBmMenuCursorData,0,0,CURSOR_SPRITE_WIDTH,CURSOR_SPRITE_HEIGHT,MINTERM_COOKIE);
 }
 
-void setupTitleMenu(void){
+void drawBackground(void){
+    menuBG = bitmapCreateFromPath("data/GFX/menuBG.bm",0);
+    for(UWORD x = 0; x < s_pMainBuffer->uBfrBounds.uwX; x+=16){//fills out the background
+        for(UWORD y = 0; y < s_pMainBuffer->uBfrBounds.uwY; y+=16){
+            blitCopyAligned(menuBG,x,y,s_pMainBuffer->pBack,x,y,16,16);
+            blitCopyAligned(menuBG,x,y,s_pMainBuffer->pFront,x,y,16,16);
+        }
+    }
+}
+
+void drawMainMenu(void){
     
     //load title text
     pBmTitleText = bitmapCreateFromPath("data/GFX/titletext.bm",0);
@@ -195,16 +197,20 @@ void setupTitleMenu(void){
 
     //load play Button
     pBmButtonPlay = bitmapCreateFromPath("data/GFX/buttonPlay.bm",0);
-    blitCopy(pBmButtonPlay,0,0,
-    s_pMainBuffer->pBack,50,200,BUTTON_WIDTH,BUTTON_HEIGHT,MINTERM_COOKIE);
+    pBmButtonPlayMask = bitmapCreateFromPath("data/GFX/buttonPlay_mask.bm",0);
+
+    blitCopyMask(pBmButtonPlay,0,0,
+    s_pMainBuffer->pBack,50,200,BUTTON_WIDTH,BUTTON_HEIGHT,pBmButtonPlayMask->Planes[0]);
 
     //load options button
-    pBmOptionButton = bitmapCreateFromPath("data/GFX/buttonOptions.bm",0);
-     blitCopy(pBmOptionButton,0,0,
-    s_pMainBuffer->pBack,206,200,BUTTON_WIDTH,BUTTON_HEIGHT,MINTERM_COOKIE);
+    pBmButtonOption = bitmapCreateFromPath("data/GFX/buttonOptions.bm",0);
+    pBmButtonOptionMask = bitmapCreateFromPath("data/GFX/buttonOptions_mask.bm",0);
+
+    blitCopyMask(pBmButtonOption,0,0,
+    s_pMainBuffer->pBack,206,200,BUTTON_WIDTH,BUTTON_HEIGHT,pBmButtonOptionMask->Planes[0]);
 
     //load highlighted versions for reference
-    pBmOptionButtonH = bitmapCreateFromPath("data/GFX/buttonOptionsH.bm",0);
-    pBMButtonPlayH = bitmapCreateFromPath("data/GFX/buttonPlayH.bm",0);
+    pBmButtonOptionH = bitmapCreateFromPath("data/GFX/buttonOptionsH.bm",0);
+   // pBmButtonPlayH = bitmapCreateFromPath("data/GFX/buttonPlayH.bm",0);
 
 }
