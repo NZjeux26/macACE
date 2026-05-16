@@ -10,7 +10,11 @@ void updateMenuMousepos(short mouseX, short mouseY);
 void onMenuClick(short mouseX, short mouseY);
 void findCPUType(void);
 void drawBackground(void);
-void loadAssets(void);
+void loadMenuAssets(void);
 void setupMouseCursor(void);
 void drawMainMenu(void);
+void drawOptionMenu(void);
+
+
+
 #endif

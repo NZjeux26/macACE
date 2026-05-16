@@ -25,6 +25,15 @@
 #define CURSOR_SPRITE_HEIGHT 18
 #define BUTTON_WIDTH 64
 #define BUTTON_HEIGHT 47
+#define OPTION_BUTTON_WIDTH 64
+#define OPTION_BUTTON_HEIGHT 22
+#define OPTION_MENU_WIDTH 128
+#define OPTION_MENU_HEIGHT 126
+#define TEAM_ATTACKER 2
+#define TEAM_DEFENDER 1
+#define MAIN_MENU 0
+#define OPTION_MENU 1
+
 /*-----Seeting Up Viewports-----*/
 static tView *s_pMenuView; //view for all viewports
 static tVPort *s_pVpMain;//viewport for the menu
@@ -47,10 +56,18 @@ static tBitMap *pBmButtonOptionH;
 static tBitMap *pBmButtonPlay;
 static tBitMap *pBmButtonPlayMask;
 static tBitMap *pBMButtonPlayH;
+static tBitMap *pBmOptionMenu;
+static tBitMap *pBmOptionMenuMask;
+static tBitMap *pBmbuttonAttacker;
+static tBitMap *pBmbuttonAttackerMask;
+static tBitMap *pBmbuttonDefender;
+static tBitMap *pBmbuttonDefenderMask;
 
 static tSprite *pSMenuCursor;
 
 BYTE cpuType = 0; //cpu types for configuring depth and adding addtional difficulty levels for CPUS that can.
+UBYTE CPUPlayerTeam = TEAM_DEFENDER; 
+BYTE activeMenu = MAIN_MENU; //0 = main menu, 1 = options menu, this will be used to determine which menu to draw and which buttons to check for clicks on.
 
 void menuGsCreate(void){
     // //create view port and the display buffer for the main viewport
@@ -67,7 +84,9 @@ void menuGsCreate(void){
 
     //colour palette for the menu
     paletteLoadFromPath("data/palette/mainmenuPalette2.plt", s_pVpMain->pPalette, 32);
-        
+    
+    loadMenuAssets(); //load the menu assets like the background and buttons
+
     drawBackground(); //draw the menu background to the back buffer before loading the view.
     
     //enanble the sprite manager and the DMA bit for sprites
@@ -88,8 +107,7 @@ void menuGsCreate(void){
     //Get the CPU type.
     findCPUType();
     drawMainMenu();
-
-    //fontDrawStr(menufont, s_pMainBuffer->pBack, 168, 155, "L", 10, FONT_COOKIE, menutextbitmap);
+    
 
     systemUnuse();
     viewLoad(s_pMenuView);
@@ -106,7 +124,17 @@ void menuGsLoop(void){
     short mouseY = mouseGetY(MOUSE_PORT_1);
     
     updateMenuMousepos(mouseX, mouseY);
-
+    
+    if(mouseCheck(MOUSE_PORT_1, MOUSE_LMB)){
+        onMenuClick(mouseX, mouseY);
+    }
+    if(mouseCheck(MOUSE_PORT_1, MOUSE_RMB)){
+        logWrite("Right click at %d, %d\n", mouseX, mouseY);
+        if(activeMenu == OPTION_MENU){ //if we're in the options menu, we need to redraw it every frame to update the highlighted button based on mouse position
+            drawBackground(); //redraw the background to clear the old highlighted button
+            drawMainMenu(); //redraw the main menu to clear the old highlighted button
+        }
+    }
 
     copProcessBlocks();
     systemIdleBegin();
@@ -115,8 +143,21 @@ void menuGsLoop(void){
 
 void menuGsDestroy(void){
     systemUse();
-    bitmapDestroy(pBmAckwin);
-    bitmapDestroy(pBDefwin);
+    bitmapDestroy(menuBG);
+    bitmapDestroy(pBmTitleText);
+    bitmapDestroy(pBmTitleTextMask);
+    bitmapDestroy(pBmButtonOption);
+    bitmapDestroy(pBmButtonOptionMask);
+    bitmapDestroy(pBmButtonOptionH);
+    bitmapDestroy(pBmButtonPlay);
+    bitmapDestroy(pBmButtonPlayMask);
+    bitmapDestroy(pBMButtonPlayH);
+    bitmapDestroy(pBmOptionMenu);
+    bitmapDestroy(pBmOptionMenuMask);
+    bitmapDestroy(pBmbuttonAttacker);
+    bitmapDestroy(pBmbuttonAttackerMask);
+    bitmapDestroy(pBmbuttonDefender);
+    bitmapDestroy(pBmbuttonDefenderMask);
     bitmapDestroy(pBmMenuCursorSrc);
     bitmapDestroy(pBmMenuCursorData);
     systemSetDmaBit(DMAB_SPRITE, 0);
@@ -164,6 +205,36 @@ void findCPUType(void){
         logWrite("CPU: 68000\n");
     }
 }
+void loadMenuAssets(void){
+    //load menu background
+    menuBG = bitmapCreateFromPath("data/GFX/menuBG.bm",0);
+
+     //load title text
+    pBmTitleText = bitmapCreateFromPath("data/GFX/titletext.bm",0);
+    pBmTitleTextMask = bitmapCreateFromPath("data/GFX/titletext_mask.bm",0);
+
+    //load play Button
+    pBmButtonPlay = bitmapCreateFromPath("data/GFX/buttonPlay.bm",0);
+    pBmButtonPlayMask = bitmapCreateFromPath("data/GFX/buttonPlay_mask.bm",0);
+
+    //load MMoption button
+    pBmButtonOption = bitmapCreateFromPath("data/GFX/buttonOptions.bm",0);
+    pBmButtonOptionMask = bitmapCreateFromPath("data/GFX/buttonOptions_mask.bm",0);
+
+    pBmOptionMenu = bitmapCreateFromPath("data/GFX/optionMenu.bm",0);
+    pBmOptionMenuMask = bitmapCreateFromPath("data/GFX/optionMenu_mask.bm",0);
+
+    pBmbuttonAttacker = bitmapCreateFromPath("data/GFX/buttonAttacker.bm",0);
+    pBmbuttonAttackerMask = bitmapCreateFromPath("data/GFX/buttonAttacker_mask.bm",0);  
+
+    pBmbuttonDefender = bitmapCreateFromPath("data/GFX/buttonDefender.bm",0);
+    pBmbuttonDefenderMask = bitmapCreateFromPath("data/GFX/buttonDefender_mask.bm",0);
+
+     //load highlighted versions for reference
+    pBmButtonOptionH = bitmapCreateFromPath("data/GFX/buttonOptionsH.bm",0);
+   // pBmButtonPlayH = bitmapCreateFromPath("data/GFX/buttonPlayH.bm",0);
+
+}
 
 void setupMouseCursor(void){
     pBmMenuCursorSrc = bitmapCreateFromPath("data/GFX/menuPointer.bm",0);
@@ -177,7 +248,6 @@ void setupMouseCursor(void){
 }
 
 void drawBackground(void){
-    menuBG = bitmapCreateFromPath("data/GFX/menuBG.bm",0);
     for(UWORD x = 0; x < s_pMainBuffer->uBfrBounds.uwX; x+=16){//fills out the background
         for(UWORD y = 0; y < s_pMainBuffer->uBfrBounds.uwY; y+=16){
             blitCopyAligned(menuBG,x,y,s_pMainBuffer->pBack,x,y,16,16);
@@ -187,30 +257,75 @@ void drawBackground(void){
 }
 
 void drawMainMenu(void){
-    
-    //load title text
-    pBmTitleText = bitmapCreateFromPath("data/GFX/titletext.bm",0);
-    pBmTitleTextMask = bitmapCreateFromPath("data/GFX/titletext_mask.bm",0);
-    
+    activeMenu = MAIN_MENU; //set the active menu to main menu so we know which buttons to check for clicks on and which menu to draw in the loop.
+    //Draw Title Text
     blitCopyMask(pBmTitleText,0,0,
     s_pMainBuffer->pBack, 50, 17, 224, 96, pBmTitleTextMask->Planes[0]);
-
-    //load play Button
-    pBmButtonPlay = bitmapCreateFromPath("data/GFX/buttonPlay.bm",0);
-    pBmButtonPlayMask = bitmapCreateFromPath("data/GFX/buttonPlay_mask.bm",0);
-
+ 
+    //load play button
     blitCopyMask(pBmButtonPlay,0,0,
     s_pMainBuffer->pBack,50,200,BUTTON_WIDTH,BUTTON_HEIGHT,pBmButtonPlayMask->Planes[0]);
 
-    //load options button
-    pBmButtonOption = bitmapCreateFromPath("data/GFX/buttonOptions.bm",0);
-    pBmButtonOptionMask = bitmapCreateFromPath("data/GFX/buttonOptions_mask.bm",0);
-
+    //draw option button
     blitCopyMask(pBmButtonOption,0,0,
     s_pMainBuffer->pBack,206,200,BUTTON_WIDTH,BUTTON_HEIGHT,pBmButtonOptionMask->Planes[0]);
 
-    //load highlighted versions for reference
-    pBmButtonOptionH = bitmapCreateFromPath("data/GFX/buttonOptionsH.bm",0);
-   // pBmButtonPlayH = bitmapCreateFromPath("data/GFX/buttonPlayH.bm",0);
+}
 
+//maybe make a undraw mainMenu function and Option menu to save having to redraw the background everytime.
+
+void drawOptionMenu(void){
+    activeMenu = OPTION_MENU; //set the active menu to option menu so we know which buttons to check for clicks on and which menu to draw in the loop.
+    
+    //draw option menu
+    blitCopyMask(pBmOptionMenu,0,0,
+    s_pMainBuffer->pBack,94,65,OPTION_MENU_WIDTH,OPTION_MENU_HEIGHT,pBmButtonOptionMask->Planes[0]);  
+
+    //draw drop shadow for team button
+    blitRect(s_pMainBuffer->pBack, 128, 112, OPTION_BUTTON_WIDTH, OPTION_BUTTON_HEIGHT, 0); //black shadow
+    
+    //This needs code to find the current AI player team and then draw the correct button for it, and then if thhe button is click swap both the button and the team.
+    if(CPUPlayerTeam == TEAM_ATTACKER){
+        //draw the button for attacker team selected
+        blitCopyMask(pBmbuttonAttacker,0,0,
+        s_pMainBuffer->pBack,129,111,OPTION_BUTTON_WIDTH,OPTION_BUTTON_HEIGHT,pBmbuttonAttackerMask->Planes[0]);
+        
+    } else {
+        //draw the button for defender team selected
+        blitCopyMask(pBmbuttonDefender,0,0,
+        s_pMainBuffer->pBack,129,111,OPTION_BUTTON_WIDTH,OPTION_BUTTON_HEIGHT,pBmbuttonDefenderMask->Planes[0]);
+    }
+
+    //Draw the A.I difficultly button Here.
+
+}
+
+void onMenuClick(short mouseX, short mouseY){
+    
+    if(activeMenu == 0){ //if we're in the main menu, check for clicks on the play and options buttons
+        //check if the click is within the bounds of the play button
+        if(mouseX >= 50 && mouseX <= 50 + BUTTON_WIDTH && mouseY >= 200 && mouseY <= 200 + BUTTON_HEIGHT){
+            logWrite("Play button clicked!\n");
+            stateChange(g_pStateManager, g_pGameState);
+        }
+        //check if the click is within the bounds of the option button
+        else if(mouseX >= 206 && mouseX <= 206 + BUTTON_WIDTH && mouseY >= 200 && mouseY <= 200 + BUTTON_HEIGHT){
+            logWrite("Option button clicked!\n");
+            drawBackground();
+            drawOptionMenu();
+        }
+    }       
+    else if(activeMenu == 1){ //if we're in the options menu, check for clicks on the team select button
+        //check if the click is within the bounds of the team select button
+        if(mouseX >= 129 && mouseX <= 129 + OPTION_BUTTON_WIDTH && mouseY >= 111 && mouseY <= 111 + OPTION_BUTTON_HEIGHT){
+            logWrite("Team select button clicked!\n");
+            //swap the team that the AI player is on
+            if(CPUPlayerTeam == TEAM_ATTACKER){
+                CPUPlayerTeam = TEAM_DEFENDER;
+            } else {
+                CPUPlayerTeam = TEAM_ATTACKER;
+            }
+            drawOptionMenu(); //redraw the option menu to update the button
+        }
+    }
 }

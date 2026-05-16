@@ -90,8 +90,11 @@ UBYTE gameWinner = 0; //0 no one, 1 attackers, 2 defenders
 ScreenPos draw_pos[BOARD_SIZE];
 AIMove moveHistory[255]; //Record the move history so we can track for repetitions
 
-UBYTE cpuPlayerTeam = TEAM_ATTACKER;//manually assigned for now, this will be set via the main menu in the future.
-UBYTE humanPlayerTeam = TEAM_DEFENDER;
+//Move this to the GamCreate, if CPU Player is Attacker then Human player is Defender, and vice versa. This will be set via the options menu in the future.
+//** */
+UBYTE cpuPlayerTeam; 
+UBYTE humanPlayerTeam; 
+
 UBYTE waitFrame = 0;
 UBYTE gameTurnCounter = 0;
 WORD gamePlyCounter = 0;
@@ -146,6 +149,16 @@ void gameGsCreate(void) {
     setupBoard(); //sets up the draw positions for each square on the board in the draw_pos array
     buildBoard(&g_state); //sets up the board array with the pieces in their starting positions and the special squares marked
     drawPieces(); //draws the board and pieces to the screen, will need to be called again every time a piece moves or is captured
+
+    //sets the player teams based on option menu selection.
+    if(CPUPlayerTeam == TEAM_ATTACKER){
+      cpuPlayerTeam = TEAM_ATTACKER;
+      humanPlayerTeam = TEAM_DEFENDER;
+    } else {
+      cpuPlayerTeam = TEAM_DEFENDER;
+      humanPlayerTeam = TEAM_ATTACKER;
+    }
+    // First team to play is the attacker.
     g_state.currentPlayer = TEAM_ATTACKER;
     
     systemUnuse();
