@@ -92,7 +92,7 @@ AIMove moveHistory[255]; //Record the move history so we can track for repetitio
 
 //Move this to the GamCreate, if CPU Player is Attacker then Human player is Defender, and vice versa. This will be set via the options menu in the future.
 //** */
-UBYTE cpuPlayerTeam; 
+UBYTE cpuPlayerTeam;
 UBYTE humanPlayerTeam; 
 
 UBYTE waitFrame = 0;
@@ -133,12 +133,25 @@ void gameGsCreate(void) {
 
     gametextbitmapattack = fontCreateTextBitMapFromStr(gFontSmall, "ACK");
     gametextbitmapdefend = fontCreateTextBitMapFromStr(gFontSmall, "DEF");
-    version = fontCreateTextBitMapFromStr(gFontSmall,"D"); //versioning so I know if the ADF disk updated correctly.
+    version = fontCreateTextBitMapFromStr(gFontSmall,"M"); //versioning so I know if the ADF disk updated correctly.
 
     spriteSetEnabled(pSMouseCursor, 1);
     
     blitCopy(pBmMouseCursorSrc, 0,0,
     pBmMouseCursorData,0,0,CURSOR_SPRITE_WIDTH,CURSOR_SPRITE_HEIGHT,MINTERM_COOKIE);
+
+    logWrite("TEAM SETUP: CPU Player Team: %d, Human Player Team: %d\n", cpuPlayerTeam, humanPlayerTeam);
+    //sets the player teams based on option menu selection.
+    if(PlayerTeam == TEAM_ATTACKER){
+      cpuPlayerTeam = TEAM_DEFENDER;
+      humanPlayerTeam = TEAM_ATTACKER;
+      logWrite("TEAM SETUP: CPU Player is Defender, Human Player is Attacker\n");
+      
+    } else {
+      cpuPlayerTeam = TEAM_ATTACKER;
+      humanPlayerTeam = TEAM_DEFENDER;
+      logWrite("TEAM SETUP: CPU Player is Attacker, Human Player is Defender\n");
+    }
 
     gameWinner = 0; //reset the game winner at the start of the game, in case we're coming from the menu after a game has ended.
     gamePlyCounter = 0;
@@ -150,14 +163,6 @@ void gameGsCreate(void) {
     buildBoard(&g_state); //sets up the board array with the pieces in their starting positions and the special squares marked
     drawPieces(); //draws the board and pieces to the screen, will need to be called again every time a piece moves or is captured
 
-    //sets the player teams based on option menu selection.
-    if(CPUPlayerTeam == TEAM_ATTACKER){
-      cpuPlayerTeam = TEAM_ATTACKER;
-      humanPlayerTeam = TEAM_DEFENDER;
-    } else {
-      cpuPlayerTeam = TEAM_DEFENDER;
-      humanPlayerTeam = TEAM_ATTACKER;
-    }
     // First team to play is the attacker.
     g_state.currentPlayer = TEAM_ATTACKER;
     
@@ -491,10 +496,11 @@ void drawPieces(void){
     //undraw the clash from the defender side and redraw it on the attacker side
     blitCopy(pBmBoard, 288, 119,
     s_pMainBuffer->pBack, 288, 119, PIECE_SPRITE_WIDTH, PIECE_SPRITE_HEIGHT, MINTERM_COOKIE);
-
+      //Draw on the attacker side
     blitCopyMask(pBmClashFX,0,0,
     s_pMainBuffer->pBack, 0, 119, PIECE_SPRITE_WIDTH, 20, pBmClashFX_Mask->Planes[0]);
   } else {
+    //undraw the clash from the attacker side and redraw it on the defender side
     blitCopy(pBmBoard, 0, 119,
     s_pMainBuffer->pBack, 0, 119, PIECE_SPRITE_WIDTH, 20, MINTERM_COOKIE);
 
