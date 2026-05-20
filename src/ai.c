@@ -1,5 +1,6 @@
 #include "ai.h"
 #include "game.h"
+#include "states.h"
 #include "openingBook.h"
 #include <ace/managers/key.h>
 #include <ace/managers/game.h>
@@ -560,6 +561,35 @@ WORD minimax(GameState *s, UBYTE depth, WORD alpha, WORD beta, UBYTE maximizingP
     }
 }
 
+UBYTE getSearchDepth(void){
+    //we use the game phase as a crude metric on when to change depth.
+    UBYTE phase = 0;
+    if(gameTurnCounter > 6 && gameTurnCounter <= 16) phase = 1;
+    else if(gameTurnCounter > 16) phase = 2;
+
+    //The difficulty level set in the options menu in menu.c and passed via an extern in states.h
+    
+    //The cpuType from menu.c which detects the CPU the player is running
+   
+
+    // [cpuClass][difficulty][phase]
+    // cpuClass: 0=68000, 1=68020, 2=68030, 3=68040/060
+    // difficulty: 0=novice, 1=apprentice, 2=warrior, 3=master
+    // phase: 0=early, 1=mid, 2=late
+    const UBYTE depthTable[4][4][3] = {
+        // 68000 - conservative, late game gets one extra ply at higher difficulties
+        {{1,1,1}, {1,1,1}, {1,1,2}, {1,2,2}},
+        // 68020 - slight improvement over 68000
+        {{1,1,1}, {1,1,2}, {1,2,2}, {2,2,2}},
+        // 68030 - comfortable at depth 2, depth 3 in late game at master
+        {{1,1,1}, {1,1,2}, {1,2,2}, {2,2,3}},
+        // 68040/060 - can push depth 3 mid/late, depth 4 late at master
+        {{1,1,1}, {1,2,2}, {2,2,3}, {2,3,4}},
+    };
+
+    return depthTable[cpuType][difficultlyLevel][phase];
+}
+
 AIMove getBestMove(GameState *s){
     
     AIMove *moveList = moveBuffer[0];
@@ -570,12 +600,14 @@ AIMove getBestMove(GameState *s){
         logWrite("Book move found: from %d to %d\n", bookMove.fromIndex, bookMove.toIndex);
         return bookMove; //if we found a book move, return it immediately without doing any further calculations, since book moves are pre-evaluated to be the best move for that position.
     } 
-
+    
     UBYTE moveCount;
     UBYTE maximisingPlayer = (s->currentPlayer == TEAM_DEFENDER);
     
-    UBYTE seearchDepth = MAX_DEPTH; //this can be adjusted based on performance needs.
-
+    UBYTE searchDepth = MAX_DEPTH; //this can be adjusted based on performance needs.
+    //gets the new max depth from the table in getSearchDepth which is based on user settings and the user hardware.
+    searchDepth = getSearchDepth();
+    logWrite("Search depth set to %d\n", searchDepth);
     WORD bestEval = maximisingPlayer ? -AI_INF : AI_INF;
     WORD alpha = -AI_INF;
     WORD beta = AI_INF;
@@ -593,7 +625,7 @@ AIMove getBestMove(GameState *s){
     for(UBYTE i = 0; i < moveCount; i++){
         UndoInfo undo;
         applyMoveWithUndo(s, moveList[i], &undo);//apply the move
-        WORD eval = minimax(s, seearchDepth, alpha, beta, !maximisingPlayer); //test it in minmax
+        WORD eval = minimax(s, searchDepth, alpha, beta, !maximisingPlayer); //test it in minmax
         undoMove(s, &undo);//undo
         
         moveList[i].score = eval;

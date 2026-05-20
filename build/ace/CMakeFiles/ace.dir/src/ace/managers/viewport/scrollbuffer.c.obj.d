@@ -17,6 +17,7 @@ ace/CMakeFiles/ace.dir/src/ace/managers/viewport/scrollbuffer.c.obj: \
  /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/bitmap.h \
  /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/blit.h \
  /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/viewport/camera.h \
+ /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/fetchmode.h \
  /Users/phillipb/Documents/macACE/deps/ace/include/ace/generic/screen.h
 /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/viewport/scrollbuffer.h:
 /Users/phillipb/Documents/macACE/deps/ace/include/ace/types.h:
@@ -35,4 +36,5 @@ ace/CMakeFiles/ace.dir/src/ace/managers/viewport/scrollbuffer.c.obj: \
 /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/bitmap.h:
 /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/blit.h:
 /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/viewport/camera.h:
+/Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/fetchmode.h:
 /Users/phillipb/Documents/macACE/deps/ace/include/ace/generic/screen.h:

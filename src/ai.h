@@ -38,6 +38,7 @@ void undoMove(GameState *s, UndoInfo *undo);
 UBYTE manhattanToCorner(UBYTE pos, UBYTE corner);
 UBYTE nearestCornerDist(GameState *s);
 void AIgameReset(void);
+UBYTE getSearchDepth(void);
 
 /* *****Tactical Functions***** */
 WORD evaluatePerimeterControl(GameState *s);

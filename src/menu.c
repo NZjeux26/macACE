@@ -64,12 +64,20 @@ static tBitMap *pBmbuttonAttacker;
 static tBitMap *pBmbuttonAttackerMask;
 static tBitMap *pBmbuttonDefender;
 static tBitMap *pBmbuttonDefenderMask;
+static tBitMap *pBmbuttonNovice;
+static tBitMap *pBmbuttonNoviceMask;
+static tBitMap *pBmbuttonApprentice;
+static tBitMap *pBmbuttonApprenticeMask;
+static tBitMap *pBmbuttonWarrior;
+static tBitMap *pBmbuttonWarriorMask;
+static tBitMap *pBmbuttonMaster;
+static tBitMap *pBmbuttonMasterMask;
 
 static tSprite *pSMenuCursor;
 
 BYTE cpuType = 0; //cpu types for configuring depth and adding addtional difficulty levels for CPUS that can.
 UBYTE PlayerTeam = TEAM_DEFENDER; 
-UBYTE maxDepth = 1; //this will be used to set the depth of the minimax algorithm for the AI, based on the difficulty level selected in the options menu 1 = Novice, 2 = Apprentice, 3 = Warrior, 4 = Master
+UBYTE difficultlyLevel = 0; //this will be used to set the depth of the minimax algorithm for the AI, based on the difficulty level selected in the options menu 1 = Novice, 2 = Apprentice, 3 = Warrior, 4 = Master
 BYTE activeMenu = MAIN_MENU; //0 = main menu, 1 = options menu, this will be used to determine which menu to draw and which buttons to check for clicks on.
 BOOL prevLMB = FALSE;
 
@@ -242,6 +250,19 @@ void loadMenuAssets(void){
     pBmbuttonDefender = bitmapCreateFromPath("data/GFX/buttonDefender.bm",0);
     pBmbuttonDefenderMask = bitmapCreateFromPath("data/GFX/buttonDefender_mask.bm",0);
 
+    pBmbuttonApprentice = bitmapCreateFromPath("data/GFX/buttonApprentice.bm",0);
+    pBmbuttonApprenticeMask = bitmapCreateFromPath("data/GFX/buttonApprentice_mask.bm",0);
+
+    pBmbuttonNovice = bitmapCreateFromPath("data/GFX/buttonNovice.bm",0);
+    pBmbuttonNoviceMask = bitmapCreateFromPath("data/GFX/buttonNovice_mask.bm",0);
+
+    pBmbuttonWarrior = bitmapCreateFromPath("data/GFX/buttonWarrior.bm",0);
+    pBmbuttonWarriorMask = bitmapCreateFromPath("data/GFX/buttonWarrior_mask.bm",0);    
+
+    pBmbuttonMaster = bitmapCreateFromPath("data/GFX/buttonMaster.bm",0);
+    pBmbuttonMasterMask = bitmapCreateFromPath("data/GFX/buttonMaster_mask.bm",0);
+
+
      //load highlighted versions for reference
     pBmButtonOptionH = bitmapCreateFromPath("data/GFX/buttonOptionsH.bm",0);
    // pBmButtonPlayH = bitmapCreateFromPath("data/GFX/buttonPlayH.bm",0);
@@ -298,6 +319,9 @@ void drawOptionMenu(void){
     //draw drop shadow for team button
     blitRect(s_pMainBuffer->pBack, 128, 112, OPTION_BUTTON_WIDTH, OPTION_BUTTON_HEIGHT, 0); //black shadow
     
+    //drop shadow for difficulty button
+    blitRect(s_pMainBuffer->pBack, 128, 163, OPTION_BUTTON_WIDTH, OPTION_BUTTON_HEIGHT, 0); //black shadow
+
     //This needs code to find the current player team and then draw the correct button for it, and then if thhe button is click swap both the button and the team.
     if(PlayerTeam == TEAM_ATTACKER){
         //draw the button for attacker team selected
@@ -311,6 +335,19 @@ void drawOptionMenu(void){
     }
 
     //Draw the A.I difficultly button Here.
+    if(difficultlyLevel == 0){
+        blitCopyMask(pBmbuttonNovice,0,0,
+        s_pMainBuffer->pBack,129,162,OPTION_BUTTON_WIDTH,OPTION_BUTTON_HEIGHT,pBmbuttonNoviceMask->Planes[0]);
+    } else if(difficultlyLevel == 1){
+        blitCopyMask(pBmbuttonApprentice,0,0,
+        s_pMainBuffer->pBack,129,162,OPTION_BUTTON_WIDTH,OPTION_BUTTON_HEIGHT,pBmbuttonApprenticeMask->Planes[0]);
+    } else if(difficultlyLevel == 2){
+        blitCopyMask(pBmbuttonWarrior,0,0,
+        s_pMainBuffer->pBack,129,162,OPTION_BUTTON_WIDTH,OPTION_BUTTON_HEIGHT,pBmbuttonWarriorMask->Planes[0]);
+    } else if(difficultlyLevel == 3){
+        blitCopyMask(pBmbuttonMaster,0,0,
+        s_pMainBuffer->pBack,129,162,OPTION_BUTTON_WIDTH,OPTION_BUTTON_HEIGHT,pBmbuttonMasterMask->Planes[0]);
+    }
 
 }
 
@@ -330,6 +367,7 @@ void onMenuClick(short mouseX, short mouseY){
             //unDrawMainMenu();
             drawOptionMenu();
         }
+        //quit button
         else if(mouseX >= 7 && mouseX <= 7 + 32 && mouseY >= 18 && mouseY <= 18 + 14){
             gameExit();
         }
@@ -344,6 +382,13 @@ void onMenuClick(short mouseX, short mouseY){
             } else {
                 PlayerTeam = TEAM_ATTACKER;
             }
+            drawOptionMenu(); //redraw the option menu to update the button
+        }
+        //difficulty select button
+        else if(mouseX >= 129 && mouseX <= 129 + OPTION_BUTTON_WIDTH && mouseY >= 162 && mouseY <= 162 + OPTION_BUTTON_HEIGHT){
+            logWrite("Difficulty select button clicked!\n");
+            //cycle through the difficulty levels for the AI
+            difficultlyLevel = (difficultlyLevel + 1) % 4; //there are currently 4 difficulty levels, so we cycle back to 0 after 3.
             drawOptionMenu(); //redraw the option menu to update the button
         }
     }

@@ -51,7 +51,8 @@ CMakeFiles/macACE.elf.dir/src/ai.c.obj: /Users/phillipb/Documents/macACE/src/ai.
   /Users/phillipb/Documents/macACE/deps/ace/include/mini_std/string.h \
   /Users/phillipb/Documents/macACE/src/ai.h \
   /Users/phillipb/Documents/macACE/src/game.h \
-  /Users/phillipb/Documents/macACE/src/openingBook.h
+  /Users/phillipb/Documents/macACE/src/openingBook.h \
+  /Users/phillipb/Documents/macACE/src/states.h
 
 CMakeFiles/macACE.elf.dir/src/game.c.obj: /Users/phillipb/Documents/macACE/src/game.c \
   /Users/phillipb/Documents/macACE/deps/ace/include/ace/macros.h \

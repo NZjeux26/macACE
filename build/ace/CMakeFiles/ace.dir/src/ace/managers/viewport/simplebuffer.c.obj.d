@@ -16,6 +16,7 @@ ace/CMakeFiles/ace.dir/src/ace/managers/viewport/simplebuffer.c.obj: \
  /Users/phillipb/Documents/macACE/deps/ace/include/mini_std/printf.h \
  /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/copper.h \
  /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/bitmap.h \
+ /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/fetchmode.h \
  /Users/phillipb/Documents/macACE/deps/ace/include/ace/generic/screen.h
 /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/viewport/simplebuffer.h:
 /Users/phillipb/Documents/macACE/deps/ace/include/ace/types.h:
@@ -33,4 +34,5 @@ ace/CMakeFiles/ace.dir/src/ace/managers/viewport/simplebuffer.c.obj: \
 /Users/phillipb/Documents/macACE/deps/ace/include/mini_std/printf.h:
 /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/copper.h:
 /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/bitmap.h:
+/Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/fetchmode.h:
 /Users/phillipb/Documents/macACE/deps/ace/include/ace/generic/screen.h:

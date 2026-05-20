@@ -270,6 +270,7 @@ ace/CMakeFiles/ace.dir/src/ace/managers/viewport/scrollbuffer.c.obj: /Users/phil
   /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/bitmap.h \
   /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/custom.h \
   /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/extview.h \
+  /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/fetchmode.h \
   /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/file.h \
   /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/tag.h \
   /Users/phillipb/Documents/macACE/deps/ace/include/mini_std/printf.h \
@@ -289,6 +290,7 @@ ace/CMakeFiles/ace.dir/src/ace/managers/viewport/simplebuffer.c.obj: /Users/phil
   /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/bitmap.h \
   /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/custom.h \
   /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/extview.h \
+  /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/fetchmode.h \
   /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/file.h \
   /Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/tag.h \
   /Users/phillipb/Documents/macACE/deps/ace/include/mini_std/printf.h \
@@ -677,6 +679,8 @@ ace/CMakeFiles/ace.dir/src/mini_std/strtoul.c.obj: /Users/phillipb/Documents/mac
 /Users/phillipb/Documents/macACE/deps/ace/src/ace/managers/mouse.c:
 
 /Users/phillipb/Documents/macACE/deps/ace/src/ace/utils/pak_file.c:
+
+/Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/fetchmode.h:
 
 /Users/phillipb/Documents/macACE/deps/ace/include/ace/managers/timer.h:
 
