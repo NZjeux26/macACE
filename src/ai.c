@@ -11,7 +11,7 @@
 
 //#define AI_LOGGING
 
-#define MAX_DEPTH 1
+#define MAX_DEPTH 4 //this is the greatest depth ever expected to be reached, when allocating the move buffer, this is used to prevent overflow. Depths above 5 WILL cause a segfault
 #define AI_INF 30000
 
 //using this global buffer instead of local ones, at depth 2+ the amount of MoveList buffers is quite large and a overflow occurs somewhere
@@ -587,7 +587,7 @@ UBYTE getSearchDepth(void){
         {{1,1,1}, {1,2,2}, {2,2,3}, {2,3,4}},
     };
 
-    return depthTable[cpuType][difficultlyLevel][phase];
+    return 2;//depthTable[cpuType][difficultlyLevel][phase];
 }
 
 AIMove getBestMove(GameState *s){
