@@ -283,8 +283,8 @@ void gameGsLoop(void) {
     }
     
     //these only need drawn once for each buffer frame and since they wont be writeen on again keft alone.
-    // fontDrawTextBitMap(s_pMainBuffer->pBack, gametextbitmapattack, 6,110,0,FONT_COOKIE);
-    // fontDrawTextBitMap(s_pMainBuffer->pBack, gametextbitmapdefend, 295,110,0,FONT_COOKIE);
+    fontDrawTextBitMap(s_pMainBuffer->pBack, gametextbitmapattack, 6,110,0,FONT_COOKIE);
+    fontDrawTextBitMap(s_pMainBuffer->pBack, gametextbitmapdefend, 295,110,0,FONT_COOKIE);
     // fontDrawTextBitMap(s_pMainBuffer->pBack, version, 8,8,0,FONT_COOKIE);
 
     s_ubBufferIndex = !s_ubBufferIndex; //toggle the buffer index for double buffering    

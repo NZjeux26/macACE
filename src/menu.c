@@ -24,9 +24,7 @@
 #define CURSOR_SPRITE_WIDTH 16
 #define CURSOR_SPRITE_HEIGHT 18
 #define BUTTON_WIDTH 64
-#define BUTTON_HEIGHT 47
-#define OPTION_BUTTON_WIDTH 64
-#define OPTION_BUTTON_HEIGHT 22
+#define BUTTON_HEIGHT 22
 #define OPTION_MENU_WIDTH 128
 #define OPTION_MENU_HEIGHT 126
 #define TEAM_ATTACKER 2
@@ -72,6 +70,8 @@ static tBitMap *pBmbuttonWarrior;
 static tBitMap *pBmbuttonWarriorMask;
 static tBitMap *pBmbuttonMaster;
 static tBitMap *pBmbuttonMasterMask;
+static tBitMap *pBmbuttonBack;
+static tBitMap *pBmbuttonBackMask;
 
 static tSprite *pSMenuCursor;
 
@@ -138,20 +138,11 @@ void menuGsLoop(void){
     updateMenuMousepos(mouseX, mouseY);
     BOOL currentLMB = mouseCheck(MOUSE_PORT_1, MOUSE_LMB);
     if(currentLMB && !prevLMB){ //if the left mouse button was just pressed this frame, check for clicks
+        prevLMB = currentLMB; //Put here as well so return early or not, prevLMB always gets set to TRUE after a click
         onMenuClick(mouseX, mouseY);
         return;
     }
     prevLMB = currentLMB; //update the previous left mouse button state for the next frame
-
-    //Maybe invert this, check if you're in the option menu before checking clicks.
-    //Maybe Replace this with a retuen button.
-     if(activeMenu == OPTION_MENU){ 
-        if(mouseCheck(MOUSE_PORT_1, MOUSE_RMB)){
-        logWrite("Right click at %d, %d\n", mouseX, mouseY);
-            drawBackground(); //redraw the background to clear the old highlighted button
-            drawMainMenu(); //redraw the main menu to clear the old highlighted button
-        }
-    }
     
     copProcessBlocks();
     systemIdleBegin();
@@ -262,6 +253,8 @@ void loadMenuAssets(void){
     pBmbuttonMaster = bitmapCreateFromPath("data/GFX/buttonMaster.bm",0);
     pBmbuttonMasterMask = bitmapCreateFromPath("data/GFX/buttonMaster_mask.bm",0);
 
+    pBmbuttonBack = bitmapCreateFromPath("data/GFX/buttonBack.bm",0);
+    pBmbuttonBackMask = bitmapCreateFromPath("data/GFX/buttonBack_mask.bm",0);
 
      //load highlighted versions for reference
     pBmButtonOptionH = bitmapCreateFromPath("data/GFX/buttonOptionsH.bm",0);
@@ -297,15 +290,15 @@ void drawMainMenu(void){
  
     //load play button
     blitCopyMask(pBmButtonPlay,0,0,
-    s_pMainBuffer->pBack,50,200,BUTTON_WIDTH,BUTTON_HEIGHT,pBmButtonPlayMask->Planes[0]);
+    s_pMainBuffer->pBack,128,119,BUTTON_WIDTH,BUTTON_HEIGHT,pBmButtonPlayMask->Planes[0]);
 
     //draw option button
     blitCopyMask(pBmButtonOption,0,0,
-    s_pMainBuffer->pBack,206,200,BUTTON_WIDTH,BUTTON_HEIGHT,pBmButtonOptionMask->Planes[0]);
+    s_pMainBuffer->pBack,128,147,BUTTON_WIDTH,BUTTON_HEIGHT,pBmButtonOptionMask->Planes[0]);
     
     //draw the quit text
     blitCopyMask(pBmButtonQuit,0,0,
-    s_pMainBuffer->pBack,2,18,32,14,pBmButtonQuitMask->Planes[0]);
+    s_pMainBuffer->pBack,128,175,BUTTON_WIDTH,BUTTON_HEIGHT,pBmButtonQuitMask->Planes[0]);
 
 }
 
@@ -317,37 +310,41 @@ void drawOptionMenu(void){
     s_pMainBuffer->pBack,94,65,OPTION_MENU_WIDTH,OPTION_MENU_HEIGHT,pBmOptionMenuMask->Planes[0]);  
 
     //draw drop shadow for team button
-    blitRect(s_pMainBuffer->pBack, 128, 112, OPTION_BUTTON_WIDTH, OPTION_BUTTON_HEIGHT, 0); //black shadow
+    blitRect(s_pMainBuffer->pBack, 128, 112, BUTTON_WIDTH, BUTTON_HEIGHT, 0); //black shadow
     
     //drop shadow for difficulty button
-    blitRect(s_pMainBuffer->pBack, 128, 163, OPTION_BUTTON_WIDTH, OPTION_BUTTON_HEIGHT, 0); //black shadow
+    blitRect(s_pMainBuffer->pBack, 128, 163, BUTTON_WIDTH, BUTTON_HEIGHT, 0); //black shadow
 
     //This needs code to find the current player team and then draw the correct button for it, and then if thhe button is click swap both the button and the team.
     if(PlayerTeam == TEAM_ATTACKER){
         //draw the button for attacker team selected
         blitCopyMask(pBmbuttonAttacker,0,0,
-        s_pMainBuffer->pBack,129,111,OPTION_BUTTON_WIDTH,OPTION_BUTTON_HEIGHT,pBmbuttonAttackerMask->Planes[0]);
+        s_pMainBuffer->pBack,129,111,BUTTON_WIDTH,BUTTON_HEIGHT,pBmbuttonAttackerMask->Planes[0]);
         
     } else {
         //draw the button for defender team selected
         blitCopyMask(pBmbuttonDefender,0,0,
-        s_pMainBuffer->pBack,129,111,OPTION_BUTTON_WIDTH,OPTION_BUTTON_HEIGHT,pBmbuttonDefenderMask->Planes[0]);
+        s_pMainBuffer->pBack,129,111,BUTTON_WIDTH,BUTTON_HEIGHT,pBmbuttonDefenderMask->Planes[0]);
     }
 
     //Draw the A.I difficultly button Here.
     if(difficultlyLevel == 0){
         blitCopyMask(pBmbuttonNovice,0,0,
-        s_pMainBuffer->pBack,129,162,OPTION_BUTTON_WIDTH,OPTION_BUTTON_HEIGHT,pBmbuttonNoviceMask->Planes[0]);
+        s_pMainBuffer->pBack,129,162,BUTTON_WIDTH,BUTTON_HEIGHT,pBmbuttonNoviceMask->Planes[0]);
     } else if(difficultlyLevel == 1){
         blitCopyMask(pBmbuttonApprentice,0,0,
-        s_pMainBuffer->pBack,129,162,OPTION_BUTTON_WIDTH,OPTION_BUTTON_HEIGHT,pBmbuttonApprenticeMask->Planes[0]);
+        s_pMainBuffer->pBack,129,162,BUTTON_WIDTH,BUTTON_HEIGHT,pBmbuttonApprenticeMask->Planes[0]);
     } else if(difficultlyLevel == 2){
         blitCopyMask(pBmbuttonWarrior,0,0,
-        s_pMainBuffer->pBack,129,162,OPTION_BUTTON_WIDTH,OPTION_BUTTON_HEIGHT,pBmbuttonWarriorMask->Planes[0]);
+        s_pMainBuffer->pBack,129,162,BUTTON_WIDTH,BUTTON_HEIGHT,pBmbuttonWarriorMask->Planes[0]);
     } else if(difficultlyLevel == 3){
         blitCopyMask(pBmbuttonMaster,0,0,
-        s_pMainBuffer->pBack,129,162,OPTION_BUTTON_WIDTH,OPTION_BUTTON_HEIGHT,pBmbuttonMasterMask->Planes[0]);
+        s_pMainBuffer->pBack,129,162,BUTTON_WIDTH,BUTTON_HEIGHT,pBmbuttonMasterMask->Planes[0]);
     }
+
+    //draw the back button
+    blitCopyMask(pBmbuttonBack,0,0,
+    s_pMainBuffer->pBack,129,192,BUTTON_WIDTH,BUTTON_HEIGHT,pBmbuttonBackMask->Planes[0]);
 
 }
 
@@ -355,26 +352,26 @@ void onMenuClick(short mouseX, short mouseY){
     
     if(activeMenu == 0){ //if we're in the main menu, check for clicks on the play and options buttons
         //check if the click is within the bounds of the play button
-        if(mouseX >= 50 && mouseX <= 50 + BUTTON_WIDTH && mouseY >= 200 && mouseY <= 200 + BUTTON_HEIGHT){
+        if(mouseX >= 128 && mouseX <= 128 + BUTTON_WIDTH && mouseY >= 119 && mouseY <= 119 + BUTTON_HEIGHT){
             logWrite("Play button clicked!\n");
             stateChange(g_pStateManager, g_pGameState);
             return;//If statechange return immediately.
         }
         //check if the click is within the bounds of the option button
-        else if(mouseX >= 206 && mouseX <= 206 + BUTTON_WIDTH && mouseY >= 200 && mouseY <= 200 + BUTTON_HEIGHT){
+        else if(mouseX >= 128 && mouseX <= 128 + BUTTON_WIDTH && mouseY >= 147 && mouseY <= 147 + BUTTON_HEIGHT){
             logWrite("Option button clicked!\n");
             drawBackground();
             //unDrawMainMenu();
             drawOptionMenu();
         }
         //quit button
-        else if(mouseX >= 7 && mouseX <= 7 + 32 && mouseY >= 18 && mouseY <= 18 + 14){
+        else if(mouseX >= 128 && mouseX <= 128 + BUTTON_WIDTH && mouseY >= 175 && mouseY <= 175 + BUTTON_HEIGHT){
             gameExit();
         }
     }       
     else if(activeMenu == 1){ //if we're in the options menu, check for clicks on the team select button
         //check if the click is within the bounds of the team select button
-        if(mouseX >= 129 && mouseX <= 129 + OPTION_BUTTON_WIDTH && mouseY >= 111 && mouseY <= 111 + OPTION_BUTTON_HEIGHT){
+        if(mouseX >= 129 && mouseX <= 129 + BUTTON_WIDTH && mouseY >= 111 && mouseY <= 111 + BUTTON_HEIGHT){
             logWrite("Team select button clicked!\n");
             //swap the team that the player is on
             if(PlayerTeam == TEAM_ATTACKER){
@@ -385,11 +382,15 @@ void onMenuClick(short mouseX, short mouseY){
             drawOptionMenu(); //redraw the option menu to update the button
         }
         //difficulty select button
-        else if(mouseX >= 129 && mouseX <= 129 + OPTION_BUTTON_WIDTH && mouseY >= 162 && mouseY <= 162 + OPTION_BUTTON_HEIGHT){
+        else if(mouseX >= 129 && mouseX <= 129 + BUTTON_WIDTH && mouseY >= 162 && mouseY <= 162 + BUTTON_HEIGHT){
             logWrite("Difficulty select button clicked!\n");
             //cycle through the difficulty levels for the AI
             difficultlyLevel = (difficultlyLevel + 1) % 4; //there are currently 4 difficulty levels, so we cycle back to 0 after 3.
             drawOptionMenu(); //redraw the option menu to update the button
+        }
+        else if(mouseX >= 129 && mouseX <= 129 + BUTTON_WIDTH && mouseY >= 192 && mouseY <= 192 + BUTTON_HEIGHT){
+            drawBackground(); //redraw the background to clear the old highlighted button
+            drawMainMenu(); //redraw the main menu to clear the old highlighted button
         }
     }
 }

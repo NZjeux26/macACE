@@ -587,7 +587,7 @@ UBYTE getSearchDepth(void){
         {{1,1,1}, {1,2,2}, {2,2,3}, {2,3,4}},
     };
 
-    return 2;//depthTable[cpuType][difficultlyLevel][phase];
+    return depthTable[cpuType][difficultlyLevel][phase];
 }
 
 AIMove getBestMove(GameState *s){
@@ -604,7 +604,7 @@ AIMove getBestMove(GameState *s){
     UBYTE moveCount;
     UBYTE maximisingPlayer = (s->currentPlayer == TEAM_DEFENDER);
     
-    UBYTE searchDepth = MAX_DEPTH; //this can be adjusted based on performance needs.
+    UBYTE searchDepth = 1; //this is intionlised as 1 in case the searchDepth fails.
     //gets the new max depth from the table in getSearchDepth which is based on user settings and the user hardware.
     searchDepth = getSearchDepth();
     logWrite("Search depth set to %d\n", searchDepth);

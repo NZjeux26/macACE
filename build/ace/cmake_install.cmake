@@ -126,6 +126,7 @@ if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT
     "/Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/disk_file_private.h"
     "/Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/endian.h"
     "/Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/extview.h"
+    "/Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/fetchmode.h"
     "/Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/file.h"
     "/Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/font.h"
     "/Users/phillipb/Documents/macACE/deps/ace/include/ace/utils/mini_std.h"
