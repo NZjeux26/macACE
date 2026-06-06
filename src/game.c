@@ -34,6 +34,8 @@
 #define CURSOR_SPRITE_WIDTH 16
 #define CURSOR_SPRITE_HEIGHT 18
 #define CURSOR_SPRITE_CHANNEL 5
+#define GAME_BUTTON_WIDTH 64
+#define GAME_BUTTON_HEIGHT 34
 
 //#define OUTPUT_LOGGING //uncomment to enable more logging on arrays and positions in the debug.txt file.
 
@@ -62,6 +64,16 @@ static tBitMap *pBmSquareHighlight_Mask;
 static tBitMap *pBmSquareHighlight_BG[2]; //for drawing the highlight with the background when it moves, to prevent leaving trails
 static tBitMap *pBmMouseCursorSrc;
 static tBitMap *pBmMouseCursorData;
+static tBitMap *pBmVictoryBanner;
+static tBitMap *pBmVictoryBannerMask;
+static tBitMap *pBmDefeatBanner;
+static tBitMap *pBmDefeatBannerMask;
+static tBitMap *pBmbuttonMainMenu;
+static tBitMap *pBmbuttonMainMenuMask;
+static tBitMap *pBmbuttonPlayAgain;
+static tBitMap *pBmbuttonPlayAgainMask;
+static tBitMap *pBmbuttonQuitMM;
+static tBitMap *pBmbuttonQuitMMMask;
 
 static tSprite *pSMouseCursor;
 
@@ -141,6 +153,7 @@ void gameGsCreate(void) {
     pBmMouseCursorData,0,0,CURSOR_SPRITE_WIDTH,CURSOR_SPRITE_HEIGHT,MINTERM_COOKIE);
 
     logWrite("TEAM SETUP: CPU Player Team: %d, Human Player Team: %d\n", cpuPlayerTeam, humanPlayerTeam);
+    
     //sets the player teams based on option menu selection.
     if(PlayerTeam == TEAM_ATTACKER){
       cpuPlayerTeam = TEAM_DEFENDER;
@@ -184,7 +197,7 @@ void gameGsLoop(void) {
       } else {
         gameWinner = 1; //set the winner to attackers, so when we go to the menu it shows the correct win screen.
       }
-      stateChange(g_pStateManager, g_pMenuState);
+      //stateChange(g_pStateManager, g_pMenuState);
       return;
     }
     if(keyCheck(KEY_D)) drawPieces();
@@ -228,12 +241,21 @@ void gameGsLoop(void) {
         }
       }
     }
-    
+     //if gameWinner is great than zero that means the king has been captured or escaped
+    if(gameWinner > 0){
+      //onMenuClick()
+      gameEndMenu();
+      if(mouseCheck(MOUSE_PORT_1, MOUSE_LMB)){
+        onGameMenuClick(mouseX, mouseY, &g_state); //check for clicks on the game end menu buttons
+      }
+    }
+    else{
       //redraw the pieces every frame, 
-    drawPieces();
-
-    if (hightlightActive){ //if the highlight for valid moves is active, draw it
-      drawSquareHighlight();
+      drawPieces();
+    }
+    
+    if(hightlightActive){ //if the highlight for valid moves is active, draw it
+        drawSquareHighlight();
     }
 
     if(g_state.currentPlayer == cpuPlayerTeam){ //if it's the CPU player's turn, calculate the best move and make it
@@ -282,10 +304,12 @@ void gameGsLoop(void) {
       else waitFrame = 1;
     }
     
+    //add section for switching to the ingame menu.
+
     //these only need drawn once for each buffer frame and since they wont be writeen on again keft alone.
     fontDrawTextBitMap(s_pMainBuffer->pBack, gametextbitmapattack, 6,110,0,FONT_COOKIE);
     fontDrawTextBitMap(s_pMainBuffer->pBack, gametextbitmapdefend, 295,110,0,FONT_COOKIE);
-    // fontDrawTextBitMap(s_pMainBuffer->pBack, version, 8,8,0,FONT_COOKIE);
+    fontDrawTextBitMap(s_pMainBuffer->pBack, version, 8,8,0,FONT_COOKIE);
 
     s_ubBufferIndex = !s_ubBufferIndex; //toggle the buffer index for double buffering    
 
@@ -331,6 +355,53 @@ void gameGsDestroy(void) {
     bitmapDestroy(pBmBoard);
     viewDestroy(s_pView);
 }
+
+void resetGame(GameState *state){
+  //reset the teams to the MM selected options
+  if(PlayerTeam == TEAM_ATTACKER){
+    cpuPlayerTeam = TEAM_DEFENDER;
+    humanPlayerTeam = TEAM_ATTACKER;
+    logWrite("TEAM SETUPR: CPU Player is Defender, Human Player is Attacker\n");
+    
+  } else {
+    cpuPlayerTeam = TEAM_ATTACKER;
+    humanPlayerTeam = TEAM_DEFENDER;
+    logWrite("TEAM SETUPR: CPU Player is Attacker, Human Player is Defender\n");
+  }
+  AIgameReset();
+  state->currentPlayer = TEAM_ATTACKER; //reset the current player to the attacker, since the attacker always goes first.
+  gameWinner = 0; //reset the game winner at the start of the game, in case we're coming from the menu after a game has ended.
+  gamePlyCounter = 0;
+  gameTurnCounter = 0;
+  waitFrame = 0;
+
+  state->kingState = KING_ALIVE;
+
+  //deactivate the gameend menu HERE
+  drawBoard();
+  setupPieces(&g_state); //sets up the pieces in their starting positions in the board array and in the piece structs
+  setupBoard();
+  buildBoard(&g_state); //sets up the board array with the pieces in their starting positions and the special squares marked
+  
+  drawPieces(); 
+  for(UBYTE i = 0; i < 2; i++){
+    lastHighlightIndex[i] = 0;
+    HLhasBGToRestore[i] = 0;
+    pieceHasBGToRestore[i] = 0;
+    capturedPieceIndex[i][0] = 0;
+    capturedPieceIndex[i][1] = 0;
+    capturedPieceIndex[i][2] = 0;
+    capturedPieceIndex[i][3] = 0;
+    capturedPieceCount[i] = 0;
+  }
+  hightlightActive = 0;
+  highlightIndex = 0;
+  validGeneration = 0;
+  memset(validMoves, 0, sizeof(validMoves));
+  memset(moveHistory, 0, sizeof(moveHistory));
+  
+}
+
 //loads in the game assets, including the piece sprites and their masks for blitting with transparency.
 void loadAssets(void){
   for(UBYTE i = 0; i < MAX_ATTACKERS; i++){
@@ -348,7 +419,18 @@ void loadAssets(void){
   pBmSquareHighlight = bitmapCreateFromPath("data/GFX/squarehighlight.bm",0);
   pBmSquareHighlight_Mask = bitmapCreateFromPath("data/GFX/squarehighlight_mask.bm",0);
   pBmSquareHighlight_BG[0] = bitmapCreate(32,21,5,0); //size of the highlight sprite, for storing the background when drawing the highlight
-  pBmSquareHighlight_BG[1] = bitmapCreate(32,21,5,0); //size of the highlight sprite, for storing the background when drawing the highlight
+  pBmSquareHighlight_BG[1] = bitmapCreate(32,21,5,0);
+
+  pBmVictoryBanner = bitmapCreateFromPath("data/GFX/victoryBanner.bm",0);
+  pBmVictoryBannerMask = bitmapCreateFromPath("data/GFX/victoryBanner_mask.bm",0);
+  pBmDefeatBanner = bitmapCreateFromPath("data/GFX/defeatBanner.bm",0);
+  pBmDefeatBannerMask = bitmapCreateFromPath("data/GFX/defeatBanner_mask.bm",0);
+  pBmbuttonMainMenu = bitmapCreateFromPath("data/GFX/buttonMainMenu.bm",0);
+  pBmbuttonMainMenuMask = bitmapCreateFromPath("data/GFX/buttonMainMenu_mask.bm",0);
+  pBmbuttonPlayAgain = bitmapCreateFromPath("data/GFX/buttonPlayAgain.bm",0);
+  pBmbuttonPlayAgainMask = bitmapCreateFromPath("data/GFX/buttonPlayAgain_mask.bm",0);
+  pBmbuttonQuitMM = bitmapCreateFromPath("data/GFX/buttonQuitGM.bm",0);
+  pBmbuttonQuitMMMask = bitmapCreateFromPath("data/GFX/buttonQuitGM_mask.bm",0);
 }
 
 //sets up the pieces in their starting positions in the board array and in the piece structs
@@ -551,6 +633,29 @@ void onClick(short mouseX, short mouseY){
          break; //exit the loop once we've found the square that was clicked
     }
   }
+}
+
+void onGameMenuClick(short mouseX, short mouseY, GameState *state){
+  //main menu
+  //128,148
+    if(mouseX >= 128 && mouseX <= 128 + GAME_BUTTON_WIDTH && mouseY >= 148 && mouseY <= 148 + GAME_BUTTON_HEIGHT){
+      logWrite("Menu button clicked!\n");
+      stateChange(g_pStateManager, g_pMenuState);
+      return;//If statechange return immediately.
+    }
+    //128,182
+  //play again
+    else if(mouseX >= 128 && mouseX <= 128 + GAME_BUTTON_WIDTH && mouseY >= 182 && mouseY <= 182 + GAME_BUTTON_HEIGHT){
+      logWrite("Play again button clicked!\n");
+      resetGame(state);
+      return;//If resetGame return immediately.
+    }
+  //quit
+  else if(mouseX >= 128 && mouseX <= 128 + GAME_BUTTON_WIDTH && mouseY >= 216 && mouseY <= 216 + GAME_BUTTON_HEIGHT){
+      logWrite("Quit button clicked!\n");
+      gameExit();
+      return;//If gameExit return immediately.
+    }
 }
  //this function will be used to draw the highlight for valid moves and selected pieces, 
  //it will be called in the drawPieces function if the highlightActive variable is true, and the position will be determined by the highlightIndex variable which will be set when a piece is selected or a move is made.
@@ -847,17 +952,48 @@ void checkGameEnd(void){
   //if the king is captured, Attackers Win
   if(g_state.kingState == KING_CAPTURED){
     gameWinner = 1;
-    stateChange(g_pStateManager, g_pMenuState);
-    return;
+    //stateChange(g_pStateManager, g_pMenuState); //change these to activate the victory or defeat screen instead of going back to the menu
+    //return;
   }
 
   //The King escapes, the Defenders Win
   else if(g_state.boardState[14] == 3 || g_state.boardState[24] == 3 || g_state.boardState[144] == 3 || g_state.boardState[154] == 3 || g_state.kingState == KING_ESCAPED){
     gameWinner = 2;
-    stateChange(g_pStateManager, g_pMenuState);
-    return;
+    //stateChange(g_pStateManager, g_pMenuState);
+    //return;
   }
   
+}
+
+void gameEndMenu(void){
+  //0 no one, 1 attackers, 2 defenders
+  //this will be the menu that shows when the game ends, it will display the winner and have a button to return to the main menu.
+  if((humanPlayerTeam == TEAM_ATTACKER && gameWinner == 1) || 
+     (humanPlayerTeam == TEAM_DEFENDER && gameWinner == 2) ){
+    
+    //draw victory banner
+    blitCopyMask(pBmVictoryBanner,0,0,
+    s_pMainBuffer->pBack,47,80,224,96,pBmVictoryBannerMask->Planes[0]);
+
+  }
+  else{
+    //draw defeat 
+    blitCopyMask(pBmDefeatBanner,0,0,
+    s_pMainBuffer->pBack,47,60,224,96,pBmDefeatBannerMask->Planes[0]);
+  }
+  //draw buttons
+
+  //Return to Main menu
+  blitCopyMask(pBmbuttonMainMenu,0,0,
+  s_pMainBuffer->pBack, 128,148,GAME_BUTTON_WIDTH,GAME_BUTTON_HEIGHT,pBmbuttonMainMenuMask->Planes[0]);
+
+  //Play Again
+  blitCopyMask(pBmbuttonPlayAgain,0,0,
+  s_pMainBuffer->pBack,128,182,GAME_BUTTON_WIDTH,GAME_BUTTON_HEIGHT,pBmbuttonPlayAgainMask->Planes[0]);
+
+  //Quit
+  blitCopyMask(pBmbuttonQuitMM,0,0,
+  s_pMainBuffer->pBack,128,216,GAME_BUTTON_WIDTH,(GAME_BUTTON_HEIGHT - 12),pBmbuttonQuitMMMask->Planes[0]);
 }
 
 void checkShieldWallCaptures(GameState *state, UBYTE pieceIndex, MoveResult *result){

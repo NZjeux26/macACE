@@ -55,7 +55,7 @@ typedef struct
     UBYTE boardState[BOARD_SIZE]; //0 = empty, 1 = defender, 2 = attacker, 3 = king
     UBYTE currentPlayer; //0 = defender, 1 = attacker
     UBYTE kingState;
-    UBYTE turnState;
+    //UBYTE turnState;
 } GameState;
 
 extern GameState g_state;
@@ -77,7 +77,7 @@ void movePiece(GameState *state, UBYTE oldIndex, UBYTE newIndex, MoveResult *res
 void drawBoard(void);
 void drawPieces(void);
 void drawSquareHighlight(void);
-void resetGame(void);
+void resetGame(GameState *state);
 void checkForWin(void);
 void checkGameEnd(void);
 void checkForCaptures(GameState *state, UBYTE pieceIndex, MoveResult *result);
@@ -87,4 +87,6 @@ void checkSurrounded(GameState *state, UBYTE pieceIndex);
 void checkforMisplacedPieces(void); //doesn't need the state passed since it's read only.
 void updateMousepos(short mouseX, short mouseY);
 void onClick(short mouseX, short mouseY);
+void onGameMenuClick(short mouseX, short mouseY, GameState *state);
+void gameEndMenu(void);
 #endif // _GAME_H_
