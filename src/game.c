@@ -110,6 +110,7 @@ UBYTE humanPlayerTeam;
 UBYTE waitFrame = 0;
 UBYTE gameTurnCounter = 0;
 WORD gamePlyCounter = 0;
+BOOL prevLMBg = FALSE;
 
 void gameGsCreate(void) {
 
@@ -200,7 +201,6 @@ void gameGsLoop(void) {
       //stateChange(g_pStateManager, g_pMenuState);
       return;
     }
-    if(keyCheck(KEY_D)) drawPieces();
 
     short mouseX = mouseGetX(MOUSE_PORT_1);
     short mouseY = mouseGetY(MOUSE_PORT_1);
@@ -210,7 +210,8 @@ void gameGsLoop(void) {
 
     //if the current player is the human player, allow them to move
     if(g_state.currentPlayer == humanPlayerTeam){
-      if(mouseCheck(MOUSE_PORT_1, MOUSE_LMB)){
+      BOOL currentLMB = mouseCheck(MOUSE_PORT_1, MOUSE_LMB);//added this so you only get one hhighlight per click
+      if(currentLMB && !prevLMBg){
         onClick(mouseX, mouseY);
 
         getValidMoves(&g_state, highlightIndex); //get the valid moves for the selected piece and populate the validMoves array
@@ -240,10 +241,11 @@ void gameGsLoop(void) {
           pieceHasBGToRestore[1] = 1; //set the flag to restore the background 
         }
       }
+      prevLMBg = currentLMB; //update the previous left mouse button state for the next frame
     }
-     //if gameWinner is great than zero that means the king has been captured or escaped
+    
+    //if gameWinner is great than zero that means the king has been captured or escaped
     if(gameWinner > 0){
-      //onMenuClick()
       gameEndMenu();
       if(mouseCheck(MOUSE_PORT_1, MOUSE_LMB)){
         onGameMenuClick(mouseX, mouseY, &g_state); //check for clicks on the game end menu buttons
@@ -253,11 +255,9 @@ void gameGsLoop(void) {
       //redraw the pieces every frame, 
       drawPieces();
     }
-    
-    if(hightlightActive){ //if the highlight for valid moves is active, draw it
-        drawSquareHighlight();
-    }
 
+    drawSquareHighlight();
+    
     if(g_state.currentPlayer == cpuPlayerTeam){ //if it's the CPU player's turn, calculate the best move and make it
       //waitframe is added to allow both buffers clear from the human players turn.
       if(waitFrame){
@@ -303,14 +303,16 @@ void gameGsLoop(void) {
         }
       else waitFrame = 1;
     }
-    
-    //add section for switching to the ingame menu.
 
     //these only need drawn once for each buffer frame and since they wont be writeen on again keft alone.
     fontDrawTextBitMap(s_pMainBuffer->pBack, gametextbitmapattack, 6,110,0,FONT_COOKIE);
     fontDrawTextBitMap(s_pMainBuffer->pBack, gametextbitmapdefend, 295,110,0,FONT_COOKIE);
     fontDrawTextBitMap(s_pMainBuffer->pBack, version, 8,8,0,FONT_COOKIE);
 
+    // if(hightlightActive){ //if the highlight for valid moves is active, draw it
+    //     drawSquareHighlight();
+    // }
+    
     s_ubBufferIndex = !s_ubBufferIndex; //toggle the buffer index for double buffering    
 
     viewProcessManagers(s_pView);
@@ -660,11 +662,10 @@ void onGameMenuClick(short mouseX, short mouseY, GameState *state){
  //this function will be used to draw the highlight for valid moves and selected pieces, 
  //it will be called in the drawPieces function if the highlightActive variable is true, and the position will be determined by the highlightIndex variable which will be set when a piece is selected or a move is made.
 void drawSquareHighlight(void){
- 
   if(!hightlightActive) return;
   //First check if there's a background to restore from the last highlighted square, and if the highlight has moved to a new square, restore the background of the old highlighted square before drawing the new one
   if(highlightIndex != lastHighlightIndex[s_ubBufferIndex]){
-    //logWrite("Restoring background for index %d\n", lastHighlightIndex[s_ubBufferIndex]);
+    logWrite("Restoring background for index %d\n", lastHighlightIndex[s_ubBufferIndex]);
     //redraw the background to erase the old highlight
     
     blitCopy(pBmBoard, draw_pos[lastHighlightIndex[s_ubBufferIndex]].x, draw_pos[lastHighlightIndex[s_ubBufferIndex]].y,
