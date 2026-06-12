@@ -267,7 +267,7 @@ void gameGsLoop(void) {
       drawPieces();
     }
 
-    if(hightlightActive){ //if the highlight for valid moves is active, draw it
+    if(hightlightActive || !pause){ //if the highlight for valid moves is active, draw it
         drawSquareHighlight();
     }
     
