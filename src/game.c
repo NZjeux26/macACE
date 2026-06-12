@@ -68,12 +68,16 @@ static tBitMap *pBmVictoryBanner;
 static tBitMap *pBmVictoryBannerMask;
 static tBitMap *pBmDefeatBanner;
 static tBitMap *pBmDefeatBannerMask;
+static tBitMap *pBmPauseBanner;
+static tBitMap *pBmPauseBannerMask;
 static tBitMap *pBmbuttonMainMenu;
 static tBitMap *pBmbuttonMainMenuMask;
 static tBitMap *pBmbuttonPlayAgain;
 static tBitMap *pBmbuttonPlayAgainMask;
 static tBitMap *pBmbuttonQuitMM;
 static tBitMap *pBmbuttonQuitMMMask;
+static tBitMap *pBmbuttonContinue;
+static tBitMap *pBmbuttonContinueMask;
 
 static tSprite *pSMouseCursor;
 
@@ -111,6 +115,7 @@ UBYTE waitFrame = 0;
 UBYTE gameTurnCounter = 0;
 WORD gamePlyCounter = 0;
 BOOL prevLMBg = FALSE;
+BOOL pause = FALSE;
 
 void gameGsCreate(void) {
 
@@ -192,14 +197,20 @@ void gameGsLoop(void) {
     if(keyCheck(KEY_ESCAPE)) {
       gameExit();
     }
-    if(keyCheck(KEY_R)){
+
+    else if(keyCheck(KEY_R)){
       if(g_state.currentPlayer == TEAM_ATTACKER){
         gameWinner = 2; //set the winner to defenders, so when we go to the menu it shows the correct win screen.
+        pause = TRUE;
       } else {
-        gameWinner = 1; //set the winner to attackers, so when we go to the menu it shows the correct win screen.
+        gameWinner = 1;
+        pause = TRUE;
       }
-      //stateChange(g_pStateManager, g_pMenuState);
       return;
+    }
+
+    else if(keyCheck(KEY_P)){
+      pause = TRUE;
     }
 
     short mouseX = mouseGetX(MOUSE_PORT_1);
@@ -245,7 +256,7 @@ void gameGsLoop(void) {
     }
     
     //if gameWinner is great than zero that means the king has been captured or escaped
-    if(gameWinner > 0){
+    if(pause){
       gameEndMenu();
       if(mouseCheck(MOUSE_PORT_1, MOUSE_LMB)){
         onGameMenuClick(mouseX, mouseY, &g_state); //check for clicks on the game end menu buttons
@@ -256,7 +267,9 @@ void gameGsLoop(void) {
       drawPieces();
     }
 
-    drawSquareHighlight();
+    if(hightlightActive){ //if the highlight for valid moves is active, draw it
+        drawSquareHighlight();
+    }
     
     if(g_state.currentPlayer == cpuPlayerTeam){ //if it's the CPU player's turn, calculate the best move and make it
       //waitframe is added to allow both buffers clear from the human players turn.
@@ -303,16 +316,12 @@ void gameGsLoop(void) {
         }
       else waitFrame = 1;
     }
+    
+    //these only need drawn once but there is so many resets of some type it's easier to jsut leave this here.
 
-    //these only need drawn once for each buffer frame and since they wont be writeen on again keft alone.
     fontDrawTextBitMap(s_pMainBuffer->pBack, gametextbitmapattack, 6,110,0,FONT_COOKIE);
     fontDrawTextBitMap(s_pMainBuffer->pBack, gametextbitmapdefend, 295,110,0,FONT_COOKIE);
     fontDrawTextBitMap(s_pMainBuffer->pBack, version, 8,8,0,FONT_COOKIE);
-
-    // if(hightlightActive){ //if the highlight for valid moves is active, draw it
-    //     drawSquareHighlight();
-    // }
-    
     s_ubBufferIndex = !s_ubBufferIndex; //toggle the buffer index for double buffering    
 
     viewProcessManagers(s_pView);
@@ -433,6 +442,10 @@ void loadAssets(void){
   pBmbuttonPlayAgainMask = bitmapCreateFromPath("data/GFX/buttonPlayAgain_mask.bm",0);
   pBmbuttonQuitMM = bitmapCreateFromPath("data/GFX/buttonQuitGM.bm",0);
   pBmbuttonQuitMMMask = bitmapCreateFromPath("data/GFX/buttonQuitGM_mask.bm",0);
+  pBmbuttonContinue = bitmapCreateFromPath("data/GFX/buttonContinue.bm",0);
+  pBmbuttonContinueMask = bitmapCreateFromPath("data/GFX/buttonContinue_mask.bm",0);
+  pBmPauseBanner = bitmapCreateFromPath("data/GFX/pauseBanner.bm",0);
+  pBmPauseBannerMask = bitmapCreateFromPath("data/GFX/pauseBanner_mask.bm",0);
 }
 
 //sets up the pieces in their starting positions in the board array and in the piece structs
@@ -528,6 +541,38 @@ void buildBoard(GameState *state){
 }
 
 void drawPieces(void){ 
+  
+  //if the highlight for valid moves is not active, we can restore the background of the last highlighted square to erase the highlight
+  if(hightlightActive == 0){ 
+    if(HLhasBGToRestore[s_ubBufferIndex]){ //check if there's a background to restore
+      blitCopy(pBmBoard, draw_pos[lastHighlightIndex[s_ubBufferIndex]].x, draw_pos[lastHighlightIndex[s_ubBufferIndex]].y,
+      s_pMainBuffer->pBack, draw_pos[lastHighlightIndex[s_ubBufferIndex]].x, draw_pos[lastHighlightIndex[s_ubBufferIndex]].y,
+      32, 21, MINTERM_COOKIE);
+      
+      HLhasBGToRestore[s_ubBufferIndex] = 0; //reset the flag after restoring
+    }
+  }
+  else if(hightlightActive == 1){
+    if(highlightIndex != lastHighlightIndex[s_ubBufferIndex]){
+      blitCopy(pBmBoard, draw_pos[lastHighlightIndex[s_ubBufferIndex]].x, draw_pos[lastHighlightIndex[s_ubBufferIndex]].y,
+      s_pMainBuffer->pBack, draw_pos[lastHighlightIndex[s_ubBufferIndex]].x, draw_pos[lastHighlightIndex[s_ubBufferIndex]].y,
+      32, 21, MINTERM_COOKIE);
+      
+      HLhasBGToRestore[s_ubBufferIndex] = 0;
+    }
+  }
+
+  //if the piece that was just captured has a background that needs to be restored, restore it to erase the piece from the screen
+  if(pieceHasBGToRestore[s_ubBufferIndex]){ 
+    for(UBYTE c = 0; c < capturedPieceCount[s_ubBufferIndex]; c++){
+      blitCopy(pBmBoard, draw_pos[capturedPieceIndex[s_ubBufferIndex][c]].x, draw_pos[capturedPieceIndex[s_ubBufferIndex][c]].y,
+      s_pMainBuffer->pBack, draw_pos[capturedPieceIndex[s_ubBufferIndex][c]].x, draw_pos[capturedPieceIndex[s_ubBufferIndex][c]].y,
+      32, 21, MINTERM_COOKIE);
+    }
+    pieceHasBGToRestore[s_ubBufferIndex] = 0; //reset the flag after restoring
+    capturedPieceCount[s_ubBufferIndex] = 0;
+  }
+
   //More efficent method, go through each defender or attacker in the respective arrays, if not captured, draw.
   for(UBYTE j = 0; j < MAX_DEFENDERS; j++){ //start at 1 since the king is zero
     UBYTE i = g_state.defenders[j].pos;
@@ -552,27 +597,6 @@ void drawPieces(void){
       s_pMainBuffer->pBack, draw_pos[i].x, draw_pos[i].y,
       PIECE_SPRITE_WIDTH,PIECE_SPRITE_HEIGHT,pBmAttackers_Mask[k]->Planes[0]);
     }
-  }
-
-  //if the highlight for valid moves is not active, we can restore the background of the last highlighted square to erase the highlight
-  if(hightlightActive == 0){ 
-    if(HLhasBGToRestore[s_ubBufferIndex]){ //check if there's a background to restore
-      blitCopy(pBmBoard, draw_pos[lastHighlightIndex[s_ubBufferIndex]].x, draw_pos[lastHighlightIndex[s_ubBufferIndex]].y,
-      s_pMainBuffer->pBack, draw_pos[lastHighlightIndex[s_ubBufferIndex]].x, draw_pos[lastHighlightIndex[s_ubBufferIndex]].y,
-      32, 21, MINTERM_COOKIE);
-      
-      HLhasBGToRestore[s_ubBufferIndex] = 0; //reset the flag after restoring
-    }
- }
-  //if the piece that was just captured has a background that needs to be restored, restore it to erase the piece from the screen
-  if(pieceHasBGToRestore[s_ubBufferIndex]){ 
-    for(UBYTE c = 0; c < capturedPieceCount[s_ubBufferIndex]; c++){
-      blitCopy(pBmBoard, draw_pos[capturedPieceIndex[s_ubBufferIndex][c]].x, draw_pos[capturedPieceIndex[s_ubBufferIndex][c]].y,
-      s_pMainBuffer->pBack, draw_pos[capturedPieceIndex[s_ubBufferIndex][c]].x, draw_pos[capturedPieceIndex[s_ubBufferIndex][c]].y,
-      32, 21, MINTERM_COOKIE);
-    }
-    pieceHasBGToRestore[s_ubBufferIndex] = 0; //reset the flag after restoring
-    capturedPieceCount[s_ubBufferIndex] = 0;
   }
 
   //this manages the clash symbol which shows who's turn it is.
@@ -638,20 +662,32 @@ void onClick(short mouseX, short mouseY){
 }
 
 void onGameMenuClick(short mouseX, short mouseY, GameState *state){
-  //main menu
-  //128,148
+  //main menu / Continue
+  //if game is over display play again or continue buttons.
+  if(gameWinner > 0){
+    //128,148
     if(mouseX >= 128 && mouseX <= 128 + GAME_BUTTON_WIDTH && mouseY >= 148 && mouseY <= 148 + GAME_BUTTON_HEIGHT){
       logWrite("Menu button clicked!\n");
       stateChange(g_pStateManager, g_pMenuState);
       return;//If statechange return immediately.
     }
-    //128,182
-  //play again
-    else if(mouseX >= 128 && mouseX <= 128 + GAME_BUTTON_WIDTH && mouseY >= 182 && mouseY <= 182 + GAME_BUTTON_HEIGHT){
-      logWrite("Play again button clicked!\n");
-      resetGame(state);
-      return;//If resetGame return immediately.
+  }
+  else{
+    if(mouseX >= 128 && mouseX <= 128 + GAME_BUTTON_WIDTH && mouseY >= 148 && mouseY <= 148 + GAME_BUTTON_HEIGHT){
+      logWrite("Continue button clicked!\n");
+      pause = FALSE;
+      drawBoard();
+      return;//If statechange return immediately.
     }
+  }
+  //128,182
+  //play again
+  if(mouseX >= 128 && mouseX <= 128 + GAME_BUTTON_WIDTH && mouseY >= 182 && mouseY <= 182 + GAME_BUTTON_HEIGHT){
+    logWrite("Play again button clicked!\n");
+    resetGame(state);
+    pause = FALSE;
+    return;//If resetGame return immediately.
+  }
   //quit
   else if(mouseX >= 128 && mouseX <= 128 + GAME_BUTTON_WIDTH && mouseY >= 216 && mouseY <= 216 + GAME_BUTTON_HEIGHT){
       logWrite("Quit button clicked!\n");
@@ -663,17 +699,6 @@ void onGameMenuClick(short mouseX, short mouseY, GameState *state){
  //it will be called in the drawPieces function if the highlightActive variable is true, and the position will be determined by the highlightIndex variable which will be set when a piece is selected or a move is made.
 void drawSquareHighlight(void){
   if(!hightlightActive) return;
-  //First check if there's a background to restore from the last highlighted square, and if the highlight has moved to a new square, restore the background of the old highlighted square before drawing the new one
-  if(highlightIndex != lastHighlightIndex[s_ubBufferIndex]){
-    logWrite("Restoring background for index %d\n", lastHighlightIndex[s_ubBufferIndex]);
-    //redraw the background to erase the old highlight
-    
-    blitCopy(pBmBoard, draw_pos[lastHighlightIndex[s_ubBufferIndex]].x, draw_pos[lastHighlightIndex[s_ubBufferIndex]].y,
-    s_pMainBuffer->pBack, draw_pos[lastHighlightIndex[s_ubBufferIndex]].x, draw_pos[lastHighlightIndex[s_ubBufferIndex]].y,
-    32, 21, MINTERM_COOKIE);
-    
-    HLhasBGToRestore[s_ubBufferIndex] = 0;
-  }
     
   //Then draw the highlight with the mask for transparency
   blitCopyMask(pBmSquareHighlight,0,0,
@@ -953,40 +978,54 @@ void checkGameEnd(void){
   //if the king is captured, Attackers Win
   if(g_state.kingState == KING_CAPTURED){
     gameWinner = 1;
+    pause = TRUE;
     //stateChange(g_pStateManager, g_pMenuState); //change these to activate the victory or defeat screen instead of going back to the menu
-    //return;
+    return;
   }
 
   //The King escapes, the Defenders Win
   else if(g_state.boardState[14] == 3 || g_state.boardState[24] == 3 || g_state.boardState[144] == 3 || g_state.boardState[154] == 3 || g_state.kingState == KING_ESCAPED){
     gameWinner = 2;
+    pause = TRUE;
     //stateChange(g_pStateManager, g_pMenuState);
-    //return;
+    return;
   }
   
 }
 
 void gameEndMenu(void){
   //0 no one, 1 attackers, 2 defenders
-  //this will be the menu that shows when the game ends, it will display the winner and have a button to return to the main menu.
-  if((humanPlayerTeam == TEAM_ATTACKER && gameWinner == 1) || 
-     (humanPlayerTeam == TEAM_DEFENDER && gameWinner == 2) ){
-    
-    //draw victory banner
-    blitCopyMask(pBmVictoryBanner,0,0,
-    s_pMainBuffer->pBack,47,80,224,96,pBmVictoryBannerMask->Planes[0]);
+  //if pause has been called and the gameWinner is > that means game has ended.
+  if(gameWinner > 0){
+    //this will be the menu that shows when the game ends, it will display the winner and have a button to return to the main menu.
+    if((humanPlayerTeam == TEAM_ATTACKER && gameWinner == 1) || 
+      (humanPlayerTeam == TEAM_DEFENDER && gameWinner == 2) ){
+      
+      //draw victory banner
+      blitCopyMask(pBmVictoryBanner,0,0,
+      s_pMainBuffer->pBack,47,80,224,96,pBmVictoryBannerMask->Planes[0]);
 
+    }
+    else{
+      //draw defeat 
+      blitCopyMask(pBmDefeatBanner,0,0,
+      s_pMainBuffer->pBack,47,60,224,96,pBmDefeatBannerMask->Planes[0]);
+    }
+    //draw buttons
+
+    //Return to Main menu
+    blitCopyMask(pBmbuttonMainMenu,0,0,
+    s_pMainBuffer->pBack, 128,148,GAME_BUTTON_WIDTH,GAME_BUTTON_HEIGHT,pBmbuttonMainMenuMask->Planes[0]);
   }
   else{
-    //draw defeat 
-    blitCopyMask(pBmDefeatBanner,0,0,
-    s_pMainBuffer->pBack,47,60,224,96,pBmDefeatBannerMask->Planes[0]);
+    //draw Puase menu banner
+    blitCopyMask(pBmPauseBanner,0,0,
+    s_pMainBuffer->pBack,47,60,224,96,pBmPauseBannerMask->Planes[0]);
+    
+    //continue
+    blitCopyMask(pBmbuttonContinue,0,0,
+    s_pMainBuffer->pBack, 128,148,GAME_BUTTON_WIDTH,(GAME_BUTTON_HEIGHT - 12),pBmbuttonContinueMask->Planes[0]);
   }
-  //draw buttons
-
-  //Return to Main menu
-  blitCopyMask(pBmbuttonMainMenu,0,0,
-  s_pMainBuffer->pBack, 128,148,GAME_BUTTON_WIDTH,GAME_BUTTON_HEIGHT,pBmbuttonMainMenuMask->Planes[0]);
 
   //Play Again
   blitCopyMask(pBmbuttonPlayAgain,0,0,
@@ -1002,8 +1041,8 @@ void checkShieldWallCaptures(GameState *state, UBYTE pieceIndex, MoveResult *res
   UBYTE currentPieceTeam = state->boardState[pieceIndex];
   
   // Must be on an edge (one of the 4 neighbours is 99)
-  UBYTE onEdge = (state->boardState[pieceIndex + 1] == 99 || 
-                  state->boardState[pieceIndex - 1] == 99 ||
+  UBYTE onEdge = (state->boardState[pieceIndex + 1] == 99  || 
+                  state->boardState[pieceIndex - 1] == 99  ||
                   state->boardState[pieceIndex - 13] == 99 || 
                   state->boardState[pieceIndex + 13] == 99);
   if(!onEdge) return;
