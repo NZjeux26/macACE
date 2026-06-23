@@ -151,7 +151,7 @@ void gameGsCreate(void) {
 
     gametextbitmapattack = fontCreateTextBitMapFromStr(gFontSmall, "ACK");
     gametextbitmapdefend = fontCreateTextBitMapFromStr(gFontSmall, "DEF");
-    version = fontCreateTextBitMapFromStr(gFontSmall,"M"); //versioning so I know if the ADF disk updated correctly.
+    version = fontCreateTextBitMapFromStr(gFontSmall,"R1"); //versioning so I know if the ADF disk updated correctly.
 
     spriteSetEnabled(pSMouseCursor, 1);
     
@@ -175,6 +175,7 @@ void gameGsCreate(void) {
     gameWinner = 0; //reset the game winner at the start of the game, in case we're coming from the menu after a game has ended.
     gamePlyCounter = 0;
     gameTurnCounter = 0;
+    pause = FALSE;
 
     loadAssets();
     setupPieces(&g_state); //sets up the pieces in their starting positions in the board array and in the piece structs
@@ -553,7 +554,7 @@ void drawPieces(void){
     }
   }
   else if(hightlightActive == 1){
-    if(highlightIndex != lastHighlightIndex[s_ubBufferIndex]){
+    if(highlightIndex != lastHighlightIndex[s_ubBufferIndex] && HLhasBGToRestore[s_ubBufferIndex]){
       blitCopy(pBmBoard, draw_pos[lastHighlightIndex[s_ubBufferIndex]].x, draw_pos[lastHighlightIndex[s_ubBufferIndex]].y,
       s_pMainBuffer->pBack, draw_pos[lastHighlightIndex[s_ubBufferIndex]].x, draw_pos[lastHighlightIndex[s_ubBufferIndex]].y,
       32, 21, MINTERM_COOKIE);
@@ -639,12 +640,19 @@ void updateMousepos(short mouseX, short mouseY){
 
 void onClick(short mouseX, short mouseY){
   for(UBYTE i = 0; i < 169; i++){
+
+    // skip any square whose draw position is off screen
+    if(draw_pos[i].y < 0 || draw_pos[i].x < 0) continue;
+    if(draw_pos[i].y >= SCREEN_HEIGHT || draw_pos[i].x >= SCREEN_WIDTH) continue;
+
     //check if the mouse is within the bounds of this square
     if(mouseX >= draw_pos[i].x && mouseX <= draw_pos[i].x + SQUARE_X &&
        mouseY >= draw_pos[i].y && mouseY <= draw_pos[i].y + SQUARE_Y){
          logWrite("Clicked on square index %d\n", i); 
          //If a square is already Highlighted, set to zero for it to be restored
          if(!hightlightActive && g_state.boardState[i] == 0) return; //if the highlight isn't active and the square clicked is empty, do nothing
+         //if the square is 99 (out of bounds) do nothing.
+         if(g_state.boardState[i] == 99) return;
 
          if(hightlightActive){ 
           //  logWrite("Undraw Highlighted Index = %d\n", highlightIndex);
@@ -652,7 +660,6 @@ void onClick(short mouseX, short mouseY){
          }
          
          highlightIndex = i; //set the highlight index to the square that was clicked
-
          hightlightActive = 1; //activate the highlight for valid moves
          //logWrite("Highlighted Index = %d\n", highlightIndex);
         

@@ -568,9 +568,7 @@ UBYTE getSearchDepth(void){
     else if(gameTurnCounter > 16) phase = 2;
 
     //The difficulty level set in the options menu in menu.c and passed via an extern in states.h
-    
     //The cpuType from menu.c which detects the CPU the player is running
-   
 
     // [cpuClass][difficulty][phase]
     // cpuClass: 0=68000, 1=68020, 2=68030, 3=68040/060
@@ -584,7 +582,7 @@ UBYTE getSearchDepth(void){
         // 68030 - comfortable at depth 2, depth 3 in late game at master
         {{1,1,1}, {1,1,2}, {1,2,2}, {2,2,3}},
         // 68040/060 - can push depth 3 mid/late, depth 4 late at master
-        {{1,1,1}, {1,2,2}, {2,2,3}, {2,3,4}},
+        {{1,1,1}, {1,2,2}, {2,2,3}, {2,3,3}},
     };
 
     return depthTable[cpuType][difficultlyLevel][phase];
