@@ -78,6 +78,8 @@ static tBitMap *pBmbuttonQuitMM;
 static tBitMap *pBmbuttonQuitMMMask;
 static tBitMap *pBmbuttonContinue;
 static tBitMap *pBmbuttonContinueMask;
+static tBitMap *pBmLoadingBanner;
+static tBitMap *pBmLoadingBannerMask;
 
 static tSprite *pSMouseCursor;
 
@@ -158,6 +160,8 @@ void gameGsCreate(void) {
     blitCopy(pBmMouseCursorSrc, 0,0,
     pBmMouseCursorData,0,0,CURSOR_SPRITE_WIDTH,CURSOR_SPRITE_HEIGHT,MINTERM_COOKIE);
 
+    gameLoadingScreen(); // Draw the loading screen while assets are loading
+
     logWrite("TEAM SETUP: CPU Player Team: %d, Human Player Team: %d\n", cpuPlayerTeam, humanPlayerTeam);
     
     //sets the player teams based on option menu selection.
@@ -187,7 +191,7 @@ void gameGsCreate(void) {
     g_state.currentPlayer = TEAM_ATTACKER;
     
     systemUnuse();
-
+    drawBoard();
     // Load the view
     viewLoad(s_pView);
   
@@ -366,6 +370,19 @@ void gameGsDestroy(void) {
     spriteManagerDestroy();
     bitmapDestroy(pBmBoard);
     viewDestroy(s_pView);
+}
+
+void gameLoadingScreen(void){
+  //load the pause banner, the board is already been drawn
+  tBitMap *pBmLoadingBanner = bitmapCreateFromPath("data/GFX/loadingBanner.bm",0);
+  tBitMap *pBmLoadingBannerMask = bitmapCreateFromPath("data/GFX/loadingBanner_mask.bm",0);
+  
+  blitCopyMask(pBmLoadingBanner,0,0,
+  s_pMainBuffer->pBack,47,60,224,96,pBmLoadingBannerMask->Planes[0]);
+
+  viewLoad(s_pView);  
+  viewProcessManagers(s_pView);
+  copProcessBlocks();
 }
 
 void resetGame(GameState *state){

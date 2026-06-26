@@ -89,4 +89,5 @@ void updateMousepos(short mouseX, short mouseY);
 void onClick(short mouseX, short mouseY);
 void onGameMenuClick(short mouseX, short mouseY, GameState *state);
 void gameEndMenu(void);
+void gameLoadingScreen(void);
 #endif // _GAME_H_
