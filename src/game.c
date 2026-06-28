@@ -153,7 +153,7 @@ void gameGsCreate(void) {
 
     gametextbitmapattack = fontCreateTextBitMapFromStr(gFontSmall, "ACK");
     gametextbitmapdefend = fontCreateTextBitMapFromStr(gFontSmall, "DEF");
-    version = fontCreateTextBitMapFromStr(gFontSmall,"R1"); //versioning so I know if the ADF disk updated correctly.
+    version = fontCreateTextBitMapFromStr(gFontSmall,"R2"); //versioning so I know if the ADF disk updated correctly.
 
     spriteSetEnabled(pSMouseCursor, 1);
     
@@ -374,8 +374,8 @@ void gameGsDestroy(void) {
 
 void gameLoadingScreen(void){
   //load the pause banner, the board is already been drawn
-  tBitMap *pBmLoadingBanner = bitmapCreateFromPath("data/GFX/loadingBanner.bm",0);
-  tBitMap *pBmLoadingBannerMask = bitmapCreateFromPath("data/GFX/loadingBanner_mask.bm",0);
+  pBmLoadingBanner = bitmapCreateFromPath("data/GFX/LoadingBanner.bm",0);
+  pBmLoadingBannerMask = bitmapCreateFromPath("data/GFX/LoadingBanner_mask.bm",0);
   
   blitCopyMask(pBmLoadingBanner,0,0,
   s_pMainBuffer->pBack,47,60,224,96,pBmLoadingBannerMask->Planes[0]);

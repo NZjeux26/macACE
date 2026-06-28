@@ -72,6 +72,8 @@ static tBitMap *pBmbuttonMaster;
 static tBitMap *pBmbuttonMasterMask;
 static tBitMap *pBmbuttonBack;
 static tBitMap *pBmbuttonBackMask;
+static tBitMap *pBmMenuLoadingBanner;   
+static tBitMap *pBmMenuLoadingBannerMask;
 
 static tSprite *pSMenuCursor;
 
@@ -97,6 +99,8 @@ void menuGsCreate(void){
     //colour palette for the menu
     paletteLoadFromPath("data/palette/mainmenuPalette2.plt", s_pVpMain->pPalette, 32);
     
+    menuLoadingScreen(); // Draw the loading screen while assets are loading
+   
     loadMenuAssets(); //load the menu assets like the background and buttons
 
     drawBackground(); //draw the menu background to the back buffer before loading the view.
@@ -271,6 +275,22 @@ void setupMouseCursor(void){
     
     blitCopy(pBmMenuCursorSrc, 0,0,
     pBmMenuCursorData,0,0,CURSOR_SPRITE_WIDTH,CURSOR_SPRITE_HEIGHT,MINTERM_COOKIE);
+}
+
+void menuLoadingScreen(void){
+    //load the pause banner, the board is already been drawn
+    pBmMenuLoadingBanner = bitmapCreateFromPath("data/GFX/MenuLoadingBanner.bm",0);
+    pBmMenuLoadingBannerMask = bitmapCreateFromPath("data/GFX/MenuLoadingBanner_mask.bm",0);
+     //set background to black while loading assets
+    blitRect(s_pMainBuffer->pBack, 0, 0, s_pMainBuffer->uBfrBounds.uwX, s_pMainBuffer->uBfrBounds.uwY, 0); //black background
+    blitRect(s_pMainBuffer->pFront, 0, 0, s_pMainBuffer->uBfrBounds.uwX, s_pMainBuffer->uBfrBounds.uwY, 0); //black background
+    //draw the loading banner to the back buffer
+    blitCopyMask(pBmMenuLoadingBanner,0,0,
+    s_pMainBuffer->pBack,47,60,224,96,pBmMenuLoadingBannerMask->Planes[0]);
+    
+    viewLoad(s_pMenuView);  
+    viewProcessManagers(s_pMenuView);
+    copProcessBlocks();
 }
 
 void drawBackground(void){

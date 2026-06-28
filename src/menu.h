@@ -15,6 +15,7 @@ void setupMouseCursor(void);
 void drawMainMenu(void);
 void drawOptionMenu(void);
 void unDrawMainMenu(void);
+void menuLoadingScreen(void);
 
 
 #endif
