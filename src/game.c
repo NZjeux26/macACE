@@ -262,6 +262,7 @@ void gameGsLoop(void) {
     
     //if gameWinner is great than zero that means the king has been captured or escaped
     if(pause){
+      updateMousepos(mouseX, mouseY);
       gameEndMenu();
       if(mouseCheck(MOUSE_PORT_1, MOUSE_LMB)){
         onGameMenuClick(mouseX, mouseY, &g_state); //check for clicks on the game end menu buttons
@@ -1003,7 +1004,6 @@ void checkGameEnd(void){
   if(g_state.kingState == KING_CAPTURED){
     gameWinner = 1;
     pause = TRUE;
-    //stateChange(g_pStateManager, g_pMenuState); //change these to activate the victory or defeat screen instead of going back to the menu
     return;
   }
 
@@ -1011,7 +1011,6 @@ void checkGameEnd(void){
   else if(g_state.boardState[14] == 3 || g_state.boardState[24] == 3 || g_state.boardState[144] == 3 || g_state.boardState[154] == 3 || g_state.kingState == KING_ESCAPED){
     gameWinner = 2;
     pause = TRUE;
-    //stateChange(g_pStateManager, g_pMenuState);
     return;
   }
   
@@ -1020,6 +1019,7 @@ void checkGameEnd(void){
 void gameEndMenu(void){
   //0 no one, 1 attackers, 2 defenders
   //if pause has been called and the gameWinner is > that means game has ended.
+  
   if(gameWinner > 0){
     //this will be the menu that shows when the game ends, it will display the winner and have a button to return to the main menu.
     if((humanPlayerTeam == TEAM_ATTACKER && gameWinner == 1) || 
